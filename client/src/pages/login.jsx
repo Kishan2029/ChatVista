@@ -3,6 +3,7 @@ import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import birdImage from "../assets/images/bird.avif";
 import { blue } from "@mui/material/colors";
 import { GithubLogo, GoogleLogo, TwitterLogo } from "@phosphor-icons/react";
+import { SubmitButton } from "../components/index";
 
 const Login = () => {
   return (
@@ -43,13 +44,7 @@ const Login = () => {
             Forgot Password ?
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          sx={{ textTransform: "none", mb: "1rem", mt: "0.6rem" }}
-          fullWidth
-        >
-          Login
-        </Button>
+        <SubmitButton name={"Login"} />
         <Divider sx={{ mb: "1rem" }}>Or</Divider>
         <Box sx={{ display: "flex", justifyContent: "center", gap: "4rem" }}>
           <GoogleLogo size={32} color="#e60000" />

@@ -3,6 +3,7 @@ import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import birdImage from "../assets/images/bird.avif";
 import { blue, grey } from "@mui/material/colors";
 import { GithubLogo, GoogleLogo, TwitterLogo } from "@phosphor-icons/react";
+import { SubmitButton } from "../components";
 
 const Register = () => {
   return (
@@ -59,13 +60,8 @@ const Register = () => {
             Forgot Password ?
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          sx={{ textTransform: "none", mb: "1rem", mt: "0.6rem" }}
-          fullWidth
-        >
-          Create Account
-        </Button>
+        <SubmitButton name={"Create Account"} />
+
         <Divider sx={{ mb: "0.6rem" }}>Or</Divider>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Typography sx={{ fontSize: "0.7rem", mb: "1rem", color: grey[700] }}>

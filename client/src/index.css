@@ -1,3 +1,17 @@
+:root {
+  --backgroundColor1: #f0f4fa;
+  --backgroundColor2: #f8faff;
+
+  --grayFontColor: #676667;
+  --grayFontColor2: #7c7c7d;
+  --grayTimeColor: #686768;
+
+  --blueNotification: #5b96f7;
+
+  --navbarImageBackgroundColor: #afbbf7;
+}
 body {
   overflow: hidden;
+  padding: 0;
+  margin: 0;
 }
