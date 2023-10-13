@@ -1,7 +1,8 @@
 import { Avatar, Badge, Box, Card, Typography } from "@mui/material";
 import React from "react";
+import OnlineAvatar from "../common/OnlineAvatar";
 
-const ChatMessageCard = () => {
+const ChatMessageCard = ({ name, time, message }) => {
   return (
     <Card
       elevation={0}
@@ -11,17 +12,18 @@ const ChatMessageCard = () => {
         borderRadius: "1rem",
         px: "1rem",
         py: "1rem",
+        flexShrink: 0,
       }}
     >
       {/* avatar and message */}
       <Box sx={{ display: "flex", gap: "1rem" }}>
-        <Avatar sx={{ height: "2.8rem", width: "2.8rem", fontSize: "1.5rem" }}>
-          K
-        </Avatar>
+        <OnlineAvatar />
         <Box>
-          <Typography sx={{ color: "#030303" }}>Cute Turtle</Typography>
+          <Typography sx={{ color: "#030303", fontWeight: 600 }}>
+            {name}
+          </Typography>
           <Typography sx={{ color: "var(--grayFontColor2)" }}>
-            That's it goodbye.
+            {message}
           </Typography>
         </Box>
       </Box>
@@ -37,7 +39,7 @@ const ChatMessageCard = () => {
           mr: "0.3rem",
         }}
       >
-        <Typography sx={{ color: "var(--grayTimeColor)" }}>9:36</Typography>
+        <Typography sx={{ color: "var(--grayTimeColor)" }}>{time}</Typography>
         <Box
           sx={{
             display: "flex",
