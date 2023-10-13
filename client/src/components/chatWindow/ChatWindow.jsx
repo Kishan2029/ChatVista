@@ -2,6 +2,7 @@ import React from "react";
 import { Autocomplete, Box, Typography } from "@mui/material";
 import Title from "./Title";
 import WriteMessage from "./WriteMessage";
+import ChatMessages from "./ChatMessages";
 const ChatWindow = () => {
   return (
     <Box
@@ -27,6 +28,7 @@ const ChatWindow = () => {
         {/* <WriteMessage /> */}
         {/* </Box> */}
 
+        <ChatMessages />
         <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
           <WriteMessage />
         </Box>

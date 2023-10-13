@@ -19,7 +19,7 @@ const WriteMessage = () => {
           placeholder="Write a message..."
           // InputProps={{
           //   startAdornment: (
-          //     <InputAdornment position="start" sx={{ bgcolor: "yellow", p: 0 }}>
+          //     <InputAdornment position="start" sx={{ bgcolor: "yellow" }}>
           //       <Box sx={{ bgcolor: "blue" }}>
           //         <Link
           //           size={32}
@@ -44,12 +44,17 @@ const WriteMessage = () => {
           //   ),
           // }}
           sx={{
+            borderColor: "green",
             input: {
               color: "var(--chatEnterMessageButtonFontColor)",
               bgcolor: "var(--chatEnterMessageButtonBackgroundColor)",
               height: "1.2rem",
+
+              // px: 0,
+              // mx: 0,
             },
           }}
+          inputProps={{ style: { borderColor: "red" } }}
           variant="outlined"
           fullWidth
         />
