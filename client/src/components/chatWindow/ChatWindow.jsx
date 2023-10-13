@@ -1,6 +1,7 @@
 import React from "react";
 import { Autocomplete, Box, Typography } from "@mui/material";
 import Title from "./Title";
+import WriteMessage from "./WriteMessage";
 const ChatWindow = () => {
   return (
     <Box
@@ -9,7 +10,27 @@ const ChatWindow = () => {
         bgcolor: "var(--backgroundColor1)",
       }}
     >
-      <Title />
+      <Box sx={{ height: "10%" }}>
+        <Title />
+      </Box>
+      <Box sx={{ height: "90%", position: "relative" }}>
+        {/* <Box sx={{ height: "80%" }}>Hello</Box> */}
+        {/* <Box
+          sx={{
+            height: "20%",
+            bgcolor: "pink",
+            display: "flex",
+            justifyContent: "flex-start",
+            flexDirection: "column",
+          }}
+        > */}
+        {/* <WriteMessage /> */}
+        {/* </Box> */}
+
+        <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+          <WriteMessage />
+        </Box>
+      </Box>
     </Box>
   );
 };

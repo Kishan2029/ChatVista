@@ -27,7 +27,7 @@ const Title = ({ name, lastSeen }) => {
           </Typography>
         </Box>
       </Box>
-      <MagnifyingGlass size={32} />
+      <MagnifyingGlass size={28} />
     </Box>
   );
 };
