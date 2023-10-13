@@ -2,7 +2,7 @@ import { Avatar, Badge } from "@mui/material";
 import React from "react";
 
 const OnlineAvatar = ({}) => {
-  const online = false;
+  const online = true;
   return (
     <>
       {online ? (

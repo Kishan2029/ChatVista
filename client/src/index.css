@@ -18,6 +18,8 @@
   --chatEnterMessageButtonMarginColor: #f7f9fd;
   --chatLeft: #ffffff;
   --chatRight: #5b96f7;
+
+  --blueTextColor: #5b96f7;
 }
 body {
   overflow: hidden;
