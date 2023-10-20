@@ -7,7 +7,8 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/home";
 import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
-import { Chats, Groups, Setting, UserProfile } from "./components";
+import { Chats, Setting, UserProfile } from "./components";
+import { Groups } from "./components/groups";
 
 function App() {
   const router = createBrowserRouter([

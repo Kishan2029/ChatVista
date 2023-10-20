@@ -12,9 +12,15 @@ const EmptyConversation = () => {
         height: "100%",
       }}
     >
-      <Box>
-        <img src={empty} sx={{ height: "10rem", width: "10rem" }} />
-        <Typography>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        <img src={empty} height="230" width="230" />
+        <Typography sx={{ mt: "1rem" }}>
           Select a conversation or start a{" "}
           <span
             style={{

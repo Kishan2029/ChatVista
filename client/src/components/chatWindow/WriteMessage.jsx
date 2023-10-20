@@ -11,6 +11,7 @@ const WriteMessage = () => {
         bgcolor: "var(--chatEnterMessageButtonMarginColor)",
         // bgcolor: "green",
         p: "1rem",
+        borderLeft: "1.5px solid #B4B4B4",
       }}
     >
       <Box sx={{ width: "90%" }}>

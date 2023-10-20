@@ -29,7 +29,6 @@ const UserProfile = () => {
           alt="Remy Sharp"
           src={profileImage}
           sx={{
-            height: "5rem",
             height: "7.3rem",
             width: "7.3rem",
             mt: "3rem",

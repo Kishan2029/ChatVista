@@ -1,13 +1,23 @@
 import { Avatar, Box, Divider } from "@mui/material";
 import { Users, ChatCircleDots, Gear } from "@phosphor-icons/react";
-import React from "react";
+import React, { useState } from "react";
 import birdImage from "../assets/images/bird.avif";
 import budgie from "../assets/images/Budgie.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  console.log("Navbar");
   const navigate = useNavigate();
+  const location = useLocation();
+  // const selected = "chats";
+
+  const [selected, setSelected] = useState("");
+
+  const onClickNav = (path) => {
+    console.log("path", path);
+    navigate("/" + path);
+    setSelected(path);
+  };
+
   return (
     <Box
       sx={{
@@ -40,7 +50,7 @@ const Navbar = () => {
             // justifyContent: "center",
             alignItems: "center",
             mt: "1rem",
-            gap: "2rem",
+            gap: "2.3rem",
           }}
         >
           <Box
@@ -55,14 +65,68 @@ const Navbar = () => {
           >
             <img src={budgie} style={{ height: "2rem" }} />
           </Box>
-          <ChatCircleDots size={26} onClick={() => navigate("/")} />
-          <Users size={26} onClick={() => navigate("/groups")} />
-          {/* <Divider /> */}
+
+          {selected === "" ? (
+            <Box
+              sx={{
+                bgcolor: "var(--blueNotification)",
+                px: "0.7rem",
+                py: "0.6rem",
+                borderRadius: "1rem",
+              }}
+            >
+              <ChatCircleDots
+                color="white"
+                size={26}
+                onClick={() => onClickNav("")}
+              />
+            </Box>
+          ) : (
+            <ChatCircleDots size={26} onClick={() => onClickNav("")} />
+          )}
+
+          {selected === "groups" ? (
+            <Box
+              sx={{
+                bgcolor: "var(--blueNotification)",
+                px: "0.7rem",
+                py: "0.6rem",
+                borderRadius: "1rem",
+              }}
+            >
+              <Users
+                color="white"
+                size={26}
+                onClick={() => onClickNav("groups")}
+              />
+            </Box>
+          ) : (
+            <Users size={26} onClick={() => onClickNav("groups")} />
+          )}
+
           <Divider sx={{ width: "100%", color: "#B4B4B4" }} />
-          <Gear size={26} onClick={() => navigate("/setting")} />
+          {selected === "setting" ? (
+            <Box
+              sx={{
+                bgcolor: "var(--blueNotification)",
+                px: "0.7rem",
+                py: "0.6rem",
+                borderRadius: "1rem",
+              }}
+            >
+              <Gear
+                color="white"
+                size={26}
+                onClick={() => onClickNav("setting")}
+              />
+            </Box>
+          ) : (
+            <Gear size={26} onClick={() => onClickNav("setting")} />
+          )}
         </Box>
       </Box>
 
+      {/* profile */}
       <Box
         sx={{
           display: "flex",
@@ -70,7 +134,7 @@ const Navbar = () => {
           alignItems: "center",
           mb: "1.5rem",
         }}
-        onClick={() => navigate("/profile")}
+        onClick={() => onClickNav("profile")}
       >
         <Avatar />
       </Box>

@@ -12,7 +12,7 @@ const Title = ({ name, lastSeen }) => {
         justifyContent: "space-between",
         px: "1rem",
         py: "0.8rem",
-        borderLeft: "1px solid #B4B4B4",
+        borderLeft: "1.5px solid #B4B4B4",
         alignItems: "center",
       }}
     >

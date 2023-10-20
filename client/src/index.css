@@ -20,6 +20,8 @@
   --chatRight: #5b96f7;
 
   --blueTextColor: #5b96f7;
+
+  --buttonColor: #3366ff;
 }
 body {
   overflow: hidden;
