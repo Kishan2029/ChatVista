@@ -2,16 +2,23 @@ import { Avatar, Box, Button, TextField, Typography } from "@mui/material";
 import { ArrowLeft } from "@phosphor-icons/react";
 import React, { useState } from "react";
 import profileImage from "../assets/images/profile.jpeg";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const [name, setName] = useState("");
   const [about, setAbout] = useState("");
+  const navigate = useNavigate();
 
   const saveProfile = () => {};
   return (
     <Box sx={{ padding: "1rem", height: "100%" }}>
       <Box sx={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-        <ArrowLeft size={32} color="#4B4B4B" style={{ marginLeft: "1rem" }} />
+        <ArrowLeft
+          size={32}
+          color="#4B4B4B"
+          style={{ marginLeft: "1rem" }}
+          onClick={() => navigate(-1)}
+        />
         <Typography sx={{ fontSize: "2rem", fontWeight: 550 }}>
           Profile
         </Typography>

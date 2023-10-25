@@ -14,6 +14,7 @@ const ChatMessageCard = ({ name, time, message }) => {
         py: "1rem",
         flexShrink: 0,
       }}
+      onClick={() => console.log("clicked")}
     >
       {/* avatar and message */}
       <Box sx={{ display: "flex", gap: "1rem" }}>

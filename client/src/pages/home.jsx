@@ -4,7 +4,7 @@ import { ChatWindow } from "../components/chatWindow";
 import EmptyConversation from "../components/chatWindow/EmptyConversation";
 
 const Home = ({ children }) => {
-  const selected = true;
+  const selected = false;
   return (
     <Box sx={{ display: "flex", width: "100%", height: "100vh" }}>
       <Box

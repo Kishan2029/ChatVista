@@ -12,7 +12,7 @@ import {
 import { XCircle } from "@phosphor-icons/react";
 import React, { useState } from "react";
 
-const CreateGroup = ({ open, handleClose }) => {
+const CreateGroupModal = ({ open, handleClose }) => {
   const userList = [
     { id: 1, name: "name 1" },
     { id: 2, name: "name 2" },
@@ -41,7 +41,7 @@ const CreateGroup = ({ open, handleClose }) => {
           label="Name"
           variant="outlined"
           fullWidth
-          sx={{ mt: "1rem", mb: "1rem" }}
+          sx={{ mt: "2rem", mb: "1.5rem" }}
         />
 
         <Autocomplete
@@ -80,7 +80,7 @@ const CreateGroup = ({ open, handleClose }) => {
           }}
         />
 
-        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "3rem" }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: "5rem" }}>
           <Button
             variant="contained"
             sx={{
@@ -99,4 +99,4 @@ const CreateGroup = ({ open, handleClose }) => {
   );
 };
 
-export default CreateGroup;
+export default CreateGroupModal;

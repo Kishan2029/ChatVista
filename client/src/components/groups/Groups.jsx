@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { AllChats } from "../chats";
 import { Plus } from "@phosphor-icons/react";
 import { Divide } from "@phosphor-icons/react/dist/ssr";
-import CreateGroup from "./createGroup";
+import CreateGroupModal from "./CreateGroupModal";
 
 const Groups = () => {
   const [modal, setModal] = useState(false);
@@ -20,16 +20,20 @@ const Groups = () => {
           px: "0.3rem",
         }}
       >
-        <Typography onClick={() => setModal(!modal)}>
+        <Typography onClick={() => setModal(!modal)} sx={{ cursor: "pointer" }}>
           Create New Group
         </Typography>
-        <Plus onClick={() => setModal(!modal)} size={26} />
+        <Plus
+          onClick={() => setModal(!modal)}
+          size={26}
+          style={{ cursor: "pointer" }}
+        />
       </Box>
       <Divider sx={{ my: "1rem" }} />
 
       <AllChats />
 
-      <CreateGroup open={modal} handleClose={() => setModal(false)} />
+      <CreateGroupModal open={modal} handleClose={() => setModal(false)} />
     </Box>
   );
 };
