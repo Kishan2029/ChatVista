@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const dotenv = require("dotenv");
-dotenv.config();
+require('dotenv').config({ path: process.env.NODE_ENV === "production" ? ".env" : ".env.dev" })
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const path = require("path");
@@ -27,7 +27,7 @@ const PORT = process.env.PORT || 6000;
 
 
 // connectDB();
-
+console.log("env", process.env.NODE_ENV)
 app.get('/', (req, res) => {
     res.send('Server is working')
 })
