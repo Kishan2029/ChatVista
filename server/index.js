@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
 const dotenv = require("dotenv");
-require('dotenv').config({ path: process.env.NODE_ENV === "production" ? ".env" : ".env.dev" })
+dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env" : ".env.dev" })
 const cors = require("cors");
 const bodyParser = require('body-parser');
 const path = require("path");
-// const route = require("./routes/routes");
-// const { errorHandler, logger, checkAuth } = require('./middleware/index');
+const route = require("./routes/routes");
+const { logger } = require('./middleware/index');
 
 // const connectDB = require('./config/db');
 
@@ -27,17 +27,22 @@ const PORT = process.env.PORT || 6000;
 
 
 // connectDB();
-console.log("env", process.env.NODE_ENV)
+
 app.get('/', (req, res) => {
-    res.send('Server is working')
+    console.log("Hello")
+    res.send('Server is running')
+})
+
+app.get('/test', (req, res) => {
+    res.send('test is running')
 })
 
 
-// app.use(logger);
+app.use(logger);
 
 // app.use(checkAuth);
 
-// route(app);
+route(app);
 
 // app.use(errorHandler);
 
