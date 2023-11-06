@@ -8,7 +8,7 @@ const path = require("path");
 const route = require("./routes/routes");
 const { logger } = require('./middleware/index');
 
-// const connectDB = require('./config/db');
+const connectDB = require('./config/db');
 
 // Cors Setup
 const corsOptions = {
@@ -26,7 +26,7 @@ app.use(bodyParser.json())
 const PORT = process.env.PORT || 6000;
 
 
-// connectDB();
+connectDB();
 
 app.get('/', (req, res) => {
     console.log("Hello")
