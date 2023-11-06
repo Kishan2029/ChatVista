@@ -44,7 +44,7 @@ app.use(logger);
 
 route(app);
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`[listen] Server listening on ${PORT}`);
