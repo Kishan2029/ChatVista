@@ -6,7 +6,7 @@ const cors = require("cors");
 const bodyParser = require('body-parser');
 const path = require("path");
 const route = require("./routes/routes");
-const { logger } = require('./middleware/index');
+const { logger, errorHandler } = require('./middleware/index');
 
 const connectDB = require('./config/db');
 

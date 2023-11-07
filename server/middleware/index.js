@@ -1,9 +1,9 @@
-// const { errorHandler } = require("./errorHandler");
+const { errorHandler } = require("./errorHandler");
 const { logger } = require('./logger');
 // const { checkAuth } = require('./checkAuth');
 
 module.exports = {
-    // errorHandler,
+    errorHandler,
     logger,
     // checkAuth,
     // imageUpload

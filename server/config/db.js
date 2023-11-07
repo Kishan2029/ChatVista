@@ -8,7 +8,7 @@ const connectDB = async () => {
         mongoose.connect(
             process.env.MONGODB_URL
         );
-        console.log("ChatVista Connected....");
+        console.log("ChatVista Database Connected....");
     } catch (err) {
         console.error(err.message);
         // Exit Process with failure
