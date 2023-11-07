@@ -3,7 +3,8 @@ const { ZodError } = require('zod');
 const { fromZodError } = require('zod-validation-error');
 
 
-// eslint-disable-next-line no-unused-vars
+// Status code
+// 403 - validation error
 const errorHandler = (err, req, res, next) => {
 
     if (process.env.NODE_ENV !== "production") {
@@ -15,7 +16,6 @@ const errorHandler = (err, req, res, next) => {
     if (process.env.NODE_ENV === "development") {
         if (err instanceof ZodError) {
             const validation = fromZodError(err)
-            console.log(validation)
             return res
                 .status(403)
                 .send({

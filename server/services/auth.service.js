@@ -1,15 +1,25 @@
-// var User = require('../models/user.model')
+const User = require('../models/user.model');
+const OTP = require('../models/otp.model');
 
-// exports.createUser = async function (body) {
+const generateOTP = () => {
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    return otp;
+}
 
-//     try {
-//         const user = await User.findOne({ email: body.email });
-//         if (user) return "User Already Exists";
-//         const newUser = new User(body)
-//         await newUser.save();
-//         return "Document added";
-//     } catch (e) {
-//         // Log Errors
-//         console.log("error", e)
-//     }
-// }
+
+exports.registerUser = async function (firstName, lastName, email, password) {
+
+
+    // const user = await User.findOne({ email: email });
+    // if (user) return { statusCode: 200, response: { success: false, message: "User already exist" } };
+
+
+    const newOtp = new OTP({ email, otp: generateOTP() })
+    await newOtp.save();
+
+
+    // const newUser = new User({ firstName, lastName, email, password })
+    // await newUser.save();
+    return { statusCode: 200, response: { success: true, message: "New user registered" } };
+
+}
