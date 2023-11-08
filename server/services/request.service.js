@@ -84,3 +84,14 @@ exports.sentRequest = async function (userA, userB, status) {
 
 
 }
+
+exports.getUserReceivedRequests = async function (userId) {
+    const user = await User.findById(userId);
+    if (!user) return { statusCode: 400, response: { success: false, message: "User is not registered." } };
+
+    const requests = await Request.find({ receiverUser: userId, status: "sent" }).select({ senderUser: 1, })
+
+    return { statusCode: 200, response: { success: true, data: requests } };
+
+}
+
