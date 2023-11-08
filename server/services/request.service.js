@@ -4,6 +4,7 @@ const Request = require('../models/request.model')
 const alreadyFriends = async (userA, userB) => {
     const requestAtoB = await Request.find({ senderUser: userA, receiverUser: userB, status: "accepted" });
     const requestBtoA = await Request.find({ senderUser: userB, receiverUser: userA, status: "accepted" });
+    console.log
     if (requestAtoB.length > 0 || requestBtoA.length > 0) {
         return true;
     }
@@ -11,7 +12,7 @@ const alreadyFriends = async (userA, userB) => {
 }
 
 const sentRequestExist = async (userA, userB) => {
-    const sentRequest = await Request.find({ senderUser: userB, receiverUser: userA, status: "sent" });
+    const sentRequest = await Request.findOne({ senderUser: userB, receiverUser: userA, status: "sent" });
     if (sentRequest) return true;
     return false;
 }
@@ -34,7 +35,8 @@ exports.sentRequest = async function (userA, userB, status) {
 
         // already sent a request
         const request = await Request.find({ senderUser: userA, receiverUser: userB, status: "sent" });
-        if (request) {
+        console.log("request", request)
+        if (request.length) {
             return { statusCode: 400, response: { success: false, message: "You already sent a request." } };
         }
 
@@ -50,11 +52,18 @@ exports.sentRequest = async function (userA, userB, status) {
 
         // check if userB to userA sent request exist
         const sentRequest = await sentRequestExist(userA, userB);
+
         if (!sentRequest) return { statusCode: 400, response: { success: false, message: "You have not receive the request. So you cannot accept/reject it." } };
 
         // update request status to accepted
-        sentRequest.status = "accepted";
-        await sentRequest.save();
+        const request = await Request.findOne({ senderUser: userB, receiverUser: userA, status: "sent" });
+        console.log("request", request)
+        request.status = "accepted"
+        await request.save();
+
+        // if userA to userB sent request exist, delete it
+        await Request.deleteMany({ senderUser: userA, receiverUser: userB, status: "sent" });
+
 
         return { statusCode: 200, response: { success: true, message: "You have accepted request." } };
 
@@ -64,8 +73,9 @@ exports.sentRequest = async function (userA, userB, status) {
         if (!sentRequest) return { statusCode: 400, response: { success: false, message: "You have not receive the request. So you cannot accept/reject it." } };
 
         // update request status to rejected
-        sentRequest.status = "rejected";
-        await sentRequest.save();
+        const request = await Request.findOne({ senderUser: userB, receiverUser: userA, status: "sent" });
+        request.status = "rejected";
+        await request.save();
 
         return { statusCode: 200, response: { success: true, message: "You have rejected request." } };
     } else {

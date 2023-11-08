@@ -1,11 +1,15 @@
 const { z } = require("zod")
-const RequestService = require("../services/request.service")
+const RequestService = require("../services/request.service");
+const { ObjectId } = require("mongodb");
 exports.sentRequest = async function (req, res, next) {
+
 
     try {
         const user = z.object({
             userA: z.string({ required_error: "UserId is required" }),
             userB: z.string({ required_error: "UserId is required" }),
+            // userA: z.instanceof(ObjectId),
+            // userB: z.instanceof(ObjectId),
             status: z.enum(['accepted', 'rejected', 'sent'])
         });
         const { userA, userB, status } = user.parse(req.body);
