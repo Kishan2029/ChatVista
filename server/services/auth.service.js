@@ -68,8 +68,6 @@ exports.verifyUser = async function (firstName, lastName, email, password, otp) 
 }
 
 exports.loginUser = async function (email, password) {
-
-
     const user = await User.findOne({ email: email });
     if (!user) return { statusCode: 400, response: { success: false, message: "User is not registered." } };
 
@@ -79,7 +77,5 @@ exports.loginUser = async function (email, password) {
     } else {
         return { statusCode: 400, response: { success: true, message: "Password does not match" } };
     }
-
-
 
 }

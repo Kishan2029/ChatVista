@@ -25,8 +25,6 @@ const errorHandler = (err, req, res, next) => {
         else {
             console.log("[error] API error", { error: err });
         }
-
-
     }
 
     return res
