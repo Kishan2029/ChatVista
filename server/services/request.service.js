@@ -1,5 +1,5 @@
 const User = require('../models/user.model');
-const Request = require('../models/request.model')
+const Request = require('../models/request.model');
 
 const alreadyFriends = async (userA, userB) => {
     const requestAtoB = await Request.find({ senderUser: userA, receiverUser: userB, status: "accepted" });
