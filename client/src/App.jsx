@@ -9,8 +9,16 @@ import { Outlet } from "react-router-dom";
 import { Box } from "@mui/material";
 import { Chats, Setting, UserProfile } from "./components";
 import { Groups } from "./components/groups";
+import { useState } from "react";
+import { AuthContext } from "./context/authContext";
 
 function App() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -62,11 +70,45 @@ function App() {
     },
     {
       path: "/register",
-      element: <Register />,
+      element: (
+        <AuthContext.Provider
+          value={{
+            firstName,
+            setFirstName,
+            lastName,
+            setLastName,
+            email,
+            setEmail,
+            password,
+            setPassword,
+            confirmPassword,
+            setConfirmPassword,
+          }}
+        >
+          <Register />
+        </AuthContext.Provider>
+      ),
     },
     {
       path: "/verify",
-      element: <Verify />,
+      element: (
+        <AuthContext.Provider
+          value={{
+            firstName,
+            setFirstName,
+            lastName,
+            setLastName,
+            email,
+            setEmail,
+            password,
+            setPassword,
+            confirmPassword,
+            setConfirmPassword,
+          }}
+        >
+          <Verify />
+        </AuthContext.Provider>
+      ),
     },
   ]);
   return <RouterProvider router={router} />;

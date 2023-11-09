@@ -12,18 +12,15 @@ const getAllUsers = async () => {
     return users;
 }
 
-//
+// explore users = allUsers - friends
 const exploredUsers = async (allUsers, friendList) => {
-    // Extract all senderIds and receiverIds from array B
+
     const idsToRemove = friendList.reduce((ids, item) => {
         ids.push(String(item.senderUser), String(item.receiverUser));
         return ids;
     }, []);
 
-    console.log("idsToRemove", idsToRemove)
-    const list = allUsers.filter(
-        item => !idsToRemove.includes(String(item._id))
-    )
+    const list = allUsers.filter(item => !idsToRemove.includes(String(item._id)))
 
     return list;
 
@@ -43,11 +40,9 @@ exports.getExploreUsers = async function (userId) {
     if (!user) return { statusCode: 400, response: { success: false, message: "User is not registered." } };
 
     const allUsers = await getAllUsers();
-    console.log("allUsers", allUsers)
     const friendList = await getFriendList(userId);
-    console.log("friendList", friendList)
     const exploreUsers = await exploredUsers(allUsers, friendList);
-    // console.log("exploreUsers", exploreUsers)
+
     return { statusCode: 200, response: { success: true, data: exploreUsers } };
 }
 
