@@ -28,6 +28,14 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState("");
   const [confirmError, setConfirmError] = useState("");
 
+  // const registerUserMutation = useMutation({
+  //   mutationFn: (body) => registerUser(body),
+  //   onMutate: async (body) => {
+
+  //   },
+  //   onSuccess: async (queryKey, body) => {},
+  // });
+
   const checkError = () => {
     if (
       firstNameError !== "" ||
@@ -89,11 +97,12 @@ const Register = () => {
     const isError = setError();
 
     if (!isError) {
-      console.log("firstName", firstName);
-      console.log("lastName", lastName);
-      console.log("email", email);
-      console.log("password", password);
-      console.log("confirmPassword", confirmPassword);
+      // console.log("firstName", firstName);
+      // console.log("lastName", lastName);
+      // console.log("email", email);
+      // console.log("password", password);
+      // console.log("confirmPassword", confirmPassword);
+
       navigate("/verify");
     }
   };

@@ -6,7 +6,7 @@ import Verify from "./pages/verify";
 import Navbar from "./components/Navbar";
 import Home from "./pages/home";
 import { Outlet } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Backdrop, Box, CircularProgress } from "@mui/material";
 import { Chats, Setting, UserProfile } from "./components";
 import { Groups } from "./components/groups";
 import { useState } from "react";
@@ -19,14 +19,25 @@ function App() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  //loading
+  const [globalLoader, setLoader] = useState(false);
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: (
-        <Box sx={{ display: "flex" }}>
-          <Navbar />
-          <Outlet />
-        </Box>
+        <>
+          <Box sx={{ display: "flex" }}>
+            <Navbar />
+            <Outlet />
+          </Box>
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={globalLoader}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        </>
       ),
       children: [
         {
@@ -66,48 +77,71 @@ function App() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: (
+        <>
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={globalLoader}
+          >
+            <Login />
+          </Backdrop>
+        </>
+      ),
     },
     {
       path: "/register",
       element: (
-        <AuthContext.Provider
-          value={{
-            firstName,
-            setFirstName,
-            lastName,
-            setLastName,
-            email,
-            setEmail,
-            password,
-            setPassword,
-            confirmPassword,
-            setConfirmPassword,
-          }}
-        >
-          <Register />
-        </AuthContext.Provider>
+        <>
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={globalLoader}
+          >
+            <AuthContext.Provider
+              value={{
+                firstName,
+                setFirstName,
+                lastName,
+                setLastName,
+                email,
+                setEmail,
+                password,
+                setPassword,
+                confirmPassword,
+                setConfirmPassword,
+              }}
+            >
+              <Register />
+            </AuthContext.Provider>
+          </Backdrop>
+        </>
       ),
     },
     {
       path: "/verify",
       element: (
-        <AuthContext.Provider
-          value={{
-            firstName,
-            setFirstName,
-            lastName,
-            setLastName,
-            email,
-            setEmail,
-            password,
-            setPassword,
-            confirmPassword,
-            setConfirmPassword,
-          }}
-        >
-          <Verify />
-        </AuthContext.Provider>
+        <>
+          <Backdrop
+            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={globalLoader}
+          >
+            <AuthContext.Provider
+              value={{
+                firstName,
+                setFirstName,
+                lastName,
+                setLastName,
+                email,
+                setEmail,
+                password,
+                setPassword,
+                confirmPassword,
+                setConfirmPassword,
+              }}
+            >
+              <Verify />
+            </AuthContext.Provider>
+          </Backdrop>
+        </>
       ),
     },
   ]);
