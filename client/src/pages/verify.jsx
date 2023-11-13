@@ -39,9 +39,9 @@ const Verify = () => {
       setGlobalLoader(true);
     },
     onSuccess: async (queryKey, body, data) => {
+      navigate("/");
       setGlobalLoader(false);
       console.log("data", data);
-      navigate("/");
     },
     onError: () => {
       setGlobalLoader(false);

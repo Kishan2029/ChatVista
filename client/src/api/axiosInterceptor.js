@@ -27,7 +27,7 @@ export const axiosResponseInterceptor = () => axios.interceptors.response.use(
         return response;
     },
     function (error) {
-        console.log("App error");
+        console.log("App error", error.response.data);
         return Promise.reject(error);
     }
 );

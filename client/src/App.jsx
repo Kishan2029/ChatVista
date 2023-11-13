@@ -84,13 +84,20 @@ function App() {
       path: "/login",
       element: (
         <>
-          <Login />
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={globalLoader}
+          <AuthContext.Provider
+            value={{
+              globalLoader,
+              setGlobalLoader,
+            }}
           >
-            <CircularProgress color="inherit" />
-          </Backdrop>
+            <Login />
+            <Backdrop
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={globalLoader}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          </AuthContext.Provider>
         </>
       ),
     },

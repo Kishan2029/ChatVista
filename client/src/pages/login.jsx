@@ -1,11 +1,77 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import birdImage from "../assets/images/bird.avif";
 import { blue } from "@mui/material/colors";
 import { GithubLogo, GoogleLogo, TwitterLogo } from "@phosphor-icons/react";
 import { SubmitButton } from "../components/index";
+import { TextFieldElement } from "react-hook-form-mui";
+import { useMutation } from "react-query";
+import { loginUser } from "../reactQuery/mutation";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { globalLoader, setGlobalLoader } = useContext(AuthContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // error
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const loginUserMutation = useMutation({
+    mutationFn: (body) => loginUser(body),
+    onMutate: async (body) => {
+      setGlobalLoader(true);
+    },
+    onSuccess: async (queryKey, body) => {
+      setGlobalLoader(false);
+      navigate("/");
+    },
+    onError: async () => {
+      setGlobalLoader(false);
+    },
+  });
+
+  const setError = () => {
+    let isError = false;
+
+    // email error
+    if (email === "") {
+      isError = true;
+      setEmailError("Email cannot be empty.");
+    } else {
+      setEmailError("");
+    }
+
+    // password error
+    if (password === "") {
+      setPasswordError("Password cannot be empty.");
+      isError = true;
+    } else if (password.length < 6) {
+      setPasswordError("Minimum password length should be 6.");
+      isError = true;
+    } else {
+      setPasswordError("");
+    }
+
+    return isError;
+  };
+
+  const onLogin = async () => {
+    console.log("login Button Clicked");
+    const isError = setError();
+
+    if (!isError) {
+      loginUserMutation.mutate({
+        email,
+        password,
+      });
+      navigate("/");
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -27,24 +93,36 @@ const Login = () => {
           New User ? <span style={{ color: blue[800] }}>Create an account</span>
         </Typography>
         <TextField
+          error={emailError.length === 0 ? false : true}
+          helperText={emailError}
           id="email"
           label="Email Address"
           variant="outlined"
           fullWidth
+          value={email}
+          required
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
+          sx={{ mt: "0.7rem", mb: "0.7rem" }}
+          error={passwordError.length === 0 ? false : true}
+          helperText={passwordError}
           id="password"
           label="Password"
           variant="outlined"
           fullWidth
-          sx={{ mt: "0.7rem", mb: "0.7rem" }}
+          type="password"
+          value={password}
+          required
+          onChange={(e) => setPassword(e.target.value)}
         />
+
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Typography sx={{ color: blue[800], textDecoration: "underline" }}>
             Forgot Password ?
           </Typography>
         </Box>
-        <SubmitButton name={"Login"} />
+        <SubmitButton name={"Login"} onClick={() => onLogin()} />
         <Divider sx={{ mb: "1rem" }}>Or</Divider>
         <Box sx={{ display: "flex", justifyContent: "center", gap: "4rem" }}>
           <GoogleLogo size={32} color="#e60000" />

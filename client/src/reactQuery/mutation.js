@@ -16,6 +16,15 @@ export const verifyUser = async (body) => {
     const { data } = await axios.post(config.urls.auth.verify(), body, {
 
     });
-    console.log("data", data);
+    // console.log("data", data);
+    return data.data;
+}
+
+// login user
+export const loginUser = async (body) => {
+    const { data } = await axios.post(config.urls.auth.login(), body, {
+
+    });
+    // console.log("data", data);
     return data.data;
 }
