@@ -3,8 +3,12 @@ import birdImage from "../assets/images/bird.avif";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { SubmitButton } from "../components";
 import { AuthContext } from "../context/authContext";
+import { verifyUser } from "../reactQuery/mutation";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 const Verify = () => {
+  const navigate = useNavigate();
   // const email = "kishan@gmail.com";
   const [digit1, setDigit1] = useState("");
   const [digit2, setDigit2] = useState("");
@@ -24,7 +28,25 @@ const Verify = () => {
     setPassword,
     confirmPassword,
     setConfirmPassword,
+    globalLoader,
+    setGlobalLoader,
   } = useContext(AuthContext);
+
+  // verify mutation
+  const verifyUserMutation = useMutation({
+    mutationFn: (body) => verifyUser(body),
+    onMutate: async (body) => {
+      setGlobalLoader(true);
+    },
+    onSuccess: async (queryKey, body, data) => {
+      setGlobalLoader(false);
+      console.log("data", data);
+      navigate("/");
+    },
+    onError: () => {
+      setGlobalLoader(false);
+    },
+  });
 
   const isEmptyDigits = () => {
     if (
@@ -42,7 +64,21 @@ const Verify = () => {
 
   const onVerify = () => {
     const otp = digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
-    console.log("otp", otp);
+    console.log({
+      firstName,
+      lastName,
+      email,
+      password,
+      otp,
+    });
+    verifyUserMutation.mutate({
+      firstName,
+      lastName,
+      email,
+      password,
+      otp,
+    });
+    // navigate("/");
   };
 
   return (

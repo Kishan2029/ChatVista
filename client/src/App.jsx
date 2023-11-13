@@ -11,7 +11,12 @@ import { Chats, Setting, UserProfile } from "./components";
 import { Groups } from "./components/groups";
 import { useState } from "react";
 import { AuthContext } from "./context/authContext";
-
+import {
+  axiosRequestInterceptor,
+  axiosResponseInterceptor,
+} from "./api/axiosInterceptor";
+axiosRequestInterceptor();
+axiosResponseInterceptor();
 function App() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -20,7 +25,7 @@ function App() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   //loading
-  const [globalLoader, setLoader] = useState(false);
+  const [globalLoader, setGlobalLoader] = useState(false);
 
   const router = createBrowserRouter([
     {
@@ -79,11 +84,12 @@ function App() {
       path: "/login",
       element: (
         <>
+          <Login />
           <Backdrop
             sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
             open={globalLoader}
           >
-            <Login />
+            <CircularProgress color="inherit" />
           </Backdrop>
         </>
       ),
@@ -92,27 +98,30 @@ function App() {
       path: "/register",
       element: (
         <>
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={globalLoader}
+          <AuthContext.Provider
+            value={{
+              firstName,
+              setFirstName,
+              lastName,
+              setLastName,
+              email,
+              setEmail,
+              password,
+              setPassword,
+              confirmPassword,
+              setConfirmPassword,
+              globalLoader,
+              setGlobalLoader,
+            }}
           >
-            <AuthContext.Provider
-              value={{
-                firstName,
-                setFirstName,
-                lastName,
-                setLastName,
-                email,
-                setEmail,
-                password,
-                setPassword,
-                confirmPassword,
-                setConfirmPassword,
-              }}
+            <Register />
+            <Backdrop
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={globalLoader}
             >
-              <Register />
-            </AuthContext.Provider>
-          </Backdrop>
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          </AuthContext.Provider>
         </>
       ),
     },
@@ -120,27 +129,30 @@ function App() {
       path: "/verify",
       element: (
         <>
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={globalLoader}
+          <AuthContext.Provider
+            value={{
+              firstName,
+              setFirstName,
+              lastName,
+              setLastName,
+              email,
+              setEmail,
+              password,
+              setPassword,
+              confirmPassword,
+              setConfirmPassword,
+              globalLoader,
+              setGlobalLoader,
+            }}
           >
-            <AuthContext.Provider
-              value={{
-                firstName,
-                setFirstName,
-                lastName,
-                setLastName,
-                email,
-                setEmail,
-                password,
-                setPassword,
-                confirmPassword,
-                setConfirmPassword,
-              }}
+            <Verify />
+            <Backdrop
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={globalLoader}
             >
-              <Verify />
-            </AuthContext.Provider>
-          </Backdrop>
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          </AuthContext.Provider>
         </>
       ),
     },

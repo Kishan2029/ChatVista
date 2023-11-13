@@ -6,6 +6,8 @@ import { GithubLogo, GoogleLogo, TwitterLogo } from "@phosphor-icons/react";
 import { SubmitButton } from "../components";
 import { AuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { registerUser } from "../reactQuery/mutation";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ const Register = () => {
     setPassword,
     confirmPassword,
     setConfirmPassword,
+    globalLoader,
+    setGlobalLoader,
   } = useContext(AuthContext);
 
   const [firstNameError, setFirstNameError] = useState("");
@@ -28,13 +32,18 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState("");
   const [confirmError, setConfirmError] = useState("");
 
-  // const registerUserMutation = useMutation({
-  //   mutationFn: (body) => registerUser(body),
-  //   onMutate: async (body) => {
-
-  //   },
-  //   onSuccess: async (queryKey, body) => {},
-  // });
+  const registerUserMutation = useMutation({
+    mutationFn: (body) => registerUser(body),
+    onMutate: async (body) => {
+      setGlobalLoader(true);
+    },
+    onSuccess: async (queryKey, body) => {
+      setGlobalLoader(false);
+    },
+    onError: async () => {
+      setGlobalLoader(false);
+    },
+  });
 
   const checkError = () => {
     if (
@@ -93,7 +102,7 @@ const Register = () => {
     return isError;
   };
 
-  const onRegister = () => {
+  const onRegister = async () => {
     const isError = setError();
 
     if (!isError) {
@@ -102,7 +111,12 @@ const Register = () => {
       // console.log("email", email);
       // console.log("password", password);
       // console.log("confirmPassword", confirmPassword);
-
+      registerUserMutation.mutate({
+        firstName,
+        lastName,
+        email,
+        password,
+      });
       navigate("/verify");
     }
   };

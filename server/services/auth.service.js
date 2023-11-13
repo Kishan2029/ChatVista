@@ -19,21 +19,23 @@ exports.registerUser = async function (firstName, lastName, email, password) {
 
 
     const user = await User.findOne({ email: email });
-    if (user) return { statusCode: 200, response: { success: false, message: "User already exist" } };
+    if (user) return { statusCode: 409, response: { success: false, message: "User already exist" } };
 
-
+    // Before otp generation, delete pervious otps
+    await OTP.deleteMany({ email: email });
     const newOtp = new OTP({ email, otp: generateOTP() })
     await newOtp.save();
 
     // check if otp is generated
     const findOTP = await OTP.findOne({ email });
-    if (!findOTP) return { statusCode: 200, response: { success: false, message: "Otp is not generated" } };
+    if (!findOTP) return { statusCode: 400, response: { success: false, message: "Otp is not generated" } };
 
 
 
     return { statusCode: 200, response: { success: true, message: "Otp is generated" } };
 
 }
+
 exports.verifyUser = async function (firstName, lastName, email, password, otp) {
 
 

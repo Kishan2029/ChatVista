@@ -7,5 +7,15 @@ export const registerUser = async (body) => {
     const { data } = await axios.post(config.urls.auth.register(), body, {
 
     });
+    console.log("data", data);
+    return data.data;
+}
+
+// verify user
+export const verifyUser = async (body) => {
+    const { data } = await axios.post(config.urls.auth.verify(), body, {
+
+    });
+    console.log("data", data);
     return data.data;
 }

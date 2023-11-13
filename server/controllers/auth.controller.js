@@ -35,7 +35,7 @@ exports.register = async function (req, res, next) {
 }
 
 exports.verify = async function (req, res, next) {
-    console.log("verify")
+
     try {
         const user = z.object({
             firstName: z.string({ required_error: "First name is required" }),
@@ -46,7 +46,7 @@ exports.verify = async function (req, res, next) {
         });
 
         const { firstName, lastName, email, password, otp } = user.parse(req.body);
-
+        console.log("verify")
         const { statusCode, response } = await AuthService.verifyUser(firstName, lastName, email, password, otp);
         res.status(statusCode).send(response);
     } catch (error) {
