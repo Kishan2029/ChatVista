@@ -13,15 +13,29 @@ const getAllUsers = async () => {
 }
 
 // explore users = allUsers - friends
-const exploredUsers = async (allUsers, friendList) => {
+const exploredUsers = async (allUsers, friendList, userId) => {
 
     const idsToRemove = friendList.reduce((ids, item) => {
         ids.push(String(item.senderUser), String(item.receiverUser));
         return ids;
     }, []);
 
-    const list = allUsers.filter(item => !idsToRemove.includes(String(item._id)))
+    let list = allUsers.filter(item => !idsToRemove.includes(String(item._id)));
 
+    // requests from a to anyUser
+    const requests = await Request.find({ senderUser: userId, status: "sent" });
+    console.log("requests", requests);
+    list = list.map((user) => {
+        let sent = false
+        if (requests.find((req) => String(req.receiverUser) === String(user._id))) {
+            sent = true;
+        }
+        return {
+            ...user._doc,
+            sent: sent
+        }
+    })
+    console.log("list", list)
     return list;
 
 }
@@ -41,7 +55,7 @@ exports.getExploreUsers = async function (userId) {
 
     const allUsers = await getAllUsers();
     const friendList = await getFriendList(userId);
-    const exploreUsers = await exploredUsers(allUsers, friendList);
+    const exploreUsers = await exploredUsers(allUsers, friendList, userId);
 
     return { statusCode: 200, response: { success: true, data: exploreUsers } };
 }

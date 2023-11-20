@@ -27,3 +27,11 @@ export const loginUser = async (body) => {
     });
     return data.data;
 }
+
+// send request
+export const sendRequest = async (body) => {
+    const { data } = await axios.post(config.urls.request.sendRequest(), body, {
+
+    });
+    return data.data;
+}

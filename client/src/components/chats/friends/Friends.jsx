@@ -1,31 +1,28 @@
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import React from "react";
+import { fetchFriends } from "../../../reactQuery/query";
+import LocalLoader from "../../LocalLoader";
+import { useSelector } from "react-redux";
+import { useQuery } from "react-query";
 
 const Friends = () => {
-  const friends = [
-    {
-      id: "1",
-      name: "Kevin",
-    },
-    {
-      id: "2",
-      name: "Virat",
-    },
-    {
-      id: "3",
-      name: "Rohit",
-    },
-    {
-      id: "4",
-      name: "Anushka",
-    },
-  ];
+  const auth = useSelector((state) => state.auth.user);
+  const { data, error, isError, isLoading } = useQuery({
+    queryFn: () => fetchFriends(auth.userId),
+    queryKey: ["friends"],
+  });
+  console.log("data", data);
+  if (isLoading) {
+    return <LocalLoader />;
+  }
+  const friends = data;
+
   return (
     <Box>
       <Stack spacing={2}>
         {friends.map((item) => {
           return (
-            <Box id={item.id}>
+            <Box id={item._id}>
               <Box
                 sx={{
                   display: "flex",
@@ -37,7 +34,9 @@ const Friends = () => {
                   sx={{ display: "flex", gap: "1rem", alignItems: "center" }}
                 >
                   <Avatar />
-                  <Typography>{item.name}</Typography>
+                  <Typography>
+                    {item.firstName + " " + item.lastName}
+                  </Typography>
                 </Box>
                 <Typography sx={{ color: "var(--chatMessageBlue)" }}>
                   Go to Chat

@@ -6,7 +6,13 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import store from "./store/index.js";
 import { Provider } from "react-redux";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false, // default: true
+    },
+  },
+});
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>

@@ -58,22 +58,22 @@ const io = new Server(server, {
     },
 });
 
-io.on("connection", (socket, data) => {
+// io.on("connection", (socket, data) => {
 
-    console.log("User Connected:", socket.id)
-    socket.on("disconnect", () => {
-        console.log("User Disconnected:", socket.id)
-    });
+//     console.log("User Connected:", socket.id)
+//     socket.on("disconnect", () => {
+//         console.log("User Disconnected:", socket.id)
+//     });
 
-    socket.on("addUser", (data) => {
-        console.log("newUser", data)
-    })
-    socket.on('sendMessage', (arg) => {
-        console.log(socket.id + " " + arg);
-    });
+//     socket.on("addUser", (data) => {
+//         console.log("newUser", data)
+//     })
+//     socket.on('sendMessage', (arg) => {
+//         console.log(socket.id + " " + arg);
+//     });
 
 
-});
+// });
 
 
 

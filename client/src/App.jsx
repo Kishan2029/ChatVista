@@ -32,7 +32,7 @@ axiosResponseInterceptor();
 function App() {
   // socket.emit("addUser", "abc");
   // const auth = useSelector((state) => state.auth.user);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // dispatch(setUser("user"));
   // console.log("authApp", auth);
   const [firstName, setFirstName] = useState("");
@@ -46,12 +46,16 @@ function App() {
 
   // useEffect
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (isUserLoggedIn()) {
+      dispatch(setUser({ userId: localStorage.getItem("userId") }));
+    }
+  }, []);
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: (
+      element: isUserLoggedIn() ? (
         <>
           <Box sx={{ display: "flex" }}>
             <Navbar />
@@ -64,6 +68,8 @@ function App() {
             <CircularProgress color="inherit" />
           </Backdrop>
         </>
+      ) : (
+        <Navigate to="/login" />
       ),
       children: [
         {

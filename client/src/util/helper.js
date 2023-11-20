@@ -11,8 +11,9 @@ export const isUserLoggedIn = () => {
     return localStorage.getItem("login");
 }
 
-export const setUserLogin = () => {
-    return localStorage.setItem("login", true)
+export const setUserLogin = (userId) => {
+    localStorage.setItem("login", true)
+    localStorage.setItem("userId", userId)
 }
 
 

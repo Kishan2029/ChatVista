@@ -7,7 +7,7 @@ import { SubmitButton } from "../components/index";
 
 import { useMutation } from "react-query";
 import { loginUser } from "../reactQuery/mutation";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../store/slices/authSlice";
@@ -37,7 +37,7 @@ const Login = () => {
       const user = {
         userId: data.userId,
       };
-      setUserLogin();
+      setUserLogin(data.userId);
       dispatch(setUser(user));
 
       // navigate("/verify");
@@ -108,7 +108,17 @@ const Login = () => {
           Login to ChatVista
         </Typography>
         <Typography sx={{ mb: "0.4rem" }}>
-          New User ? <span style={{ color: blue[800] }}>Create an account</span>
+          New User ?{" "}
+          <span
+            style={{
+              color: blue[800],
+              cursor: "pointer",
+              textDecoration: "none",
+            }}
+            onClick={() => navigate("/register")}
+          >
+            Create an account
+          </span>
         </Typography>
         <TextField
           error={emailError.length === 0 ? false : true}

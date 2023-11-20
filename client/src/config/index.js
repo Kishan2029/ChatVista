@@ -16,7 +16,16 @@ export const config = {
         return `${import.meta.env.VITE_BACKEND_URL}/user/exploreUsers/${id}`;
       },
       getFriends: (id) => {
-        return `${import.meta.env.VITE_BACKEND_URL}/user/exploreUsers/${id}`;
+        return `${import.meta.env.VITE_BACKEND_URL}/user/friends/${id}`;
+      },
+
+    },
+    request: {
+      getRequests: (id) => {
+        return `${import.meta.env.VITE_BACKEND_URL}/request/${id}`;
+      },
+      sendRequest: () => {
+        return `${import.meta.env.VITE_BACKEND_URL}/request/sent`;
       },
 
     }

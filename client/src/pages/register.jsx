@@ -142,7 +142,12 @@ const Register = () => {
         </Typography>
         <Typography sx={{ mb: "0.6rem" }}>
           Already have an account ?{" "}
-          <span style={{ color: blue[800] }}>Sign In</span>
+          <span
+            style={{ color: blue[800], cursor: "pointer" }}
+            onClick={() => navigate("/login")}
+          >
+            Sign In
+          </span>
         </Typography>
         <Box sx={{ display: "flex", gap: "1rem", mb: "0.7rem" }}>
           <TextField
