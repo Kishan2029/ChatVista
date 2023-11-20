@@ -19,7 +19,7 @@ export const axiosResponseInterceptor = () => axios.interceptors.response.use(
     // consoe.log("After response");
 
     function (response) {
-        console.log("res", response)
+        // console.log("res", response)
         // if (response.data.notification.value) {
         //     notify("success", response.data.notification.message)
         // }
@@ -28,6 +28,6 @@ export const axiosResponseInterceptor = () => axios.interceptors.response.use(
     },
     function (error) {
         console.log("App error", error.response.data);
-        return Promise.reject(error);
+        return Promise.reject(error.response.data);
     }
 );

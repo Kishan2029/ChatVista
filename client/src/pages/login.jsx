@@ -4,19 +4,24 @@ import birdImage from "../assets/images/bird.avif";
 import { blue } from "@mui/material/colors";
 import { GithubLogo, GoogleLogo, TwitterLogo } from "@phosphor-icons/react";
 import { SubmitButton } from "../components/index";
-import { TextFieldElement } from "react-hook-form-mui";
+
 import { useMutation } from "react-query";
 import { loginUser } from "../reactQuery/mutation";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../store/slices/authSlice";
+import { setUserLogin } from "../util/helper";
 
 const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { globalLoader, setGlobalLoader } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   // error
+  // const [isError, setIsError] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
@@ -25,18 +30,31 @@ const Login = () => {
     onMutate: async (body) => {
       setGlobalLoader(true);
     },
-    onSuccess: async (queryKey, body) => {
+    onSuccess: async (data, body) => {
       setGlobalLoader(false);
-      navigate("/");
+      console.log("Login Success");
+
+      const user = {
+        userId: data.userId,
+      };
+      setUserLogin();
+      dispatch(setUser(user));
+
+      // navigate("/verify");
+      // window.location.reload();
+      // navigate(0);
     },
-    onError: async () => {
+    onError: async (error) => {
+      console.log("error", error);
       setGlobalLoader(false);
+      setPasswordError("Password is not correct");
+      // setIsError(true);
     },
   });
 
-  const setError = () => {
+  const setError = (value) => {
     let isError = false;
-
+    if (value !== undefined) return isError;
     // email error
     if (email === "") {
       isError = true;
@@ -61,15 +79,15 @@ const Login = () => {
 
   const onLogin = async () => {
     console.log("login Button Clicked");
-    const isError = setError();
+    // const isError = setError();
 
-    if (!isError) {
+    if (!setError()) {
       loginUserMutation.mutate({
         email,
         password,
       });
-      navigate("/");
     }
+    navigate("/");
   };
 
   return (

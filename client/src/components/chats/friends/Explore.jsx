@@ -1,7 +1,26 @@
-import { Avatar, Box, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  CircularProgress,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React from "react";
+import { useSelector } from "react-redux";
+import { useQuery } from "react-query";
+import { fetchExploreUsers } from "../../../reactQuery/query";
+import { LocalLoader } from "../../index";
 
 const Explore = () => {
+  const auth = useSelector((state) => state.auth.user);
+  const { data, error, isError, isLoading } = useQuery({
+    queryFn: () => fetchExploreUsers(auth.userId),
+    queryKey: ["exploreUsers"],
+  });
+  console.log("data", data);
+  if (isLoading) {
+    return <LocalLoader />;
+  }
   const explore = [
     {
       id: "1",

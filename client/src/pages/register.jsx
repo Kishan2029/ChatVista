@@ -39,6 +39,8 @@ const Register = () => {
     },
     onSuccess: async (queryKey, body) => {
       setGlobalLoader(false);
+      // navigate("/verify");
+      // navigate(0);
     },
     onError: async () => {
       setGlobalLoader(false);

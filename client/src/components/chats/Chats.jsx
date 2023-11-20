@@ -3,9 +3,14 @@ import React, { useState } from "react";
 import AllChats from "./AllChats";
 import { UserPlus } from "@phosphor-icons/react";
 import { AddFriendModal } from "./friends/index";
+import { useSelector } from "react-redux";
 
 const Chats = () => {
+  const auth = useSelector((state) => state.auth.user);
+
+  console.log("auth", auth);
   const [modal, setModal] = useState(false);
+
   return (
     <Box sx={{ padding: "1rem", height: "100%" }}>
       <Box

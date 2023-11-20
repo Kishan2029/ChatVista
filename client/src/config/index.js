@@ -12,28 +12,14 @@ export const config = {
       },
     },
     user: {
-      getUserInfo: (email) => {
-        return `${import.meta.env.VITE_BACKEND_URL}/user/${email}`;
+      getExploreUsers: (id) => {
+        return `${import.meta.env.VITE_BACKEND_URL}/user/exploreUsers/${id}`;
       },
-      getFriends: (email) => {
-        return `${import.meta.env.VITE_BACKEND_URL}/user/getFriends/${email}`;
+      getFriends: (id) => {
+        return `${import.meta.env.VITE_BACKEND_URL}/user/exploreUsers/${id}`;
       },
-      getPhotos: (email) => {
-        return `${import.meta.env.VITE_BACKEND_URL}/user/getPhotos/${email}`;
-      },
-      updateProfileText: () => {
-        return `${import.meta.env.VITE_BACKEND_URL}/user/profile/updateText`;
-      },
-      updateProfileImage: () => {
-        return `${import.meta.env.VITE_BACKEND_URL}/user/profile/updateImage`;
-      },
-      addFriend: () => {
-        return `${import.meta.env.VITE_BACKEND_URL}/user/addFriend`;
-      },
-      updateDescription: () => {
-        return `${import.meta.env.VITE_BACKEND_URL}/user/updateDescription`;
-      },
-    },
+
+    }
 
   },
 };

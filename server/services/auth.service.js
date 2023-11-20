@@ -75,7 +75,7 @@ exports.loginUser = async function (email, password) {
 
     const match = await bcrypt.compare(password, user.password);
     if (match) {
-        return { statusCode: 200, response: { success: true, message: "Login successful" } };
+        return { statusCode: 200, response: { success: true, message: "Login successful", data: { userId: user.id } } };
     } else {
         return { statusCode: 400, response: { success: true, message: "Password does not match" } };
     }

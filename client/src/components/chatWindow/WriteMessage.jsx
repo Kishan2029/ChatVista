@@ -1,8 +1,15 @@
 import { Box, InputAdornment, TextField } from "@mui/material";
 import { Link, Smiley, TelegramLogo } from "@phosphor-icons/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const WriteMessage = () => {
+  const [sendMessage, setSendMessage] = useState("");
+
+  const onSendMessage = () => {
+    console.log("message", sendMessage);
+    socket.emit("sendMessage", sendMessage);
+  };
+
   return (
     <Box
       sx={{
@@ -18,6 +25,22 @@ const WriteMessage = () => {
         <TextField
           id="enter-message"
           placeholder="Write a message..."
+          value={sendMessage}
+          onChange={(e) => setSendMessage(e.target.value)}
+          sx={{
+            borderColor: "green",
+            input: {
+              color: "var(--chatEnterMessageButtonFontColor)",
+              bgcolor: "var(--chatEnterMessageButtonBackgroundColor)",
+              height: "1.2rem",
+
+              // px: 0,
+              // mx: 0,
+            },
+          }}
+          inputProps={{ style: { borderColor: "red" } }}
+          variant="outlined"
+          fullWidth
           // InputProps={{
           //   startAdornment: (
           //     <InputAdornment position="start" sx={{ bgcolor: "yellow" }}>
@@ -44,20 +67,18 @@ const WriteMessage = () => {
           //     </InputAdornment>
           //   ),
           // }}
-          sx={{
-            borderColor: "green",
-            input: {
-              color: "var(--chatEnterMessageButtonFontColor)",
-              bgcolor: "var(--chatEnterMessageButtonBackgroundColor)",
-              height: "1.2rem",
 
-              // px: 0,
-              // mx: 0,
-            },
+          onKeyDown={(ev) => {
+            if (ev.key === "Enter") {
+              console.log("Enter Pressed");
+              ev.preventDefault();
+
+              // console.log("comment", commentMessage);
+              if (sendMessage !== "") {
+                onSendMessage();
+              }
+            }
           }}
-          inputProps={{ style: { borderColor: "red" } }}
-          variant="outlined"
-          fullWidth
         />
       </Box>
       <Box sx={{ width: "10%", ml: "2rem" }}>
@@ -70,7 +91,11 @@ const WriteMessage = () => {
             borderRadius: "1rem",
           }}
         >
-          <TelegramLogo size={28} color="#fff" />
+          <TelegramLogo
+            size={28}
+            color="#fff"
+            onClick={() => onSendMessage()}
+          />
         </Box>
       </Box>
     </Box>

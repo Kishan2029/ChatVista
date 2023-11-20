@@ -1,6 +1,10 @@
 import "./App.css";
 import Login from "./pages/login";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import Register from "./pages/register";
 import Verify from "./pages/verify";
 import Navbar from "./components/Navbar";
@@ -9,15 +13,28 @@ import { Outlet } from "react-router-dom";
 import { Backdrop, Box, CircularProgress } from "@mui/material";
 import { Chats, Setting, UserProfile } from "./components";
 import { Groups } from "./components/groups";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthContext } from "./context/authContext";
 import {
   axiosRequestInterceptor,
   axiosResponseInterceptor,
 } from "./api/axiosInterceptor";
+
+// socket
+import io from "socket.io-client";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "./store/slices/authSlice";
+import { isUserLoggedIn } from "./util/helper";
+const socket = io.connect(import.meta.env.VITE_BACKEND_URL);
+
 axiosRequestInterceptor();
 axiosResponseInterceptor();
 function App() {
+  // socket.emit("addUser", "abc");
+  // const auth = useSelector((state) => state.auth.user);
+  // const dispatch = useDispatch();
+  // dispatch(setUser("user"));
+  // console.log("authApp", auth);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -26,6 +43,10 @@ function App() {
 
   //loading
   const [globalLoader, setGlobalLoader] = useState(false);
+
+  // useEffect
+
+  useEffect(() => {}, []);
 
   const router = createBrowserRouter([
     {
@@ -82,8 +103,10 @@ function App() {
     },
     {
       path: "/login",
-      element: (
-        <>
+      element: isUserLoggedIn() ? (
+        <Navigate to="/" />
+      ) : (
+        <div>
           <AuthContext.Provider
             value={{
               globalLoader,
@@ -98,12 +121,14 @@ function App() {
               <CircularProgress color="inherit" />
             </Backdrop>
           </AuthContext.Provider>
-        </>
+        </div>
       ),
     },
     {
       path: "/register",
-      element: (
+      element: isUserLoggedIn() ? (
+        <Navigate to="/" />
+      ) : (
         <>
           <AuthContext.Provider
             value={{
@@ -134,7 +159,10 @@ function App() {
     },
     {
       path: "/verify",
-      element: (
+
+      element: isUserLoggedIn() ? (
+        <Navigate to="/" />
+      ) : (
         <>
           <AuthContext.Provider
             value={{

@@ -25,6 +25,5 @@ export const loginUser = async (body) => {
     const { data } = await axios.post(config.urls.auth.login(), body, {
 
     });
-    // console.log("data", data);
     return data.data;
 }
