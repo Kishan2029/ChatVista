@@ -23,8 +23,6 @@ const Explore = () => {
   const sendRequestMutation = useMutation({
     mutationFn: (body) => sendRequest(body),
     onMutate: async (body) => {
-      console.log("body", body);
-
       queryClient.setQueriesData(["exploreUsers"], (oldData) => {
         const newData = oldData.map((item) => {
           console.log("item", item);

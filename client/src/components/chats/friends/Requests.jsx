@@ -1,17 +1,55 @@
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import React from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import LocalLoader from "../../LocalLoader";
 import { fetchRequests } from "../../../reactQuery/query";
+import { sendRequest } from "../../../reactQuery/mutation";
 
 const Requests = () => {
   const auth = useSelector((state) => state.auth.user);
+  const queryClient = useQueryClient();
+
   const { data, error, isError, isLoading } = useQuery({
     queryFn: () => fetchRequests(auth.userId),
     queryKey: ["requests"],
   });
-  console.log("data", data);
+
+  const requestResponseMutation = useMutation({
+    mutationFn: (body) => sendRequest(body),
+    onMutate: async (body) => {
+      console.log("body", body);
+
+      queryClient.setQueriesData(["requests"], (oldData) => {
+        const newData = oldData.filter(
+          (item) => item.senderUser !== body.userB
+        );
+        return newData;
+      });
+
+      queryClient.setQueriesData(["friends"], (oldData) => {
+        const newData = [
+          {
+            firstName: body.firstName,
+            lastName: body.lastName,
+            _id: Math.floor(Math.random() * 90000) + 10000,
+          },
+          ...oldData,
+        ];
+        return newData;
+      });
+
+      queryClient.setQueriesData(["exploreUsers"], (oldData) => {
+        const newData = oldData.filter((item) => item.email !== body.email);
+        return newData;
+      });
+    },
+    onSuccess: async (queryKey, body) => {
+      // set data
+      console.log("request sent successfully");
+    },
+  });
+
   if (isLoading) {
     return <LocalLoader />;
   }
@@ -57,10 +95,33 @@ const Requests = () => {
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", gap: "2rem" }}>
-                  <Typography sx={{ color: "var(--chatMessageBlue)" }}>
+                  <Typography
+                    sx={{ color: "var(--chatMessageBlue)", cursor: "pointer" }}
+                    onClick={() => {
+                      requestResponseMutation.mutate({
+                        userB: item.senderUser,
+                        userA: auth.userId,
+                        status: "accepted",
+                        firstName: item.firstName,
+                        lastName: item.lastName,
+                        email: item.email,
+                      });
+                    }}
+                  >
                     Accept
                   </Typography>
-                  <Typography sx={{ color: "#e60000" }}>Reject</Typography>
+                  <Typography
+                    sx={{ color: "#e60000", cursor: "pointer" }}
+                    onClick={() => {
+                      requestResponseMutation.mutate({
+                        userB: item.senderUser,
+                        userA: auth.userId,
+                        status: "rejected",
+                      });
+                    }}
+                  >
+                    Reject
+                  </Typography>
                 </Box>
               </Box>
             </Box>

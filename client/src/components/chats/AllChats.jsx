@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import ChatMessageCard from "./ChatMessageCard";
 
 const AllChats = () => {
-  const allChats = [
+  const allChats1 = [
     {
       name: "Cute Turtle",
       message: "That's it goodbye.",

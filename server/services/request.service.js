@@ -4,7 +4,7 @@ const Request = require('../models/request.model');
 const alreadyFriends = async (userA, userB) => {
     const requestAtoB = await Request.find({ senderUser: userA, receiverUser: userB, status: "accepted" });
     const requestBtoA = await Request.find({ senderUser: userB, receiverUser: userA, status: "accepted" });
-    console.log
+
     if (requestAtoB.length > 0 || requestBtoA.length > 0) {
         return true;
     }
@@ -89,7 +89,16 @@ exports.getUserReceivedRequests = async function (userId) {
     const user = await User.findById(userId);
     if (!user) return { statusCode: 400, response: { success: false, message: "User is not registered." } };
 
-    const requests = await Request.find({ receiverUser: userId, status: "sent" }).select({ senderUser: 1, })
+    let requests = await Request.find({ receiverUser: userId, status: "sent" }).select({ senderUser: 1 });
+    requests = await Promise.all(requests.map(async (item) => {
+        const userInfo = await User.findById(item.senderUser);
+        return {
+            ...item._doc,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName,
+            email: userInfo.email
+        }
+    }))
 
     return { statusCode: 200, response: { success: true, data: requests } };
 

@@ -2,8 +2,17 @@ const User = require('../models/user.model');
 const Request = require('../models/request.model')
 
 
-const getFriendList = async (userId) => {
-    const requests = await Request.find({ $or: [{ senderUser: userId, status: "accepted" }, { receiverUser: userId, status: "accepted" }] });
+const getFriendList = exports.getFriendList = async (userId) => {
+    let requests = await Request.find({ $or: [{ senderUser: userId, status: "accepted" }, { receiverUser: userId, status: "accepted" }] });
+    requests = await Promise.all(requests.map(async (item) => {
+        const userID = String(item.senderUser) === String(userId) ? item.receiverUser : item.senderUser;
+        const userInfo = await User.findById(userID);
+        return {
+            friendId: userID,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName
+        }
+    }))
     return requests;
 }
 
@@ -16,10 +25,10 @@ const getAllUsers = async () => {
 const exploredUsers = async (allUsers, friendList, userId) => {
 
     const idsToRemove = friendList.reduce((ids, item) => {
-        ids.push(String(item.senderUser), String(item.receiverUser));
+        ids.push(String(item.friendId));
         return ids;
     }, []);
-
+    idsToRemove.push(String(userId));
     let list = allUsers.filter(item => !idsToRemove.includes(String(item._id)));
 
     // requests from a to anyUser
