@@ -3,7 +3,11 @@ import { Autocomplete, Box, Typography } from "@mui/material";
 import Title from "./Title";
 import WriteMessage from "./WriteMessage";
 import ChatMessages from "./ChatMessages";
+import { useSelector } from "react-redux";
 const ChatWindow = () => {
+  const chatData = useSelector((state) => state.chat);
+  const userInfo = chatData.userInfo;
+  console.log("chatData", chatData);
   return (
     <Box
       sx={{
@@ -12,7 +16,7 @@ const ChatWindow = () => {
       }}
     >
       <Box sx={{ height: "10%" }}>
-        <Title />
+        <Title name={userInfo.name} />
       </Box>
       <Box sx={{ height: "90%", position: "relative" }}>
         {/* <Box sx={{ height: "80%" }}>Hello</Box> */}

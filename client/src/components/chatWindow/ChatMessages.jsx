@@ -1,8 +1,36 @@
 import { Box, Card, Divider, Typography } from "@mui/material";
 import React from "react";
+import { useQuery } from "react-query";
+import { useSelector } from "react-redux";
+import { fetchUserMessages } from "../../reactQuery/query";
+import LocalLoader from "../LocalLoader";
 
 const ChatMessages = () => {
-  const messages = [
+  const auth = useSelector((state) => state.auth.user);
+  const chatData = useSelector((state) => state.chat);
+  const chatUserId = chatData.userInfo.id;
+
+  const { data, error, isError, isLoading } = useQuery({
+    queryKey: ["userChats", chatUserId],
+    queryFn: () => {
+      // Check if auth is available before making the query
+      if (auth && auth.userId && chatUserId) {
+        return fetchUserMessages({ userA: auth.userId, userB: chatUserId });
+      }
+
+      // Return a default value or null if auth is not available
+      return [];
+    },
+    enabled: !!auth && !!auth.userId && !!chatUserId,
+  });
+
+  console.log("data", data);
+  if (isLoading) {
+    return <LocalLoader />;
+  }
+  const messages = data;
+
+  const messages1 = [
     {
       date: "Oct 11,2023",
       messages: [
@@ -109,7 +137,7 @@ const ChatMessages = () => {
                   <Box
                     sx={{
                       alignSelf:
-                        individualMessage.createdBy === "Kishan"
+                        individualMessage.createdBy === auth.userId
                           ? "flex-start"
                           : "flex-end",
                       maxWidth: "65%",
@@ -119,12 +147,12 @@ const ChatMessages = () => {
                       <Typography
                         sx={{
                           alignSelf:
-                            individualMessage.createdBy === "Kishan"
+                            individualMessage.createdBy === auth.userId
                               ? "flex-start"
                               : "flex-end",
                           fontSize: "0.9rem",
                           m:
-                            individualMessage.createdBy === "Kishan"
+                            individualMessage.createdBy === auth.userId
                               ? "0 0 0 0.6rem "
                               : "0 0.6rem 0 0 ",
                         }}
@@ -136,15 +164,19 @@ const ChatMessages = () => {
                         sx={{
                           //   width: "50%",
                           bgcolor:
-                            individualMessage.createdBy === "Kishan"
+                            individualMessage.createdBy === auth.userId
                               ? "var(--chatLeft)"
                               : "var(--chatRight)",
                           px: "1rem",
                           py: "1rem",
                           borderRadius: "1.3rem",
+                          color:
+                            individualMessage.createdBy === auth.userId
+                              ? "black"
+                              : "white",
                         }}
                       >
-                        <Typography> {individualMessage.message}</Typography>
+                        <Typography> {individualMessage.content}</Typography>
                       </Card>
                     </Box>
                   </Box>

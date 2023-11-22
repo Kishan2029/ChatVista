@@ -28,6 +28,16 @@ export const config = {
         return `${import.meta.env.VITE_BACKEND_URL}/request/sent`;
       },
 
+    },
+    chat: {
+      getAllChats: (id) => {
+        return `${import.meta.env.VITE_BACKEND_URL}/chat/${id}`;
+      },
+    },
+    message: {
+      getMessages: () => {
+        return `${import.meta.env.VITE_BACKEND_URL}/message/get`;
+      },
     }
 
   },

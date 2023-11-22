@@ -16,6 +16,11 @@ export const setUserLogin = (userId) => {
     localStorage.setItem("userId", userId)
 }
 
+export const truncateString = (string, length) => {
+    if (string === undefined) return undefined;
+    return string?.length > length ? string?.substring(0, length) + "..." : string?.substring(0, length);
+};
+
 
 
 

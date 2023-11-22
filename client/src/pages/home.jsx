@@ -1,10 +1,12 @@
 import { Box } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ChatWindow } from "../components/chatWindow";
 import EmptyConversation from "../components/chatWindow/EmptyConversation";
+import { useSelector } from "react-redux";
 
 const Home = ({ children }) => {
-  const selected = true;
+  // const [selected, setSelected] = useState(false);
+  const selected = useSelector((state) => state.chat.selected);
 
   return (
     <Box sx={{ display: "flex", width: "100%", height: "100vh" }}>

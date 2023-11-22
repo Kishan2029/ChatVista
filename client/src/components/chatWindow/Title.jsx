@@ -20,7 +20,7 @@ const Title = ({ name, lastSeen }) => {
         <OnlineAvatar />
         <Box>
           <Typography sx={{ color: "#030303", fontWeight: 600 }}>
-            Kevin Peterson
+            {name}
           </Typography>
           <Typography sx={{ color: "var(--grayFontColor2)" }}>
             Online

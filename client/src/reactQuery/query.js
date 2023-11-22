@@ -15,3 +15,13 @@ export const fetchRequests = async (id) => {
     const { data } = await axios.get(config.urls.request.getRequests(id));
     return data.data;
 }
+
+export const fetchAllChats = async (id) => {
+    const { data } = await axios.get(config.urls.chat.getAllChats(id));
+    return data.data;
+}
+
+export const fetchUserMessages = async (body) => {
+    const { data } = await axios.post(config.urls.message.getMessages(), body);
+    return data.data;
+}

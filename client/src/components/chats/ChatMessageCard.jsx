@@ -1,8 +1,24 @@
 import { Avatar, Badge, Box, Card, Typography } from "@mui/material";
 import React from "react";
 import OnlineAvatar from "../common/OnlineAvatar";
+import { truncateString } from "../../util/helper";
+import { setChatValue, setSelectedTrue } from "../../store/slices/chatSlice";
+import { useDispatch } from "react-redux";
 
-const ChatMessageCard = ({ name, time, message }) => {
+const ChatMessageCard = ({ name, time, message, id }) => {
+  const dispatch = useDispatch();
+  const chatSelected = () => {
+    dispatch(setSelectedTrue({ selected: true }));
+    dispatch(
+      setChatValue({
+        messages: "hello",
+        userInfo: {
+          name,
+          id,
+        },
+      })
+    );
+  };
   return (
     <Card
       elevation={0}
@@ -13,8 +29,9 @@ const ChatMessageCard = ({ name, time, message }) => {
         px: "1rem",
         py: "1rem",
         flexShrink: 0,
+        gap: "0.2rem",
       }}
-      onClick={() => console.log("clicked")}
+      onClick={() => chatSelected()}
     >
       {/* avatar and message */}
       <Box sx={{ display: "flex", gap: "1rem" }}>
@@ -24,7 +41,8 @@ const ChatMessageCard = ({ name, time, message }) => {
             {name}
           </Typography>
           <Typography sx={{ color: "var(--grayFontColor2)" }}>
-            {message}
+            {truncateString(message, 23)}
+            {/* {message} */}
           </Typography>
         </Box>
       </Box>

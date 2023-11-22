@@ -6,9 +6,6 @@ import { AddFriendModal } from "./friends/index";
 import { useSelector } from "react-redux";
 
 const Chats = () => {
-  const auth = useSelector((state) => state.auth.user);
-
-  console.log("auth", auth);
   const [modal, setModal] = useState(false);
 
   return (
