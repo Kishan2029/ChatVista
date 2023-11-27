@@ -10,8 +10,8 @@ export const chatSlice = createSlice({
     reducers: {
         setChatValue: (state, action) => {
 
-            state.messages = action.payload.messages,
-                state.userInfo = action.payload.userInfo
+            // state.messages = action.payload.messages,
+            state.userInfo = action.payload.userInfo
         },
         setSelectedTrue: (state, action) => {
             state.selected = action.payload.selected

@@ -3,15 +3,15 @@ import React from "react";
 import OnlineAvatar from "../common/OnlineAvatar";
 import { truncateString } from "../../util/helper";
 import { setChatValue, setSelectedTrue } from "../../store/slices/chatSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const ChatMessageCard = ({ name, time, message, id }) => {
   const dispatch = useDispatch();
+
   const chatSelected = () => {
     dispatch(setSelectedTrue({ selected: true }));
     dispatch(
       setChatValue({
-        messages: "hello",
         userInfo: {
           name,
           id,
@@ -19,6 +19,10 @@ const ChatMessageCard = ({ name, time, message, id }) => {
       })
     );
   };
+
+  const selectedUser = useSelector((state) => state.chat.userInfo);
+  console.log("selectedUser", selectedUser);
+
   return (
     <Card
       elevation={0}
@@ -30,6 +34,7 @@ const ChatMessageCard = ({ name, time, message, id }) => {
         py: "1rem",
         flexShrink: 0,
         gap: "0.2rem",
+        bgcolor: selectedUser.id === id ? "var(--blueNotification)" : "white",
       }}
       onClick={() => chatSelected()}
     >
@@ -37,10 +42,20 @@ const ChatMessageCard = ({ name, time, message, id }) => {
       <Box sx={{ display: "flex", gap: "1rem" }}>
         <OnlineAvatar />
         <Box>
-          <Typography sx={{ color: "#030303", fontWeight: 600 }}>
+          <Typography
+            sx={{
+              color: selectedUser.id === id ? "#FFFFFF" : "#030303",
+              fontWeight: 600,
+            }}
+          >
             {name}
           </Typography>
-          <Typography sx={{ color: "var(--grayFontColor2)" }}>
+          <Typography
+            sx={{
+              color:
+                selectedUser.id === id ? "#FFFFFF" : "var(--grayFontColor2)",
+            }}
+          >
             {truncateString(message, 23)}
             {/* {message} */}
           </Typography>
@@ -58,25 +73,37 @@ const ChatMessageCard = ({ name, time, message, id }) => {
           mr: "0.3rem",
         }}
       >
-        <Typography sx={{ color: "var(--grayTimeColor)" }}>{time}</Typography>
-        <Box
+        <Typography
           sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "1rem",
-            width: "1rem",
-            bgcolor: "var(--blueNotification)",
-            borderRadius: "2rem",
-            padding: "0.2rem",
+            color: selectedUser.id === id ? "#FFFFFF" : "var(--grayTimeColor)",
           }}
         >
-          <Typography
-            sx={{ color: "white", fontSize: "0.8rem", alignItems: "flex-end" }}
+          {time}
+        </Typography>
+        {selectedUser.id === id && (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "1rem",
+              width: "1rem",
+              bgcolor: "var(--blueNotification)",
+              borderRadius: "2rem",
+              padding: "0.2rem",
+            }}
           >
-            3
-          </Typography>
-        </Box>
+            <Typography
+              sx={{
+                color: "white",
+                fontSize: "0.8rem",
+                alignItems: "flex-end",
+              }}
+            >
+              3
+            </Typography>
+          </Box>
+        )}
       </Box>
     </Card>
   );
