@@ -34,17 +34,17 @@ const ChatMessageCard = ({ name, time, message, id }) => {
         py: "1rem",
         flexShrink: 0,
         gap: "0.2rem",
-        bgcolor: selectedUser.id === id ? "var(--blueNotification)" : "white",
+        bgcolor: selectedUser?.id === id ? "var(--blueNotification)" : "white",
       }}
       onClick={() => chatSelected()}
     >
       {/* avatar and message */}
       <Box sx={{ display: "flex", gap: "1rem" }}>
-        <OnlineAvatar />
+        <OnlineAvatar name={name} />
         <Box>
           <Typography
             sx={{
-              color: selectedUser.id === id ? "#FFFFFF" : "#030303",
+              color: selectedUser?.id === id ? "#FFFFFF" : "#030303",
               fontWeight: 600,
             }}
           >
@@ -53,7 +53,7 @@ const ChatMessageCard = ({ name, time, message, id }) => {
           <Typography
             sx={{
               color:
-                selectedUser.id === id ? "#FFFFFF" : "var(--grayFontColor2)",
+                selectedUser?.id === id ? "#FFFFFF" : "var(--grayFontColor2)",
             }}
           >
             {truncateString(message, 23)}
@@ -75,12 +75,12 @@ const ChatMessageCard = ({ name, time, message, id }) => {
       >
         <Typography
           sx={{
-            color: selectedUser.id === id ? "#FFFFFF" : "var(--grayTimeColor)",
+            color: selectedUser?.id === id ? "#FFFFFF" : "var(--grayTimeColor)",
           }}
         >
           {time}
         </Typography>
-        {selectedUser.id === id && (
+        {selectedUser?.id !== id && (
           <Box
             sx={{
               display: "flex",

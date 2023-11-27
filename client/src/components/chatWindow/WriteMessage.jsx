@@ -17,6 +17,7 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
   const writeMessageMutation = useMutation({
     mutationFn: (body) => writeMessage(body),
     onMutate: async (body) => {
+      // add message into user chat
       queryClient.setQueriesData(["userChats", chatUserId], (oldData) => {
         console.log("onMutate");
         const newData = oldData.map((item) => {
@@ -34,6 +35,19 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
         return newData;
       });
       setScrollView(Math.floor(Math.random() * 90000) + 10000);
+
+      // update last message in card
+      queryClient.setQueriesData(["allChats"], (oldData) => {
+        console.log("onMutate");
+        const newData = oldData.map((item) => {
+          if (item.friendId === body.userB) {
+            item.lastMessage = body.content;
+          }
+          return item;
+        });
+
+        return newData;
+      });
     },
     onSuccess: async (queryKey, body) => {
       // set data

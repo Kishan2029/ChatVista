@@ -35,7 +35,7 @@ const ChatMessages = ({ scrollView }) => {
     console.log("scroll useEffect");
     if (scroll1.current)
       scroll1.current.scrollIntoView({
-        behavior: "smooth",
+        // behavior: "smooth",
         block: "end",
       });
   }, [scrollView, data]);
@@ -43,91 +43,6 @@ const ChatMessages = ({ scrollView }) => {
   if (isLoading) {
     return <LocalLoader />;
   }
-
-  const messages1 = [
-    {
-      date: "Oct 11,2023",
-      messages: [
-        {
-          time: "6:38",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kishan",
-        },
-        {
-          time: "9:39",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kishan",
-        },
-        {
-          time: "10:00",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kishan",
-        },
-        {
-          time: "10:01",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kevin",
-        },
-        {
-          time: "10:28",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kevin",
-        },
-        {
-          time: "11:38",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kevin",
-        },
-      ],
-    },
-    {
-      date: "today",
-      messages: [
-        {
-          time: "6:38",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kevin",
-        },
-        {
-          time: "9:39",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kevin",
-        },
-        {
-          time: "10:00",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kishan",
-        },
-        {
-          time: "10:01",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kevin",
-        },
-        {
-          time: "10:28",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kishan",
-        },
-        {
-          time: "11:38",
-          message:
-            "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the",
-          createdBy: "Kishan",
-        },
-      ],
-    },
-  ];
 
   return (
     <Box

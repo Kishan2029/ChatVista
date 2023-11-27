@@ -24,7 +24,7 @@ const AllChats = () => {
     enabled: !!auth && !!auth.userId,
   });
 
-  console.log("data", data);
+  console.log("allChats", data);
   if (isLoading) {
     return <LocalLoader />;
   }

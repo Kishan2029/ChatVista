@@ -17,7 +17,7 @@ const Title = ({ name, lastSeen }) => {
       }}
     >
       <Box sx={{ display: "flex", gap: "1.4rem" }}>
-        <OnlineAvatar />
+        <OnlineAvatar name={name} />
         <Box>
           <Typography sx={{ color: "#030303", fontWeight: 600 }}>
             {name}
