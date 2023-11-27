@@ -35,3 +35,11 @@ export const sendRequest = async (body) => {
     });
     return data.data;
 }
+
+// write mutation
+export const writeMessage = async (body) => {
+    const { data } = await axios.post(config.urls.message.createMessage(), body, {
+
+    });
+    return data.data;
+}

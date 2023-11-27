@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Autocomplete, Box, Typography } from "@mui/material";
 import Title from "./Title";
 import WriteMessage from "./WriteMessage";
 import ChatMessages from "./ChatMessages";
 import { useSelector } from "react-redux";
+import { writeMessage } from "../../reactQuery/mutation";
+import { useMutation } from "react-query";
 const ChatWindow = () => {
   const chatData = useSelector((state) => state.chat);
   const userInfo = chatData.userInfo;
+  const [scrollView, setScrollView] = useState("0");
   console.log("chatData", chatData);
+
   return (
     <Box
       sx={{
@@ -32,9 +36,9 @@ const ChatWindow = () => {
         {/* <WriteMessage /> */}
         {/* </Box> */}
 
-        <ChatMessages />
+        <ChatMessages scrollView={scrollView} setScrollView={setScrollView} />
         <Box sx={{ position: "absolute", bottom: 0, width: "100%" }}>
-          <WriteMessage />
+          <WriteMessage scrollView={scrollView} setScrollView={setScrollView} />
         </Box>
       </Box>
     </Box>

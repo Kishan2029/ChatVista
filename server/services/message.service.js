@@ -72,7 +72,7 @@ exports.getMessage = async function (userA, userB, content) {
         const time = timeFormate(msg.createdAt);
 
         if (dateFormate(new Date()) === date) {
-            date = "today"
+            date = "Today"
         }
 
         const data = {

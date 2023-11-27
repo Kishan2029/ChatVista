@@ -1,13 +1,57 @@
 import { Box, InputAdornment, TextField } from "@mui/material";
 import { Link, Smiley, TelegramLogo } from "@phosphor-icons/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { writeMessage } from "../../reactQuery/mutation";
+import { useSelector } from "react-redux";
+import { useMutation, useQueryClient } from "react-query";
 
-const WriteMessage = () => {
+const WriteMessage = ({ scrollView, setScrollView }) => {
+  const auth = useSelector((state) => state.auth.user);
+  const chatData = useSelector((state) => state.chat);
+  const chatUserId = chatData.userInfo.id;
+
+  const queryClient = useQueryClient();
+
   const [sendMessage, setSendMessage] = useState("");
+
+  const writeMessageMutation = useMutation({
+    mutationFn: (body) => writeMessage(body),
+    onMutate: async (body) => {
+      queryClient.setQueriesData(["userChats", chatUserId], (oldData) => {
+        console.log("onMutate");
+        const newData = oldData.map((item) => {
+          if (item.date.toLowerCase() === "today") {
+            item.messages.push({
+              time: "now",
+              content: body.content,
+              id: Math.floor(Math.random() * 90000) + 10000,
+              createdBy: auth.userId,
+            });
+          }
+          return item;
+        });
+        console.log("newData", newData);
+        return newData;
+      });
+      setScrollView(Math.floor(Math.random() * 90000) + 10000);
+    },
+    onSuccess: async (queryKey, body) => {
+      // set data
+      console.log("message created successfully");
+    },
+  });
 
   const onSendMessage = () => {
     console.log("message", sendMessage);
-    socket.emit("sendMessage", sendMessage);
+    // socket.emit("sendMessage", sendMessage);
+    writeMessageMutation.mutate({
+      userA: auth.userId,
+      userB: chatUserId,
+      status: "sent",
+      content: sendMessage,
+    });
+
+    setSendMessage("");
   };
 
   return (

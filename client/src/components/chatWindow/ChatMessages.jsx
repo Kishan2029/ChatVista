@@ -1,14 +1,18 @@
 import { Box, Card, Divider, Typography } from "@mui/material";
-import React from "react";
-import { useQuery } from "react-query";
+import React, { useEffect, useRef } from "react";
+import { useMutation, useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import { fetchUserMessages } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
+import ScrollIntoView from "react-scroll-into-view";
 
-const ChatMessages = () => {
+const ChatMessages = ({ scrollView }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
+
+  const scroll1 = useRef(null);
+  console.log("scrollView", scrollView);
 
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["userChats", chatUserId],
@@ -25,10 +29,20 @@ const ChatMessages = () => {
   });
 
   console.log("data", data);
+
+  const messages = data;
+  useEffect(() => {
+    console.log("scroll useEffect");
+    if (scroll1.current)
+      scroll1.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+  }, [scrollView, data]);
+
   if (isLoading) {
     return <LocalLoader />;
   }
-  const messages = data;
 
   const messages1 = [
     {
@@ -114,18 +128,20 @@ const ChatMessages = () => {
       ],
     },
   ];
+
   return (
     <Box
       sx={{
-        height: "100%",
+        height: "82%",
         p: "1rem",
         overflow: "scroll",
+
         // bgcolor: "green",
       }}
     >
-      {messages.map((item) => {
+      {messages.map((item, index) => {
         return (
-          <Box sx={{ width: "100%" }}>
+          <Box sx={{ width: "100%" }} key={index}>
             <Divider textAlign="center" sx={{ mx: "1rem" }}>
               <Typography sx={{ mb: "1rem", mt: "1rem" }}>
                 {item.date}
@@ -186,6 +202,7 @@ const ChatMessages = () => {
           </Box>
         );
       })}
+      <Box ref={scroll1}></Box>
     </Box>
   );
 };

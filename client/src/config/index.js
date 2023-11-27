@@ -38,6 +38,9 @@ export const config = {
       getMessages: () => {
         return `${import.meta.env.VITE_BACKEND_URL}/message/get`;
       },
+      createMessage: () => {
+        return `${import.meta.env.VITE_BACKEND_URL}/message/create`;
+      },
     }
 
   },
