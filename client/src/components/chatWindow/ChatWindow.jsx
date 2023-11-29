@@ -10,7 +10,6 @@ const ChatWindow = () => {
   const chatData = useSelector((state) => state.chat);
   const userInfo = chatData.userInfo;
   const [scrollView, setScrollView] = useState("0");
-  console.log("chatData", chatData);
 
   return (
     <Box

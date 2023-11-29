@@ -25,13 +25,12 @@ const Explore = () => {
     onMutate: async (body) => {
       queryClient.setQueriesData(["exploreUsers"], (oldData) => {
         const newData = oldData.map((item) => {
-          console.log("item", item);
           if (String(body.userB) === String(item._id)) {
             item.sent = true;
           }
           return item;
         });
-        console.log("newData", newData);
+
         return newData;
       });
     },
@@ -41,7 +40,6 @@ const Explore = () => {
     },
   });
 
-  console.log("data", data);
   if (isLoading) {
     return <LocalLoader />;
   }

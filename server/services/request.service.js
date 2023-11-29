@@ -35,7 +35,7 @@ exports.sentRequest = async function (userA, userB, status) {
 
         // already sent a request
         const request = await Request.find({ senderUser: userA, receiverUser: userB, status: "sent" });
-        console.log("request", request)
+
         if (request.length) {
             return { statusCode: 400, response: { success: false, message: "You already sent a request." } };
         }
@@ -57,7 +57,7 @@ exports.sentRequest = async function (userA, userB, status) {
 
         // update request status to accepted
         const request = await Request.findOne({ senderUser: userB, receiverUser: userA, status: "sent" });
-        console.log("request", request)
+
         request.status = "accepted"
         await request.save();
 

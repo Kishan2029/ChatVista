@@ -9,7 +9,6 @@ const generateOTP = () => {
 
 const generateHashedPassword = async (password) => {
     const data = await bcrypt.hash(password, 10);
-    console.log("data", data);
     return data;
 }
 

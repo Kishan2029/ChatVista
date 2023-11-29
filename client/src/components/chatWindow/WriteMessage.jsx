@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { writeMessage } from "../../reactQuery/mutation";
 import { useSelector } from "react-redux";
 import { useMutation, useQueryClient } from "react-query";
+import { socket } from "../../socket/index";
 
 const WriteMessage = ({ scrollView, setScrollView }) => {
   const auth = useSelector((state) => state.auth.user);
@@ -19,7 +20,6 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
     onMutate: async (body) => {
       // add message into user chat
       queryClient.setQueriesData(["userChats", chatUserId], (oldData) => {
-        console.log("onMutate");
         const newData = oldData.map((item) => {
           if (item.date.toLowerCase() === "today") {
             item.messages.push({
@@ -31,14 +31,13 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
           }
           return item;
         });
-        console.log("newData", newData);
+
         return newData;
       });
       setScrollView(Math.floor(Math.random() * 90000) + 10000);
 
       // update last message in card
       queryClient.setQueriesData(["allChats"], (oldData) => {
-        console.log("onMutate");
         const newData = oldData.map((item) => {
           if (item.friendId === body.userB) {
             item.lastMessage = body.content;
@@ -56,8 +55,13 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
   });
 
   const onSendMessage = () => {
-    console.log("message", sendMessage);
-    // socket.emit("sendMessage", sendMessage);
+    const socketData = {
+      userA: auth.userId,
+      userB: chatUserId,
+      content: sendMessage,
+    };
+    socket.emit("sendMessage", socketData);
+
     writeMessageMutation.mutate({
       userA: auth.userId,
       userB: chatUserId,
@@ -128,7 +132,6 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
 
           onKeyDown={(ev) => {
             if (ev.key === "Enter") {
-              console.log("Enter Pressed");
               ev.preventDefault();
 
               // console.log("comment", commentMessage);

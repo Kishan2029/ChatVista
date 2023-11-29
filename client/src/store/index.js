@@ -6,7 +6,8 @@ import chatReducer from './slices/chatSlice'
 export default configureStore({
     reducer: {
         auth: authReducer,
-        chat: chatReducer
+        chat: chatReducer,
+
     },
 
 })

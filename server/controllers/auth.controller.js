@@ -46,7 +46,6 @@ exports.verify = async function (req, res, next) {
         });
 
         const { firstName, lastName, email, password, otp } = user.parse(req.body);
-        console.log("verify")
         const { statusCode, response } = await AuthService.verifyUser(firstName, lastName, email, password, otp);
         res.status(statusCode).send(response);
     } catch (error) {

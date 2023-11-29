@@ -111,7 +111,6 @@ const Verify = () => {
             // value={digit1}
             onChange={(e) => {
               setDigit1(e.target.value);
-              console.log("digit1", digit1);
             }}
             autoFocus={digit1 === "" ? true : false}
           />

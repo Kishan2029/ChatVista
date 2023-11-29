@@ -11,7 +11,7 @@ const Friends = () => {
     queryFn: () => fetchFriends(auth.userId),
     queryKey: ["friends"],
   });
-  console.log("data", data);
+
   if (isLoading) {
     return <LocalLoader />;
   }

@@ -8,7 +8,6 @@ import LocalLoader from "../LocalLoader";
 
 const AllChats = () => {
   const auth = useSelector((state) => state.auth.user);
-  console.log("auth", auth);
 
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["allChats"],
@@ -24,7 +23,6 @@ const AllChats = () => {
     enabled: !!auth && !!auth.userId,
   });
 
-  console.log("allChats", data);
   if (isLoading) {
     return <LocalLoader />;
   }

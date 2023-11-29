@@ -20,21 +20,17 @@ import {
   axiosResponseInterceptor,
 } from "./api/axiosInterceptor";
 
-// socket
-import io from "socket.io-client";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./store/slices/authSlice";
 import { isUserLoggedIn } from "./util/helper";
-const socket = io.connect(import.meta.env.VITE_BACKEND_URL);
+import { socket } from "./socket";
 
 axiosRequestInterceptor();
 axiosResponseInterceptor();
 function App() {
-  // socket.emit("addUser", "abc");
   // const auth = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-  // dispatch(setUser("user"));
-  // console.log("authApp", auth);
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

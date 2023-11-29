@@ -5,8 +5,8 @@ dotenv.config({ path: process.env.NODE_ENV === "production" ? ".env" : ".env.dev
 const PORT = process.env.PORT || 6000;
 const cors = require("cors");
 const bodyParser = require('body-parser');
-const path = require("path");
 const route = require("./routes/routes");
+const socket = require("./sockets/index")
 const { logger, errorHandler } = require('./middleware/index');
 const { Server } = require("socket.io");
 const connectDB = require('./config/db');
@@ -32,7 +32,6 @@ connectDB();
 
 
 app.get('/', (req, res) => {
-    console.log("Hello")
     res.send('Server is running')
 })
 
@@ -58,6 +57,8 @@ const io = new Server(server, {
     },
 });
 
+socket(io)
+
 // io.on("connection", (socket, data) => {
 
 //     console.log("User Connected:", socket.id)
@@ -66,13 +67,12 @@ const io = new Server(server, {
 //     });
 
 //     socket.on("addUser", (data) => {
-//         console.log("newUser", data)
+//         const userId = data.userId
+        
 //     })
 //     socket.on('sendMessage', (arg) => {
 //         console.log(socket.id + " " + arg);
 //     });
-
-
 // });
 
 

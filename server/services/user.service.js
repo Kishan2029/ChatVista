@@ -33,7 +33,7 @@ const exploredUsers = async (allUsers, friendList, userId) => {
 
     // requests from a to anyUser
     const requests = await Request.find({ senderUser: userId, status: "sent" });
-    console.log("requests", requests);
+
     list = list.map((user) => {
         let sent = false
         if (requests.find((req) => String(req.receiverUser) === String(user._id))) {
@@ -44,7 +44,7 @@ const exploredUsers = async (allUsers, friendList, userId) => {
             sent: sent
         }
     })
-    console.log("list", list)
+
     return list;
 
 }

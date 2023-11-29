@@ -55,7 +55,7 @@ exports.getAllChatsForUser = async function (userId) {
 
     }))
     chats = chats.sort((a, b) => a.createdAt > b.createdAt ? -1 : 1);
-    console.log("chats", chats)
+
     return { statusCode: 200, response: { success: true, data: chats } };
 
 

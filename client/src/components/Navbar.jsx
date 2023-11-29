@@ -13,7 +13,6 @@ const Navbar = () => {
   const [selected, setSelected] = useState("");
 
   const onClickNav = (path) => {
-    console.log("path", path);
     navigate("/" + path);
     setSelected(path);
   };

@@ -1,18 +1,20 @@
 import { Box, Card, Divider, Typography } from "@mui/material";
 import React, { useEffect, useRef } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { fetchUserMessages } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
 import ScrollIntoView from "react-scroll-into-view";
+import { socket } from "../../socket";
 
-const ChatMessages = ({ scrollView }) => {
+const ChatMessages = ({ scrollView, setScrollView }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
 
   const scroll1 = useRef(null);
-  console.log("scrollView", scrollView);
+
+  const queryClient = useQueryClient();
 
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["userChats", chatUserId],
@@ -28,17 +30,40 @@ const ChatMessages = ({ scrollView }) => {
     enabled: !!auth && !!auth.userId && !!chatUserId,
   });
 
-  console.log("data", data);
-
   const messages = data;
+  console.log("messages", messages);
+
   useEffect(() => {
-    console.log("scroll useEffect");
     if (scroll1.current)
       scroll1.current.scrollIntoView({
         // behavior: "smooth",
         block: "end",
       });
   }, [scrollView, data]);
+
+  useEffect(() => {
+    socket.on("receiveMessage", (data) => {
+      console.log("data", data);
+      // add message into user chat
+      if (auth.userId === data.receiverUser)
+        queryClient.setQueriesData(["userChats", data.createdBy], (oldData) => {
+          const newData = oldData.map((item) => {
+            if (item.date.toLowerCase() === "today") {
+              item.messages.push({
+                time: "now",
+                content: data.content,
+                id: Math.floor(Math.random() * 90000) + 10000,
+                createdBy: data.createdBy,
+              });
+            }
+            return item;
+          });
+
+          return newData;
+        });
+      setScrollView(Math.floor(Math.random() * 90000) + 10000);
+    });
+  }, [socket]);
 
   if (isLoading) {
     return <LocalLoader />;
@@ -63,12 +88,13 @@ const ChatMessages = ({ scrollView }) => {
               </Typography>
             </Divider>
             <Box sx={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              {item.messages.map((individualMessage) => {
+              {item.messages.map((individualMessage, index) => {
                 return (
                   <Box
+                    key={index}
                     sx={{
                       alignSelf:
-                        individualMessage.createdBy === auth.userId
+                        individualMessage.createdBy !== auth.userId
                           ? "flex-start"
                           : "flex-end",
                       maxWidth: "65%",
@@ -78,12 +104,12 @@ const ChatMessages = ({ scrollView }) => {
                       <Typography
                         sx={{
                           alignSelf:
-                            individualMessage.createdBy === auth.userId
+                            individualMessage.createdBy !== auth.userId
                               ? "flex-start"
                               : "flex-end",
                           fontSize: "0.9rem",
                           m:
-                            individualMessage.createdBy === auth.userId
+                            individualMessage.createdBy !== auth.userId
                               ? "0 0 0 0.6rem "
                               : "0 0.6rem 0 0 ",
                         }}
@@ -95,14 +121,14 @@ const ChatMessages = ({ scrollView }) => {
                         sx={{
                           //   width: "50%",
                           bgcolor:
-                            individualMessage.createdBy === auth.userId
+                            individualMessage.createdBy !== auth.userId
                               ? "var(--chatLeft)"
                               : "var(--chatRight)",
                           px: "1rem",
                           py: "1rem",
                           borderRadius: "1.3rem",
                           color:
-                            individualMessage.createdBy === auth.userId
+                            individualMessage.createdBy !== auth.userId
                               ? "black"
                               : "white",
                         }}

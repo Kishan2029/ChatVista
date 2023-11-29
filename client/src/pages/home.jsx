@@ -3,11 +3,15 @@ import React, { useEffect, useState } from "react";
 import { ChatWindow } from "../components/chatWindow";
 import EmptyConversation from "../components/chatWindow/EmptyConversation";
 import { useSelector } from "react-redux";
+import { socket } from "../socket";
 
 const Home = ({ children }) => {
-  // const [selected, setSelected] = useState(false);
+  const auth = useSelector((state) => state.auth.user);
   const selected = useSelector((state) => state.chat.selected);
 
+  if (auth) {
+    socket.emit("addUser", { userId: auth.userId });
+  }
   return (
     <Box sx={{ display: "flex", width: "100%", height: "100vh" }}>
       <Box
