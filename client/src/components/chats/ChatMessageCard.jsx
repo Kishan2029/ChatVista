@@ -1,9 +1,10 @@
 import { Avatar, Badge, Box, Card, Typography } from "@mui/material";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import OnlineAvatar from "../common/OnlineAvatar";
 import { truncateString } from "../../util/helper";
 import { setChatValue, setSelectedTrue } from "../../store/slices/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { socket } from "../../socket/index";
 
 const ChatMessageCard = ({ name, time, message, id }) => {
   const dispatch = useDispatch();
@@ -21,7 +22,38 @@ const ChatMessageCard = ({ name, time, message, id }) => {
   };
 
   const selectedUser = useSelector((state) => state.chat.userInfo);
-  console.log("selectedUser", selectedUser);
+
+  const [online, setOnline] = useState(false);
+  const [userTyping, setUserTyping] = useState(false);
+
+  useEffect(() => {
+    // console.log("userTyping", userTyping);
+  }, [userTyping]);
+
+  useEffect(() => {
+    socket.on("fetchUserTyping", (data) => {
+      console.log("fetchUserTyping", userTyping);
+      let time;
+      let i = 0;
+      if (data.senderUser === id) {
+        if (userTyping === true) {
+          console.log("true");
+          console.log("clear", i);
+          clearTimeout(time);
+        } else {
+          i = 0;
+          // console.log("false");
+          setUserTyping(true);
+        }
+        i++;
+
+        time = setTimeout(() => {
+          console.log("User stopped typing.");
+          setUserTyping(false);
+        }, 3 * 1000);
+      }
+    });
+  }, [socket]);
 
   return (
     <Card
@@ -40,7 +72,12 @@ const ChatMessageCard = ({ name, time, message, id }) => {
     >
       {/* avatar and message */}
       <Box sx={{ display: "flex", gap: "1rem" }}>
-        <OnlineAvatar name={name} />
+        <OnlineAvatar
+          name={name}
+          id={id}
+          online={online}
+          setOnline={setOnline}
+        />
         <Box>
           <Typography
             sx={{
@@ -56,8 +93,7 @@ const ChatMessageCard = ({ name, time, message, id }) => {
                 selectedUser?.id === id ? "#FFFFFF" : "var(--grayFontColor2)",
             }}
           >
-            {truncateString(message, 23)}
-            {/* {message} */}
+            {userTyping ? `Typing...` : truncateString(message, 23)}
           </Typography>
         </Box>
       </Box>

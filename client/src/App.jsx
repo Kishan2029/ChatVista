@@ -27,6 +27,7 @@ import { socket } from "./socket";
 
 axiosRequestInterceptor();
 axiosResponseInterceptor();
+
 function App() {
   // const auth = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
@@ -41,7 +42,6 @@ function App() {
   const [globalLoader, setGlobalLoader] = useState(false);
 
   // useEffect
-
   useEffect(() => {
     if (isUserLoggedIn()) {
       dispatch(setUser({ userId: localStorage.getItem("userId") }));

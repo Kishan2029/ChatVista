@@ -1,4 +1,4 @@
-const { addUser, removeUser, sendMessage } = require("./functions");
+const { addUser, removeUser, sendMessage, sendOnlineStatus, userTyping } = require("./functions");
 
 
 
@@ -17,5 +17,24 @@ module.exports = (io) => {
         socket.on('sendMessage', (data) => {
             sendMessage(data, socket)
         });
+
+        // socket.on('isOnline', (data) => {
+        //     isOnline(data, socket, io)
+        // });
+
+        socket.on('userTyping', (data) => [
+            userTyping(data, socket)
+        ])
+
+        setInterval(() => {
+            sendOnlineStatus(socket)
+        }, 2 * 1000)
+
+
+
+        socket.on('error', (error) => {
+            console.error('Socket error:', error);
+        });
+
     });
 };

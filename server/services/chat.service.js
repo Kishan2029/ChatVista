@@ -50,7 +50,8 @@ exports.getAllChatsForUser = async function (userId) {
             ...friend,
             lastMessage: lastMessage ? lastMessage.content : null,
             createdAt: lastMessage ? lastMessage.createdAt : null,
-            time: lastMessage ? getFormattedTime(lastMessage.createdAt) : null
+            time: lastMessage ? getFormattedTime(lastMessage.createdAt) : null,
+            online: false
         }
 
     }))

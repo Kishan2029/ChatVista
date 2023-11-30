@@ -138,6 +138,12 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
               if (sendMessage !== "") {
                 onSendMessage();
               }
+            } else {
+              const socketData = {
+                userA: auth.userId,
+                userB: chatUserId,
+              };
+              socket.emit("userTyping", socketData);
             }
           }}
         />

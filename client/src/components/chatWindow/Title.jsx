@@ -1,9 +1,15 @@
 import { Avatar, Box, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import OnlineAvatar from "../common/OnlineAvatar";
+import { useSelector } from "react-redux";
 
 const Title = ({ name, lastSeen }) => {
+  const chatData = useSelector((state) => state.chat);
+  const chatUserId = chatData.userInfo.id;
+
+  const [online, setOnline] = useState(false);
+
   return (
     <Box
       sx={{
@@ -17,13 +23,18 @@ const Title = ({ name, lastSeen }) => {
       }}
     >
       <Box sx={{ display: "flex", gap: "1.4rem" }}>
-        <OnlineAvatar name={name} />
+        <OnlineAvatar
+          name={name}
+          id={chatUserId}
+          online={online}
+          setOnline={setOnline}
+        />
         <Box>
           <Typography sx={{ color: "#030303", fontWeight: 600 }}>
             {name}
           </Typography>
           <Typography sx={{ color: "var(--grayFontColor2)" }}>
-            Online
+            {online ? `Online` : `Offline`}
           </Typography>
         </Box>
       </Box>

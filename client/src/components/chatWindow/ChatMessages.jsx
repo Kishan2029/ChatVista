@@ -43,7 +43,7 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
 
   useEffect(() => {
     socket.on("receiveMessage", (data) => {
-      console.log("data", data);
+      console.log("receiveMessage data:", data);
       // add message into user chat
       if (auth.userId === data.receiverUser)
         queryClient.setQueriesData(["userChats", data.createdBy], (oldData) => {

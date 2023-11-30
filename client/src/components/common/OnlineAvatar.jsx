@@ -1,9 +1,27 @@
 import { Avatar, Badge } from "@mui/material";
-import React from "react";
-import { stringToColor } from "../../util/helper";
+import React, { useEffect, useState } from "react";
+import { socket } from "../../socket/index";
+import { useQueryClient } from "react-query";
 
-const OnlineAvatar = ({ name }) => {
-  const online = true;
+const OnlineAvatar = ({ name, id, online, setOnline }) => {
+  // useEffect(() => {
+  //   socket.emit("isOnline", { userId: id });
+  //   setInterval(() => {
+  //     socket.emit("isOnline", { userId: id });
+  //   }, 10 * 1000);
+  // }, []);
+
+  useEffect(() => {
+    console.log("inside useeffect");
+    socket.on("fetchOnlineStatus", (data) => {
+      if (data.includes(id)) {
+        setOnline(true);
+      } else {
+        setOnline(false);
+      }
+    });
+  }, []);
+
   return (
     <>
       {online ? (
@@ -32,7 +50,6 @@ const OnlineAvatar = ({ name }) => {
               fontSize: "1.5rem",
               // backgroundColor: stringToColor(name),
             }}
-            src="/broken-image.jpg"
           >
             {name[0]}
           </Avatar>

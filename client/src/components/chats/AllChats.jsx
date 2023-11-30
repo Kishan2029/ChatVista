@@ -22,7 +22,7 @@ const AllChats = () => {
     },
     enabled: !!auth && !!auth.userId,
   });
-
+  console.log("allChats", data);
   if (isLoading) {
     return <LocalLoader />;
   }
@@ -58,6 +58,7 @@ const AllChats = () => {
                 message={item.lastMessage}
                 time={item.time}
                 id={item.friendId}
+                online={item.online}
               />
             );
           })}
