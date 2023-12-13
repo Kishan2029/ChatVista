@@ -2,6 +2,7 @@ const Request = require('../models/user.model');
 const User = require('../models/user.model');
 const Message = require('../models/message.model');
 const { getFriendList } = require('./user.service');
+const Notification = require('../models/notification.model');
 
 const dateDiffInDays = (a, b) => {
     const _MS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -40,18 +41,19 @@ exports.getAllChatsForUser = async function (userId) {
     if (!user) return { statusCode: 400, response: { success: false, message: "User is not registered." } };
 
     const friendList = await getFriendList(userId);
-    // console.log("friendList", friendList);
+
 
     let chats = await Promise.all(friendList.map(async (friend) => {
         const lastMessage = await Message.findOne({ $or: [{ senderUser: userId, receiverUser: friend.friendId }, { senderUser: friend.friendId, receiverUser: userId }] }).sort({ createdAt: -1 });
-        // console.log("lastMessage", lastMessage);
+        const notification = await Notification.findOne({ receiverUser: userId, senderUser: friend.friendId })
 
         return {
             ...friend,
             lastMessage: lastMessage ? lastMessage.content : null,
             createdAt: lastMessage ? lastMessage.createdAt : null,
             time: lastMessage ? getFormattedTime(lastMessage.createdAt) : null,
-            online: false
+            online: false,
+            notificationCount: notification ? notification.count : 0
         }
 
     }))

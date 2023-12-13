@@ -1,4 +1,5 @@
 const OnlineUser = require('../models/onlineUser.model');
+const Notification = require('../models/notification.model');
 
 exports.addUser = async (userId, socketId) => {
     const user = await OnlineUser.find({ socketId })
@@ -16,14 +17,14 @@ exports.removeUser = async (socketId) => {
 }
 
 exports.sendMessage = async (data, socket) => {
-    console.log("data", data.userB)
+
     const receiverSocket = await OnlineUser.find({ userId: data.userB })
-    console.log("receiverSocket", receiverSocket);
+
 
     const socketIds = receiverSocket.map((item) => {
         return item.socketId
     })
-    console.log("socketIds", socketIds)
+
     if (socketIds.length > 0) {
 
         const receiverData = {
@@ -81,7 +82,66 @@ exports.userTyping = async (data, socket) => {
             senderUser: data.userA,
             receiverUser: data.userB
         }
-        console.log("hello")
+        // console.log("hello")
         socket.to(socketIds).emit("fetchUserTyping", receiverData)
     }
+}
+
+exports.sendNotification = async (data, socket) => {
+    console.log("Inside sendNotification socket", data)
+
+    // update the count
+    const notification = await Notification.find({
+        senderUser: data.userA,
+        receiverUser: data.userB,
+    })
+
+    const count = notification.length ? notification[0].count + 1 : 1;
+    await Notification.findOneAndUpdate({
+        senderUser: data.userA,
+        receiverUser: data.userB,
+    }, {
+        senderUser: data.userA,
+        receiverUser: data.userB,
+        count: count
+    }, {
+        new: true,
+        upsert: true
+    })
+
+
+    // send notification to receiver
+    const receiverSocket = await OnlineUser.find({ userId: data.userB })
+
+
+    const socketIds = receiverSocket.map((item) => {
+        return item.socketId
+    })
+
+    if (socketIds.length > 0) {
+
+        const receiverData = {
+            count,
+            createdBy: data.userA,
+            receiverUser: data.userB
+        }
+        socket.to(socketIds).emit("receiveNotification", receiverData)
+    }
+}
+
+exports.makeNotificationCountZero = async (data, socket) => {
+    console.log("Inside makeNotificationCountZero socket", data)
+
+    // make count 0
+    await Notification.findOneAndUpdate({
+        senderUser: data.userA,
+        receiverUser: data.userB,
+    }, {
+        senderUser: data.userA,
+        receiverUser: data.userB,
+        count: 0
+    }, {
+        new: true,
+        upsert: true
+    })
 }

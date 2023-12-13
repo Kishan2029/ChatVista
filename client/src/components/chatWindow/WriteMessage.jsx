@@ -62,6 +62,8 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
     };
     socket.emit("sendMessage", socketData);
 
+    socket.emit("sendNotification", socketData);
+
     writeMessageMutation.mutate({
       userA: auth.userId,
       userB: chatUserId,

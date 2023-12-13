@@ -5,8 +5,11 @@ import { truncateString } from "../../util/helper";
 import { setChatValue, setSelectedTrue } from "../../store/slices/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { socket } from "../../socket/index";
+import { useQueryClient } from "react-query";
 
-const ChatMessageCard = ({ name, time, message, id }) => {
+const ChatMessageCard = ({ name, time, message, id, count }) => {
+  const auth = useSelector((state) => state.auth.user);
+  const queryClient = useQueryClient();
   const dispatch = useDispatch();
 
   const chatSelected = () => {
@@ -19,6 +22,27 @@ const ChatMessageCard = ({ name, time, message, id }) => {
         },
       })
     );
+    console.log("chat selected");
+
+    console.log("chat slected 2");
+    // make notification count 0
+    queryClient.setQueriesData(["allChats"], (oldData) => {
+      console.log("helllo");
+      const newData = oldData.map((item) => {
+        console.log("first", id, item.friendId);
+        if (item.friendId === id) {
+          item.notificationCount = 0;
+        }
+        return item;
+      });
+      return newData;
+    });
+
+    const socketData = {
+      userB: auth.userId,
+      userA: id,
+    };
+    socket.emit("makeNotificationCountZero", socketData);
   };
 
   const selectedUser = useSelector((state) => state.chat.userInfo);
@@ -116,7 +140,7 @@ const ChatMessageCard = ({ name, time, message, id }) => {
         >
           {time}
         </Typography>
-        {selectedUser?.id !== id && (
+        {selectedUser?.id !== id && count > 0 && (
           <Box
             sx={{
               display: "flex",
@@ -136,7 +160,7 @@ const ChatMessageCard = ({ name, time, message, id }) => {
                 alignItems: "flex-end",
               }}
             >
-              3
+              {count}
             </Typography>
           </Box>
         )}

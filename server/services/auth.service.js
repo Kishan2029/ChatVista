@@ -44,7 +44,7 @@ exports.verifyUser = async function (firstName, lastName, email, password, otp) 
 
     const { otp: generatedOtp } = await OTP.findOne({ email });
     if (!generatedOtp) return { statusCode: 400, response: { success: false, message: "Otp is not generated." } };
-    console.log("generatedOtp", generatedOtp)
+
     if (otp === generatedOtp) {
         // save the user
         // bcrypt.hash(password, 10, async function (err, hash) {

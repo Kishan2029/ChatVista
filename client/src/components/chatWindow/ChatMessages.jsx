@@ -31,7 +31,7 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
   });
 
   const messages = data;
-  console.log("messages", messages);
+  // console.log("messages", messages);
 
   useEffect(() => {
     if (scroll1.current)
