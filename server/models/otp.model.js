@@ -1,9 +1,23 @@
 // models/otpModel.js
 const mongoose = require('mongoose');
-const { mailSender } = require('../util/index');
+const { mailSender } = require('../util/mailSender');
 
 const otpSchema = new mongoose.Schema({
     email: {
+        type: String,
+        required: true,
+    },
+    firstName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    lastName: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    password: {
         type: String,
         required: true,
     },
@@ -11,7 +25,6 @@ const otpSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-
     createdAt: {
         type: Date,
         default: Date.now,

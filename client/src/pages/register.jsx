@@ -39,11 +39,14 @@ const Register = () => {
     },
     onSuccess: async (queryKey, body) => {
       setGlobalLoader(false);
-      // navigate("/verify");
-      // navigate(0);
+      navigate("/verify");
+      navigate(0);
     },
-    onError: async () => {
+    onError: async (error) => {
       setGlobalLoader(false);
+      console.log("error", error);
+      navigate("/login");
+      navigate(0);
     },
   });
 
@@ -106,20 +109,16 @@ const Register = () => {
 
   const onRegister = async () => {
     const isError = setError();
-
+    localStorage.setItem("email", email);
     if (!isError) {
-      // console.log("firstName", firstName);
-      // console.log("lastName", lastName);
-      // console.log("email", email);
-      // console.log("password", password);
-      // console.log("confirmPassword", confirmPassword);
-      registerUserMutation.mutate({
-        firstName,
-        lastName,
-        email,
-        password,
-      });
-      navigate("/verify");
+      try {
+        await registerUserMutation.mutateAsync({
+          firstName,
+          lastName,
+          email,
+          password,
+        });
+      } catch (error) {}
     }
   };
 

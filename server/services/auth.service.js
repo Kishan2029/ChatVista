@@ -22,12 +22,15 @@ exports.registerUser = async function (firstName, lastName, email, password) {
 
     // Before otp generation, delete pervious otps
     await OTP.deleteMany({ email: email });
-    const newOtp = new OTP({ email, otp: generateOTP() })
+    const hashedPassword = await generateHashedPassword(password);
+    const newOtp = new OTP({ email, otp: generateOTP(), firstName, lastName, password: hashedPassword })
     await newOtp.save();
 
     // check if otp is generated
     const findOTP = await OTP.findOne({ email });
     if (!findOTP) return { statusCode: 400, response: { success: false, message: "Otp is not generated" } };
+
+    // store data in temp users
 
 
 
@@ -35,27 +38,22 @@ exports.registerUser = async function (firstName, lastName, email, password) {
 
 }
 
-exports.verifyUser = async function (firstName, lastName, email, password, otp) {
+exports.verifyUser = async function (email, otp) {
 
 
     const user = await User.findOne({ email: email });
     if (user) return { statusCode: 400, response: { success: false, message: "User is alredy registered." } };
 
 
-    const { otp: generatedOtp } = await OTP.findOne({ email });
+    const { otp: generatedOtp, firstName, lastName, password } = await OTP.findOne({ email });
+
     if (!generatedOtp) return { statusCode: 400, response: { success: false, message: "Otp is not generated." } };
 
     if (otp === generatedOtp) {
         // save the user
-        // bcrypt.hash(password, 10, async function (err, hash) {
-        //     // Store hash in your password DB.
-        //     const newUser = new User({ firstName, lastName, email, password: hash })
-        //     await newUser.save();
-        //     return { statusCode: 400, response: { success: true, message: "New user is registered." } };
 
-        // });
-        const hashedPassword = await generateHashedPassword(password);
-        const newUser = new User({ firstName, lastName, email, password: hashedPassword })
+
+        const newUser = new User({ firstName, lastName, email, password })
         await newUser.save();
         return { statusCode: 200, response: { success: true, message: "New user is registered." } };
 

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import birdImage from "../assets/images/bird.avif";
 import { blue } from "@mui/material/colors";
@@ -26,7 +26,7 @@ const Login = () => {
   const [passwordError, setPasswordError] = useState("");
 
   const loginUserMutation = useMutation({
-    mutationFn: (body) => loginUser(body),
+    mutationFn: (body) => Promise.resolve(loginUser(body)),
     onMutate: async (body) => {
       setGlobalLoader(true);
     },
@@ -52,12 +52,20 @@ const Login = () => {
     },
   });
 
+  useEffect(() => {
+    console.log("emailError", emailError);
+  }, [emailError]);
+  useEffect(() => {
+    console.log("passwordError", passwordError);
+  }, [passwordError]);
+
   const setError = (value) => {
     let isError = false;
-    if (value !== undefined) return isError;
+
     // email error
     if (email === "") {
       isError = true;
+      // console.log("hey");
       setEmailError("Email cannot be empty.");
     } else {
       setEmailError("");
@@ -73,21 +81,30 @@ const Login = () => {
     } else {
       setPasswordError("");
     }
+    console.log("isError", isError);
 
     return isError;
   };
-
   const onLogin = async () => {
     console.log("login Button Clicked");
-    // const isError = setError();
 
-    if (!setError()) {
-      loginUserMutation.mutate({
-        email,
-        password,
-      });
+    const isError = setError();
+
+    if (!isError) {
+      try {
+        // Wait for the mutation to complete before navigating
+        await loginUserMutation.mutateAsync({
+          email,
+          password,
+        });
+
+        // If the mutation is successful, navigate to the next page
+        navigate("/");
+      } catch (error) {
+        // Handle error from the mutation, if needed
+        console.error("Error during login:", error);
+      }
     }
-    navigate("/");
   };
 
   return (

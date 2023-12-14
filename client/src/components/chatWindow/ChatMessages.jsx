@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { fetchUserMessages } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
-import ScrollIntoView from "react-scroll-into-view";
+// import ScrollIntoView from "react-scroll-into-view";
 import { socket } from "../../socket";
 
 const ChatMessages = ({ scrollView, setScrollView }) => {

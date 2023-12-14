@@ -38,15 +38,14 @@ exports.verify = async function (req, res, next) {
 
     try {
         const user = z.object({
-            firstName: z.string({ required_error: "First name is required" }),
-            lastName: z.string({ required_error: "Last name is required" }),
+
             email: z.string({ required_error: "Email is required", }).email({ message: "Not a email formate" }),
-            password: z.string({ required_error: "Password is required" }),
+
             otp: z.string({ required_error: "Otp is required" }).length(6),
         });
 
-        const { firstName, lastName, email, password, otp } = user.parse(req.body);
-        const { statusCode, response } = await AuthService.verifyUser(firstName, lastName, email, password, otp);
+        const { email, otp } = user.parse(req.body);
+        const { statusCode, response } = await AuthService.verifyUser(email, otp);
         res.status(statusCode).send(response);
     } catch (error) {
         next(error)

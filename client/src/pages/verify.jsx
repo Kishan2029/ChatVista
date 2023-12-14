@@ -16,21 +16,8 @@ const Verify = () => {
   const [digit4, setDigit4] = useState("");
   const [digit5, setDigit5] = useState("");
   const [digit6, setDigit6] = useState("");
-
-  const {
-    firstName,
-    setFirstName,
-    lastName,
-    setLastName,
-    email,
-    setEmail,
-    password,
-    setPassword,
-    confirmPassword,
-    setConfirmPassword,
-    globalLoader,
-    setGlobalLoader,
-  } = useContext(AuthContext);
+  const email = localStorage.getItem("email");
+  const { setGlobalLoader } = useContext(AuthContext);
 
   // verify mutation
   const verifyUserMutation = useMutation({
@@ -39,9 +26,10 @@ const Verify = () => {
       setGlobalLoader(true);
     },
     onSuccess: async (queryKey, body, data) => {
+      localStorage.removeItem("email");
       setGlobalLoader(false);
       navigate("/");
-      // navigate(0);
+      navigate(0);
     },
     onError: () => {
       setGlobalLoader(false);
@@ -64,21 +52,11 @@ const Verify = () => {
 
   const onVerify = () => {
     const otp = digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
-    console.log({
-      firstName,
-      lastName,
-      email,
-      password,
-      otp,
-    });
+
     verifyUserMutation.mutate({
-      firstName,
-      lastName,
       email,
-      password,
       otp,
     });
-    // navigate("/");
   };
 
   return (
