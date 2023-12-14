@@ -29,23 +29,30 @@ const AllChats = () => {
     enabled: !!auth && !!auth.userId,
   });
   console.log("allChats", data);
+  const playSound = () => {
+    let src =
+      "https://commondatastorage.googleapis.com/codeskulptor-assets/jump.ogg";
+    let src1 = "src/assets/sound/mouse-click-153941.mp3";
+    let audio = new Audio(src1);
+    audio.play();
+  };
   useEffect(() => {
     const handleReceiveNotification = (data) => {
-      console.log("receiveNotification", data);
       if (auth.userId === data.receiverUser) {
         queryClient.setQueriesData(["allChats"], (oldData) => {
           const newData = oldData.map((item) => {
             if (item.friendId === data.createdBy) {
-              console.log("step1", item.friendId, chatData?.userInfo?.id);
+              playSound();
               if (chatUserId === item.friendId) {
-                console.log("step2");
                 item.notificationCount = 0;
                 const socketData = {
                   userB: auth.userId,
                   userA: chatUserId,
                 };
                 socket.emit("makeNotificationCountZero", socketData);
-              } else item.notificationCount = data.count;
+              } else {
+                item.notificationCount = data.count;
+              }
             }
             return item;
           });
@@ -64,7 +71,7 @@ const AllChats = () => {
         socket.off("receiveNotification", handleReceiveNotification);
       }
     };
-  }, [auth, socket.connected, queryClient]);
+  }, [auth, socket.connected, queryClient, chatUserId]);
   if (isLoading) {
     return <LocalLoader />;
   }

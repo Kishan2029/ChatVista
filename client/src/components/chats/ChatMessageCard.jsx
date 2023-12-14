@@ -24,10 +24,8 @@ const ChatMessageCard = ({ name, time, message, id, count }) => {
     );
     console.log("chat selected");
 
-    console.log("chat slected 2");
     // make notification count 0
     queryClient.setQueriesData(["allChats"], (oldData) => {
-      console.log("helllo");
       const newData = oldData.map((item) => {
         console.log("first", id, item.friendId);
         if (item.friendId === id) {
@@ -56,13 +54,13 @@ const ChatMessageCard = ({ name, time, message, id, count }) => {
 
   useEffect(() => {
     socket.on("fetchUserTyping", (data) => {
-      console.log("fetchUserTyping", userTyping);
+      // console.log("fetchUserTyping", userTyping);
       let time;
       let i = 0;
       if (data.senderUser === id) {
         if (userTyping === true) {
-          console.log("true");
-          console.log("clear", i);
+          // console.log("true");
+          // console.log("clear", i);
           clearTimeout(time);
         } else {
           i = 0;
@@ -72,7 +70,7 @@ const ChatMessageCard = ({ name, time, message, id, count }) => {
         i++;
 
         time = setTimeout(() => {
-          console.log("User stopped typing.");
+          // console.log("User stopped typing.");
           setUserTyping(false);
         }, 3 * 1000);
       }
