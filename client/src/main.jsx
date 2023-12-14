@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import store from "./store/index.js";
 import { Provider } from "react-redux";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { ToastContainer } from "react-toastify";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <QueryClientProvider client={queryClient}>
       <App />
+      <ToastContainer />
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   </Provider>

@@ -6,6 +6,7 @@ import { AuthContext } from "../context/authContext";
 import { verifyUser } from "../reactQuery/mutation";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { notify } from "../util/notify";
 
 const Verify = () => {
   const navigate = useNavigate();
@@ -50,13 +51,16 @@ const Verify = () => {
     return false;
   };
 
-  const onVerify = () => {
+  const onVerify = async () => {
     const otp = digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
-
-    verifyUserMutation.mutate({
-      email,
-      otp,
-    });
+    try {
+      await verifyUserMutation.mutateAsync({
+        email,
+        otp,
+      });
+    } catch (error) {
+      notify("error", error.notificationMessage);
+    }
   };
 
   return (

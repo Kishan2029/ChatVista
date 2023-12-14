@@ -18,7 +18,7 @@ exports.registerUser = async function (firstName, lastName, email, password) {
 
 
     const user = await User.findOne({ email: email });
-    if (user) return { statusCode: 409, response: { success: false, message: "User already exist" } };
+    if (user) return { statusCode: 409, response: { success: false, message: "User already exist", notificationMessage: "User is alredy registered. Go to login page" } };
 
     // Before otp generation, delete pervious otps
     await OTP.deleteMany({ email: email });
@@ -28,7 +28,7 @@ exports.registerUser = async function (firstName, lastName, email, password) {
 
     // check if otp is generated
     const findOTP = await OTP.findOne({ email });
-    if (!findOTP) return { statusCode: 400, response: { success: false, message: "Otp is not generated" } };
+    if (!findOTP) return { statusCode: 400, response: { success: false, message: "Otp is not generated", notificationMessage: "Otp is not generated" } };
 
     // store data in temp users
 
@@ -42,12 +42,12 @@ exports.verifyUser = async function (email, otp) {
 
 
     const user = await User.findOne({ email: email });
-    if (user) return { statusCode: 400, response: { success: false, message: "User is alredy registered." } };
+    if (user) return { statusCode: 400, response: { success: false, message: "User is alredy registered.", notificationMessage: "User is alredy registered. Go to login page." } };
 
 
     const { otp: generatedOtp, firstName, lastName, password } = await OTP.findOne({ email });
 
-    if (!generatedOtp) return { statusCode: 400, response: { success: false, message: "Otp is not generated." } };
+    if (!generatedOtp) return { statusCode: 400, response: { success: false, message: "Otp is not generated.", notificationMessage: "Otp is not generated." } };
 
     if (otp === generatedOtp) {
         // save the user
@@ -59,7 +59,7 @@ exports.verifyUser = async function (email, otp) {
 
 
     } else {
-        return { statusCode: 400, response: { success: true, message: "Otp is not correct." } };
+        return { statusCode: 400, response: { success: true, message: "Otp is not correct.", notificationMessage: "Otp is not correct." } };
     }
 
 
@@ -74,7 +74,7 @@ exports.loginUser = async function (email, password) {
     if (match) {
         return { statusCode: 200, response: { success: true, message: "Login successful", data: { userId: user.id } } };
     } else {
-        return { statusCode: 400, response: { success: true, message: "Password does not match" } };
+        return { statusCode: 400, response: { success: true, message: "Password does not match", notificationMessage: "Password is not correct." } };
     }
 
 }

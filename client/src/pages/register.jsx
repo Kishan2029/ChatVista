@@ -8,6 +8,7 @@ import { AuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { registerUser } from "../reactQuery/mutation";
+import { notify } from "../util/notify";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -45,8 +46,9 @@ const Register = () => {
     onError: async (error) => {
       setGlobalLoader(false);
       console.log("error", error);
-      navigate("/login");
-      navigate(0);
+
+      // navigate("/login");
+      // navigate(0);
     },
   });
 
@@ -118,7 +120,9 @@ const Register = () => {
           email,
           password,
         });
-      } catch (error) {}
+      } catch (error) {
+        notify("error", error.notificationMessage);
+      }
     }
   };
 
