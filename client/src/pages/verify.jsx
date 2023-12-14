@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import birdImage from "../assets/images/bird.avif";
 import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { SubmitButton } from "../components";
@@ -11,12 +11,7 @@ import { notify } from "../util/notify";
 const Verify = () => {
   const navigate = useNavigate();
   // const email = "kishan@gmail.com";
-  const [digit1, setDigit1] = useState("");
-  const [digit2, setDigit2] = useState("");
-  const [digit3, setDigit3] = useState("");
-  const [digit4, setDigit4] = useState("");
-  const [digit5, setDigit5] = useState("");
-  const [digit6, setDigit6] = useState("");
+  const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const email = localStorage.getItem("email");
   const { setGlobalLoader } = useContext(AuthContext);
 
@@ -38,21 +33,27 @@ const Verify = () => {
   });
 
   const isEmptyDigits = () => {
-    if (
-      digit1 === "" ||
-      digit2 === "" ||
-      digit3 === "" ||
-      digit4 === "" ||
-      digit5 === "" ||
-      digit6 === ""
-    ) {
-      return true;
-    }
-    return false;
+    return digits.some((digit) => digit === "");
+  };
+
+  const inputRefs = Array.from({ length: 6 }, () => useRef(null));
+
+  const onDigitChange = (index, value) => {
+    setDigits((prevDigits) => {
+      const newDigits = [...prevDigits];
+      newDigits[index] = value;
+
+      // Move focus to the next input
+      if (value !== "" && index < 5) {
+        inputRefs[index + 1].current.focus();
+      }
+
+      return newDigits;
+    });
   };
 
   const onVerify = async () => {
-    const otp = digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
+    const otp = digits.join("");
     try {
       await verifyUserMutation.mutateAsync({
         email,
@@ -84,78 +85,19 @@ const Verify = () => {
         </Typography>
 
         <Box sx={{ display: "flex", gap: "1rem", mt: "1rem" }}>
-          <TextField
-            id="digit1"
-            placeholder="-"
-            variant="outlined"
-            sx={{ width: "4rem" }}
-            inputProps={{ maxLength: 1, style: { textAlign: "center" } }}
-            // value={digit1}
-            onChange={(e) => {
-              setDigit1(e.target.value);
-            }}
-            autoFocus={digit1 === "" ? true : false}
-          />
-          <TextField
-            id="digit2"
-            placeholder="-"
-            variant="outlined"
-            sx={{ width: "4rem" }}
-            inputProps={{ maxLength: 1, style: { textAlign: "center" } }}
-            // value={digit1}
-            onChange={(e) => {
-              setDigit2(e.target.value);
-            }}
-            autoFocus={digit1 !== "" ? true : false}
-          />
-          <TextField
-            id="digit3"
-            placeholder="-"
-            variant="outlined"
-            sx={{ width: "4rem" }}
-            inputProps={{ maxLength: 1, style: { textAlign: "center" } }}
-            // value={digit1}
-            onChange={(e) => {
-              setDigit3(e.target.value);
-            }}
-            // autoFocus={digit3 === "" ? true : false}
-          />
-          <TextField
-            id="digit4"
-            placeholder="-"
-            variant="outlined"
-            sx={{ width: "4rem" }}
-            inputProps={{ maxLength: 1, style: { textAlign: "center" } }}
-            // value={digit1}
-            onChange={(e) => {
-              setDigit4(e.target.value);
-            }}
-            // autoFocus={digit4 === "" ? true : false}
-          />
-          <TextField
-            id="digit5"
-            placeholder="-"
-            variant="outlined"
-            sx={{ width: "4rem" }}
-            inputProps={{ maxLength: 1, style: { textAlign: "center" } }}
-            // value={digit1}
-            onChange={(e) => {
-              setDigit5(e.target.value);
-            }}
-            // autoFocus={digit5 === "" ? true : false}
-          />
-          <TextField
-            id="digit6"
-            placeholder="-"
-            variant="outlined"
-            sx={{ width: "4rem" }}
-            inputProps={{ maxLength: 1, style: { textAlign: "center" } }}
-            // value={digit1}
-            onChange={(e) => {
-              setDigit6(e.target.value);
-            }}
-            // autoFocus={digit6 === "" ? true : false}
-          />
+          {digits.map((digit, index) => (
+            <TextField
+              key={index}
+              id={`digit${index + 1}`}
+              placeholder="-"
+              variant="outlined"
+              sx={{ width: "4rem" }}
+              inputProps={{ maxLength: 1, style: { textAlign: "center" } }}
+              value={digit}
+              onChange={(e) => onDigitChange(index, e.target.value)}
+              inputRef={inputRefs[index]}
+            />
+          ))}
         </Box>
 
         <SubmitButton
