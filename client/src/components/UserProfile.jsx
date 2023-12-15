@@ -63,14 +63,12 @@ const UserProfile = () => {
     formData.append("about", about);
     formData.append("id", auth.userId);
     if (edit) formData.append("images", coverImage);
-
-    // updateProfileMutation.mutate({
-    //   id: auth.userId,
-    //   firstName,
-    //   lastName,
-    //   about,
-    // });
     updateProfileMutation.mutate(formData);
+  };
+
+  const isEmptyValue = () => {
+    if (firstName === "" || lastName === "") return true;
+    return false;
   };
 
   useEffect(() => {
@@ -222,6 +220,7 @@ const UserProfile = () => {
             textTransform: "none",
             mt: "1rem",
           }}
+          disabled={isEmptyValue()}
           onClick={() => saveProfile()}
         >
           Save
