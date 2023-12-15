@@ -36,9 +36,17 @@ export const sendRequest = async (body) => {
     return data.data;
 }
 
-// write mutation
+// write message
 export const writeMessage = async (body) => {
     const { data } = await axios.post(config.urls.message.createMessage(), body, {
+
+    });
+    return data.data;
+}
+
+// update profile
+export const updateProfile = async (body) => {
+    const { data } = await axios.put(config.urls.profile.updateProfile(), body, {
 
     });
     return data.data;

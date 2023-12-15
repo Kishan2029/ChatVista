@@ -30,7 +30,7 @@ exports.updateProfile = async function (req, res, next) {
         const { id, firstName, lastName, about } = user.parse(req.body);
         // console.log("body", req.body)
 
-        const { response, statusCode } = await ProfileService.updateUserProfile(id, firstName, lastName, about);
+        const { response, statusCode } = await ProfileService.updateUserProfile(id, firstName, lastName, about, req.files);
         res.status(statusCode).send(response);
     } catch (error) {
 

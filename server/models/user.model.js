@@ -24,6 +24,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
+    profileUrl: {
+        type: String,
+        trim: true
+    },
 
 }, { timestamps: true });
 

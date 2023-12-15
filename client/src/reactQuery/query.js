@@ -25,3 +25,8 @@ export const fetchUserMessages = async (body) => {
     const { data } = await axios.post(config.urls.message.getMessages(), body);
     return data.data;
 }
+
+export const fetchProfile = async (id) => {
+    const { data } = await axios.get(config.urls.profile.getProfile(id));
+    return data.data;
+}
