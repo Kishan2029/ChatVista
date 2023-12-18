@@ -22,6 +22,7 @@ exports.createGroup = async function (req, res, next) {
     }
 }
 
+// TODO: should add adminId for checking only admin can delete group
 exports.deleteGroup = async function (req, res, next) {
     try {
         const group = z.object({
@@ -55,23 +56,43 @@ exports.getGroup = async function (req, res, next) {
         next(error)
     }
 }
+
 exports.addMember = async function (req, res, next) {
     try {
         const group = z.object({
             add: z.boolean({ required_error: "Add boolean is required" }),
             userId: z.string({ required_error: "UserId is required" }),
-            groupId: z.string({ required_error: "GroupId is required" })
+            groupId: z.string({ required_error: "GroupId is required" }),
+            adminId: z.string({ required_error: "AdminId is required" }),
         });
 
-        const { add, userId, groupId } = group.parse(req.body);
+        const { add, userId, groupId, adminId } = group.parse(req.body);
 
-        const { response, statusCode } = await GroupService.addMember(add, userId, groupId);
+        const { response, statusCode } = await GroupService.addMember(add, userId, groupId, adminId);
         res.status(statusCode).send(response);
     } catch (error) {
-        // console.log("first", error)
+
         next(error)
     }
 }
+
+exports.leftGroup = async function (req, res, next) {
+    try {
+        const group = z.object({
+            userId: z.string({ required_error: "UserId is required" }),
+            groupId: z.string({ required_error: "GroupId is required" }),
+        });
+
+        const { userId, groupId } = group.parse(req.body);
+
+        const { response, statusCode } = await GroupService.leftGroup(userId, groupId);
+        res.status(statusCode).send(response);
+    } catch (error) {
+
+        next(error)
+    }
+}
+
 
 
 

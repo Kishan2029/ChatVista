@@ -7,7 +7,7 @@ router.post('/create', groupController.createGroup)
 router.delete('/delete/:id', groupController.deleteGroup)
 router.get('/get/:id', groupController.getGroup)
 router.post('/addMember', groupController.addMember)
-// router.post('/removeMember', groupController.addMember)
+router.post('/leftGroup', groupController.leftGroup)
 
 
 
