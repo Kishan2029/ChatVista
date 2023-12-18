@@ -4,9 +4,9 @@ const router = Router();
 const groupController = require("../controllers/group.controller")
 
 router.post('/create', groupController.createGroup)
-// router.post('/delete', groupController.deleteGroup)
-// router.post('/get', groupController.getGroup)
-// router.post('/addMember', groupController.addMember)
+router.delete('/delete/:id', groupController.deleteGroup)
+router.get('/get/:id', groupController.getGroup)
+router.post('/addMember', groupController.addMember)
 // router.post('/removeMember', groupController.addMember)
 
 
