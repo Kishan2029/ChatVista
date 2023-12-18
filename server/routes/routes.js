@@ -5,4 +5,5 @@ module.exports = (app) => {
     app.use("/chat", require("./chat.route"));
     app.use("/message", require("./message.route"));
     app.use("/profile", require("./profile.route"));
+    app.use("/group", require("./group.route"));
 };

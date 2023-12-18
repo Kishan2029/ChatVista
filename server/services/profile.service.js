@@ -35,7 +35,7 @@ exports.updateUserProfile = async function (userId, firstName, lastName, about, 
 
 
     const profile = await cloudinary.uploader.upload(path.join('./uploads/' + file[0].filename),
-        { public_id: process.env.NODE_ENV === "production" ? "chatVista_dev/" + file[0].filename : file[0].filename },
+        { public_id: process.env.NODE_ENV === "production" ? "chatVista_prod/profile" + file[0].filename : "chatVista_dev/profile" + file[0].filename },
         (error, result) => {
 
             removeFile(file[0].filename)
