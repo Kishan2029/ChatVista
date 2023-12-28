@@ -31,18 +31,20 @@ exports.getUserProfile = async function (userId) {
 exports.updateUserProfile = async function (userId, firstName, lastName, about, file) {
     const user = await User.findById(userId).select({ email: 1, firstName: 1, lastName: 1, about: 1 });
     if (!user) return { statusCode: 400, response: { success: false, message: "User is not registered." } };
+    // console.log("file[0].filename", file[0].filename)
 
+    if (file.length > 0) {
+        const profile = await cloudinary.uploader.upload(path.join('./uploads/' + file[0].filename),
+            { public_id: process.env.NODE_ENV === "production" ? "chatVista_prod/profile" + file[0].filename : "chatVista_dev/profile" + file[0].filename },
+            (error, result) => {
 
+                removeFile(file[0].filename)
+                if (error)
+                    console.log("Image upload error")
+            })
+        user.profileUrl = profile.url;
+    }
 
-    const profile = await cloudinary.uploader.upload(path.join('./uploads/' + file[0].filename),
-        { public_id: process.env.NODE_ENV === "production" ? "chatVista_prod/profile" + file[0].filename : "chatVista_dev/profile" + file[0].filename },
-        (error, result) => {
-
-            removeFile(file[0].filename)
-            if (error)
-                console.log("Image upload error")
-        })
-    user.profileUrl = profile.url;
     user.firstName = firstName;
     user.lastName = lastName;
     user.about = about;

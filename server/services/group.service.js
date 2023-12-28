@@ -3,7 +3,7 @@ const User = require('../models/user.model');
 const Group = require('../models/group.model');
 const mongoose = require("mongoose");
 
-const isPartOfGroup = (userId, groups) => {
+const isPartOfGroup = exports.isPartOfGroup = (userId, groups) => {
     const isMember = groups.members.indexOf(userId);
     const isAdmin = groups.admin.indexOf(userId);
     if (isMember < 0 && isAdmin < 0) return false;
@@ -68,9 +68,6 @@ exports.addMember = async function (add, userId, groupId, adminId) {
     if (groups.admin.indexOf(adminId) < 0)
         return { statusCode: 400, response: { success: false, message: "Admin id is not correct" } };
 
-
-    // const isMember = groups.members.indexOf(userId);
-    // const isAdmin = groups.admin.indexOf(userId);
     const partOfGroup = isPartOfGroup(userId, groups);
 
     if (add) {
@@ -114,6 +111,84 @@ exports.leftGroup = async function (userId, groupId) {
     }
 
 }
+
+exports.addAdmin = async function (add, userId, groupId, adminId) {
+
+    const groups = await Group.findById(groupId);
+    if (!groups) return { statusCode: 400, response: { success: false, message: "Group does not exist." } };
+
+    if (groups.admin.indexOf(adminId) < 0)
+        return { statusCode: 400, response: { success: false, message: "Admin id is not correct" } };
+
+    if (add) {
+        const isAdmin = groups.admin.indexOf(userId);
+        if (isAdmin >= 0) return { statusCode: 400, response: { success: false, message: "User is alredy admin" } };
+
+        const isMember = groups.members.indexOf(userId);
+        if (isMember >= 0) {
+            // remover member
+            const index = groups.members.indexOf(userId);
+            groups.members.splice(index, 1);
+
+            // add admin
+            groups.admin.push(userId)
+            await groups.save()
+
+            return { statusCode: 200, response: { success: true, message: "Member is now an admin." } };
+        } else {
+            return { statusCode: 400, response: { success: false, message: "Member is not part of the group." } };
+        }
+    } else {
+        const partOfGroup = isPartOfGroup(userId, groups);
+        if (!partOfGroup) return { statusCode: 400, response: { success: false, message: "User is not part of the group." } };
+
+        const isAdmin = groups.admin.indexOf(userId);
+        if (isAdmin < 0) return { statusCode: 400, response: { success: false, message: "User is already not admin." } };
+
+        // remove from admin
+        const index = groups.admin.indexOf(userId);
+        groups.admin.splice(index, 1);
+
+        // add member
+        groups.members.push(userId);
+        await groups.save();
+
+        return { statusCode: 200, response: { success: true, message: "Admin is removed." } };
+
+    }
+
+}
+
+exports.editGroupInfo = async function (userId, groupId, name, file) {
+
+    const user = await User.findById(userId);
+    if (!user) return { statusCode: 400, response: { success: false, message: "User is not registered." } };
+
+    const groups = await Group.findById(groupId);
+    if (!groups) return { statusCode: 400, response: { success: false, message: "Group does not exist." } };
+
+
+    const partOfGroup = isPartOfGroup(userId, groups);
+    if (!partOfGroup) return { statusCode: 400, response: { success: false, message: "User is not part of the group." } };
+
+    if (file?.length > 0) {
+        const profile = await cloudinary.uploader.upload(path.join('./uploads/' + file[0].filename),
+            { public_id: process.env.NODE_ENV === "production" ? "chatVista_prod/profile" + file[0].filename : "chatVista_dev/profile" + file[0].filename },
+            (error, result) => {
+
+                removeFile(file[0].filename)
+                if (error)
+                    console.log("Image upload error")
+            })
+        groups.profileUrl = profile.url;
+    }
+    groups.name = name;
+
+    await groups.save();
+    return { statusCode: 200, response: { success: true, message: "Group profile is updated" } };
+
+}
+
 
 
 

@@ -2,7 +2,7 @@ const Request = require('../models/user.model');
 const User = require('../models/user.model');
 const Message = require('../models/message.model');
 
-const dateFormate = (date) => {
+const dateFormate = exports.dateFormate = (date) => {
     // Define options for formatting
     const options1 = { year: "numeric", month: "short", day: "2-digit" };
     const formattedDate = date.toLocaleDateString("en-US", options1);
@@ -10,7 +10,7 @@ const dateFormate = (date) => {
     return formattedDate;
 }
 
-const timeFormate = (date) => {
+const timeFormate = exports.timeFormate = (date) => {
     // Get hours and minutes
     let hours = date.getHours();
     const minutes = date.getMinutes();

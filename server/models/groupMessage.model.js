@@ -1,13 +1,13 @@
-import { Schema, model } from "mongoose";
+const mongoose = require('mongoose');
 
-const GroupMessageSchema = new Schema({
+const GroupMessageSchema = new mongoose.Schema({
     groupId: {
-        type: Schema.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: 'group',
         required: true,
     },
     senderUser: {
-        type: Schema.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: 'user',
         required: true,
     },
@@ -24,6 +24,7 @@ const GroupMessageSchema = new Schema({
 
 }, { timestamps: true });
 
-const GroupMessage = model("GroupMessage", GroupMessageSchema);
+const GroupMessage = mongoose.model("GroupMessage", GroupMessageSchema);
 
-export default GroupMessage;
+
+module.exports = GroupMessage;

@@ -93,6 +93,45 @@ exports.leftGroup = async function (req, res, next) {
     }
 }
 
+exports.addAdmin = async function (req, res, next) {
+    try {
+        const group = z.object({
+            add: z.boolean({ required_error: "Add boolean is required" }),
+            userId: z.string({ required_error: "UserId is required" }),
+            groupId: z.string({ required_error: "GroupId is required" }),
+            adminId: z.string({ required_error: "AdminId is required" }),
+        });
+
+        const { add, userId, groupId, adminId } = group.parse(req.body);
+
+        const { response, statusCode } = await GroupService.addAdmin(add, userId, groupId, adminId);
+        res.status(statusCode).send(response);
+    } catch (error) {
+
+        next(error)
+    }
+}
+
+exports.editInfo = async function (req, res, next) {
+    try {
+        const group = z.object({
+            userId: z.string({ required_error: "UserId is required" }),
+            groupId: z.string({ required_error: "GroupId is required" }),
+            name: z.string({ required_error: "Group name is required" }),
+        });
+
+        const { userId, groupId, name } = group.parse(req.body);
+
+        const { response, statusCode } = await GroupService.editGroupInfo(userId, groupId, name, req.files);
+        res.status(statusCode).send(response);
+    } catch (error) {
+
+        next(error)
+    }
+}
+
+
+
 
 
 
