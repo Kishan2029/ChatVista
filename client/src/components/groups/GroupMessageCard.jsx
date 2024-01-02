@@ -7,13 +7,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { socket } from "../../socket/index";
 import { useQueryClient } from "react-query";
 
-const ChatMessageCard = ({
+const GroupMessageCard = ({
   name,
   time,
   message,
   id,
-  count,
-  showOnline = true,
+  count = 0,
+  senderUser,
 }) => {
   const auth = useSelector((state) => state.auth.user);
   const queryClient = useQueryClient();
@@ -26,64 +26,64 @@ const ChatMessageCard = ({
         userInfo: {
           name,
           id,
-          group: false,
+          group: true,
         },
       })
     );
     console.log("chat selected");
 
     // make notification count 0
-    queryClient.setQueriesData(["allChats"], (oldData) => {
-      const newData = oldData.map((item) => {
-        console.log("first", id, item.friendId);
-        if (item.friendId === id) {
-          item.notificationCount = 0;
-        }
-        return item;
-      });
-      return newData;
-    });
+    // queryClient.setQueriesData(["allChats"], (oldData) => {
+    //   const newData = oldData.map((item) => {
+    //     console.log("first", id, item.friendId);
+    //     if (item.friendId === id) {
+    //       item.notificationCount = 0;
+    //     }
+    //     return item;
+    //   });
+    //   return newData;
+    // });
 
-    const socketData = {
-      userB: auth.userId,
-      userA: id,
-    };
-    socket.emit("makeNotificationCountZero", socketData);
+    // const socketData = {
+    //   userB: auth.userId,
+    //   userA: id,
+    // };
+    // socket.emit("makeNotificationCountZero", socketData);
   };
 
   const selectedUser = useSelector((state) => state.chat.userInfo);
+  console.log("selectedUser", selectedUser);
 
-  const [online, setOnline] = useState(false);
   const [userTyping, setUserTyping] = useState(false);
 
-  useEffect(() => {
-    // console.log("userTyping", userTyping);
-  }, [userTyping]);
+  //   useEffect(() => {
+  //     // console.log("userTyping", userTyping);
+  //   }, [userTyping]);
 
-  useEffect(() => {
-    socket.on("fetchUserTyping", (data) => {
-      // console.log("fetchUserTyping", userTyping);
-      let time;
-      let i = 0;
-      if (data.senderUser === id) {
-        if (userTyping === true) {
-          // console.log("true");
-          // console.log("clear", i);
-          clearTimeout(time);
-        } else {
-          i = 0;
-          // console.log("false");
-          setUserTyping(true);
-        }
-        i++;
+  //   useEffect(() => {
+  //     socket.on("fetchUserTyping", (data) => {
+  //       // console.log("fetchUserTyping", userTyping);
+  //       let time;
+  //       let i = 0;
+  //       if (data.senderUser === id) {
+  //         if (userTyping === true) {
+  //           // console.log("true");
+  //           // console.log("clear", i);
+  //           clearTimeout(time);
+  //         } else {
+  //           i = 0;
+  //           // console.log("false");
+  //           setUserTyping(true);
+  //         }
+  //         i++;
 
-        time = setTimeout(() => {
-          // console.log("User stopped typing.");
-          setUserTyping(false);
-        }, 3 * 1000);
-      }
-    });
-  }, [socket]);
+  //         time = setTimeout(() => {
+  //           // console.log("User stopped typing.");
+  //           setUserTyping(false);
+  //         }, 3 * 1000);
+  //       }
+  //     });
+  //   }, [socket]);
 
   return (
     <Card
@@ -102,15 +102,16 @@ const ChatMessageCard = ({
     >
       {/* avatar and message */}
       <Box sx={{ display: "flex", gap: "1rem" }}>
-        {showOnline && (
-          <OnlineAvatar
-            name={name}
-            id={id}
-            online={online}
-            setOnline={setOnline}
-          />
-        )}
-
+        <Avatar
+          sx={{
+            height: "2.8rem",
+            width: "2.8rem",
+            fontSize: "1.5rem",
+            // backgroundColor: stringToColor(name),
+          }}
+        >
+          {name[0]}
+        </Avatar>
         <Box>
           <Typography
             sx={{
@@ -126,7 +127,11 @@ const ChatMessageCard = ({
                 selectedUser?.id === id ? "#FFFFFF" : "var(--grayFontColor2)",
             }}
           >
-            {userTyping ? `Typing...` : truncateString(message, 23)}
+            {userTyping
+              ? `Typing...`
+              : senderUser
+              ? truncateString(senderUser + ": " + message, 23)
+              : ""}
           </Typography>
         </Box>
       </Box>
@@ -178,4 +183,4 @@ const ChatMessageCard = ({
   );
 };
 
-export default ChatMessageCard;
+export default GroupMessageCard;

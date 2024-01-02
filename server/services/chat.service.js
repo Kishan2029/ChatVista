@@ -14,7 +14,7 @@ const dateDiffInDays = (a, b) => {
 }
 
 
-const getFormattedTime = (date) => {
+const getFormattedTime = exports.getFormattedTime = (date) => {
 
     const today = new Date();
     const diff = dateDiffInDays(date, today);

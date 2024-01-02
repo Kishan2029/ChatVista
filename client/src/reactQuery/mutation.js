@@ -51,3 +51,11 @@ export const updateProfile = async (body) => {
     });
     return data.data;
 }
+
+// write group message
+export const writeGroupMessage = async (body) => {
+    const { data } = await axios.post(config.urls.groupMessage.createGroupMessage(), body, {
+
+    });
+    return data.data;
+}

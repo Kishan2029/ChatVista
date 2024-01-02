@@ -1,7 +1,9 @@
 
 const User = require('../models/user.model');
 const Group = require('../models/group.model');
+const GroupMessage = require('../models/groupMessage.model');
 const mongoose = require("mongoose");
+const { getFormattedTime } = require('./chat.service');
 
 const isPartOfGroup = exports.isPartOfGroup = (userId, groups) => {
     const isMember = groups.members.indexOf(userId);
@@ -53,7 +55,28 @@ exports.getUserGroups = async function (id) {
     const user = await User.findById(id);
     if (!user) return { statusCode: 400, response: { success: false, message: "User is not registered." } };
 
-    const groups = await Group.find({ members: new mongoose.Types.ObjectId(id) })
+    let groups = await Group.find({ $or: [{ members: new mongoose.Types.ObjectId(id) }, { admin: new mongoose.Types.ObjectId(id) }] });
+
+    groups = await Promise.all(groups.map(async (item) => {
+        console.log("item", item)
+        const lastMessage = await GroupMessage.findOne({ groupId: item._id }).sort({ createdAt: -1 });
+        let senderUser = ""
+        // const notification = await Notification.findOne({ receiverUser: userId, senderUser: friend.friendId })
+        if (lastMessage) {
+            senderUser = await User.findById(lastMessage.senderUser)
+            console.log("senderUser", senderUser)
+        }
+        return {
+            ...item._doc,
+            lastMessage: lastMessage ? lastMessage.content : null,
+            createdAt: lastMessage ? lastMessage.createdAt : null,
+            time: lastMessage ? getFormattedTime(lastMessage.createdAt) : null,
+            senderUser: lastMessage ? senderUser.firstName : null
+            // notificationCount: notification ? notification.count : 0
+        }
+
+    }))
+    groups = groups.sort((a, b) => a.createdAt > b.createdAt ? -1 : 1);
     return { statusCode: 200, response: { success: true, data: groups } };
 }
 

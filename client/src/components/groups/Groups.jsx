@@ -5,6 +5,7 @@ import { AllChats } from "../chats";
 import { Plus } from "@phosphor-icons/react";
 import { Divide } from "@phosphor-icons/react/dist/ssr";
 import CreateGroupModal from "./CreateGroupModal";
+import AllGroup from "./AllGroup";
 
 const Groups = () => {
   const [modal, setModal] = useState(false);
@@ -31,7 +32,7 @@ const Groups = () => {
       </Box>
       <Divider sx={{ my: "1rem" }} />
 
-      <AllChats />
+      <AllGroup />
 
       <CreateGroupModal open={modal} handleClose={() => setModal(false)} />
     </Box>

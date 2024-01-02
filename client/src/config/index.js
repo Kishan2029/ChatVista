@@ -50,6 +50,20 @@ export const config = {
       updateProfile: () => {
         return `${import.meta.env.VITE_BACKEND_URL}/profile/update`;
       },
+    },
+    group: {
+      getAllGroups: (id) => {
+        return `${import.meta.env.VITE_BACKEND_URL}/group/get/${id}`;
+      },
+
+    },
+    groupMessage: {
+      getGroupMessages: () => {
+        return `${import.meta.env.VITE_BACKEND_URL}/groupMessage/get`;
+      },
+      createGroupMessage: () => {
+        return `${import.meta.env.VITE_BACKEND_URL}/groupMessage/create`;
+      }
     }
 
   },

@@ -30,3 +30,14 @@ export const fetchProfile = async (id) => {
     const { data } = await axios.get(config.urls.profile.getProfile(id));
     return data.data;
 }
+
+export const fetchAllGroups = async (id) => {
+    const { data } = await axios.get(config.urls.group.getAllGroups(id));
+    return data.data;
+}
+
+export const fetchGroupMessages = async (body) => {
+    const { data } = await axios.post(config.urls.groupMessage.getGroupMessages(), body);
+    return data.data;
+}
+

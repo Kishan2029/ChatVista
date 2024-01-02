@@ -2,7 +2,7 @@ import { Box, Card, Divider, Typography } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
-import { fetchUserMessages } from "../../reactQuery/query";
+import { fetchGroupMessages, fetchUserMessages } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
 // import ScrollIntoView from "react-scroll-into-view";
 import { socket } from "../../socket";
@@ -21,7 +21,13 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
     queryFn: () => {
       // Check if auth is available before making the query
       if (auth && auth.userId && chatUserId) {
-        return fetchUserMessages({ userA: auth.userId, userB: chatUserId });
+        if (chatData.userInfo.group) {
+          return fetchGroupMessages({
+            userId: auth.userId,
+            groupId: chatUserId,
+          });
+        } else
+          return fetchUserMessages({ userA: auth.userId, userB: chatUserId });
       }
 
       // Return a default value or null if auth is not available
@@ -31,7 +37,7 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
   });
 
   const messages = data;
-  // console.log("messages", messages);
+  console.log("messages", messages);
 
   useEffect(() => {
     if (scroll1.current)

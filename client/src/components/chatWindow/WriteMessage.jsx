@@ -1,7 +1,7 @@
 import { Box, InputAdornment, TextField } from "@mui/material";
 import { Link, Smiley, TelegramLogo } from "@phosphor-icons/react";
 import React, { useEffect, useRef, useState } from "react";
-import { writeMessage } from "../../reactQuery/mutation";
+import { writeGroupMessage, writeMessage } from "../../reactQuery/mutation";
 import { useSelector } from "react-redux";
 import { useMutation, useQueryClient } from "react-query";
 import { socket } from "../../socket/index";
@@ -9,14 +9,22 @@ import { socket } from "../../socket/index";
 const WriteMessage = ({ scrollView, setScrollView }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
+  const isGroup = chatData.userInfo.group;
   const chatUserId = chatData.userInfo.id;
+  console.log("auth", auth);
 
   const queryClient = useQueryClient();
 
   const [sendMessage, setSendMessage] = useState("");
 
   const writeMessageMutation = useMutation({
-    mutationFn: (body) => writeMessage(body),
+    mutationFn: (body) => {
+      if (isGroup) {
+        return writeGroupMessage(body);
+      } else {
+        return writeMessage(body);
+      }
+    },
     onMutate: async (body) => {
       // add message into user chat
       queryClient.setQueriesData(["userChats", chatUserId], (oldData) => {
@@ -31,22 +39,34 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
           }
           return item;
         });
-
         return newData;
       });
       setScrollView(Math.floor(Math.random() * 90000) + 10000);
 
       // update last message in card
-      queryClient.setQueriesData(["allChats"], (oldData) => {
-        const newData = oldData.map((item) => {
-          if (item.friendId === body.userB) {
-            item.lastMessage = body.content;
-          }
-          return item;
+      if (isGroup) {
+        queryClient.setQueriesData(["allGroups"], (oldData) => {
+          const newData = oldData.map((item) => {
+            if (item._id === body.groupId) {
+              item.lastMessage = body.content;
+              item.senderUser = auth.name;
+            }
+            return item;
+          });
+          return newData;
         });
+      } else {
+        queryClient.setQueriesData(["allChats"], (oldData) => {
+          const newData = oldData.map((item) => {
+            if (item._id === body.groupId) {
+              item.lastMessage = body.content;
+            }
+            return item;
+          });
 
-        return newData;
-      });
+          return newData;
+        });
+      }
     },
     onSuccess: async (queryKey, body) => {
       // set data
@@ -55,21 +75,41 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
   });
 
   const onSendMessage = () => {
-    const socketData = {
-      userA: auth.userId,
-      userB: chatUserId,
-      content: sendMessage,
-    };
-    socket.emit("sendMessage", socketData);
+    if (isGroup) {
+      console.log("inside group");
+      // const socketData = {
+      //   userA: auth.userId,
+      //   userB: chatUserId,
+      //   content: sendMessage,
+      // };
+      // socket.emit("sendMessage", socketData);
 
-    socket.emit("sendNotification", socketData);
+      // socket.emit("sendNotification", socketData);
 
-    writeMessageMutation.mutate({
-      userA: auth.userId,
-      userB: chatUserId,
-      status: "sent",
-      content: sendMessage,
-    });
+      writeMessageMutation.mutate({
+        userId: auth.userId,
+        groupId: chatUserId,
+        status: "sent",
+        content: sendMessage,
+      });
+    } else {
+      console.log("inside user");
+      const socketData = {
+        userA: auth.userId,
+        userB: chatUserId,
+        content: sendMessage,
+      };
+      socket.emit("sendMessage", socketData);
+
+      socket.emit("sendNotification", socketData);
+
+      writeMessageMutation.mutate({
+        userA: auth.userId,
+        userB: chatUserId,
+        status: "sent",
+        content: sendMessage,
+      });
+    }
 
     setSendMessage("");
   };
