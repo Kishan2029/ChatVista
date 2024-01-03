@@ -14,6 +14,8 @@ const GroupMessageCard = ({
   id,
   count = 0,
   senderUser,
+  members,
+  memberCount,
 }) => {
   const auth = useSelector((state) => state.auth.user);
   const queryClient = useQueryClient();
@@ -27,6 +29,8 @@ const GroupMessageCard = ({
           name,
           id,
           group: true,
+          members,
+          memberCount,
         },
       })
     );

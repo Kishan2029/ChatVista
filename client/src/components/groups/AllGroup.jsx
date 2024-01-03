@@ -61,6 +61,8 @@ const AllGroup = () => {
                 time={item.time}
                 id={item._id}
                 senderUser={item.senderUser}
+                members={item.members}
+                memberCount={item.memberCount}
                 //   count={"item.notificationCount"}
               />
             );

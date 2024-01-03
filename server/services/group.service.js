@@ -58,20 +58,44 @@ exports.getUserGroups = async function (id) {
     let groups = await Group.find({ $or: [{ members: new mongoose.Types.ObjectId(id) }, { admin: new mongoose.Types.ObjectId(id) }] });
 
     groups = await Promise.all(groups.map(async (item) => {
-        console.log("item", item)
+        console.log("item.member", item.admin)
         const lastMessage = await GroupMessage.findOne({ groupId: item._id }).sort({ createdAt: -1 });
         let senderUser = ""
         // const notification = await Notification.findOne({ receiverUser: userId, senderUser: friend.friendId })
         if (lastMessage) {
             senderUser = await User.findById(lastMessage.senderUser)
-            console.log("senderUser", senderUser)
+
         }
+        let count = 1, members = ["You"];
+
+        await Promise.all(item.members.map(async (item) => {
+            if (String(item) === String(id)) {
+                return;
+            }
+            const user = await User.findById(item).select({ firstName: 1 });
+            if (count === 3) return;
+            members.push(user.firstName);
+            count++;
+
+        }))
+        await Promise.all(item.admin.map(async (item) => {
+            if (String(item) === String(id)) {
+                return;
+            }
+            const user = await User.findById(item).select({ firstName: 1 });
+            if (count === 3) return;
+            members.push(user.firstName);
+            count++;
+
+        }))
         return {
             ...item._doc,
             lastMessage: lastMessage ? lastMessage.content : null,
             createdAt: lastMessage ? lastMessage.createdAt : null,
             time: lastMessage ? getFormattedTime(lastMessage.createdAt) : null,
-            senderUser: lastMessage ? senderUser.firstName : null
+            senderUser: lastMessage ? senderUser.firstName : null,
+            memberCount: item.admin.length + item.members.length,
+            members: members
             // notificationCount: notification ? notification.count : 0
         }
 

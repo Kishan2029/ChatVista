@@ -1,5 +1,6 @@
 const OnlineUser = require('../models/onlineUser.model');
 const Notification = require('../models/notification.model');
+const Group = require('../models/group.model');
 
 exports.addUser = async (userId, socketId) => {
     const user = await OnlineUser.find({ socketId })
@@ -144,4 +145,27 @@ exports.makeNotificationCountZero = async (data, socket) => {
         new: true,
         upsert: true
     })
+}
+
+
+exports.sendGroupMessage = async (data, socket) => {
+
+    const group = await Group.findById(data.groupId);
+    const userArray = group.admin.concat(group.members)
+    const receiverSocket = await OnlineUser.find({ userId: { $in: userArray } })
+    console.log("receiverSocket", receiverSocket)
+
+    // const socketIds = receiverSocket.map((item) => {
+    //     return item.socketId
+    // })
+
+    // if (socketIds.length > 0) {
+
+    //     const receiverData = {
+    //         content: data.content,
+    //         createdBy: data.userA,
+    //         receiverUser: data.userB
+    //     }
+    //     socket.to(socketIds).emit("receiveMessage", receiverData)
+    // }
 }

@@ -35,6 +35,7 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
               content: body.content,
               id: Math.floor(Math.random() * 90000) + 10000,
               createdBy: auth.userId,
+              createdByUser: auth.name,
             });
           }
           return item;
@@ -77,12 +78,12 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
   const onSendMessage = () => {
     if (isGroup) {
       console.log("inside group");
-      // const socketData = {
-      //   userA: auth.userId,
-      //   userB: chatUserId,
-      //   content: sendMessage,
-      // };
-      // socket.emit("sendMessage", socketData);
+      const socketData = {
+        groupId: chatUserId,
+        userId: auth.userId,
+        content: sendMessage,
+      };
+      socket.emit("sendGroupMessage", socketData);
 
       // socket.emit("sendNotification", socketData);
 

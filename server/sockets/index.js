@@ -1,4 +1,4 @@
-const { addUser, removeUser, sendMessage, sendOnlineStatus, userTyping, sendNotification, makeNotificationCountZero } = require("./functions");
+const { addUser, removeUser, sendMessage, sendOnlineStatus, userTyping, sendNotification, makeNotificationCountZero, sendGroupMessage } = require("./functions");
 
 
 
@@ -34,6 +34,9 @@ module.exports = (io) => {
             userTyping(data, socket)
         ]);
 
+        socket.on('sendGroupMessage', (data) => {
+            sendGroupMessage(data, socket)
+        });
 
 
         setInterval(() => {

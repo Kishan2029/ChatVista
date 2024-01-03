@@ -7,8 +7,27 @@ import { useSelector } from "react-redux";
 const Title = ({ name, lastSeen }) => {
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
-
+  const isGroup = chatData.userInfo.group;
+  const members = chatData.userInfo.members;
+  const memberCount = chatData.userInfo.memberCount;
   const [online, setOnline] = useState(false);
+
+  let groupComponent = "";
+  if (isGroup) {
+    groupComponent = (
+      <div>
+        {members.map((item, index) => (
+          <span key={index}>
+            {item}
+            {index !== members.length - 1 && ", "}
+          </span>
+        ))}
+        {members.length > 3 && (
+          <span>{" & " + (memberCount - 3) + "other"} </span>
+        )}
+      </div>
+    );
+  }
 
   return (
     <Box
@@ -34,7 +53,7 @@ const Title = ({ name, lastSeen }) => {
             {name}
           </Typography>
           <Typography sx={{ color: "var(--grayFontColor2)" }}>
-            {online ? `Online` : `Offline`}
+            {isGroup ? "groupComponent" : online ? `Online` : `Offline`}
           </Typography>
         </Box>
       </Box>
