@@ -11,6 +11,8 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
+  const isGroup = chatData.userInfo.group;
+  console.log("chatData", chatData);
 
   const scroll1 = useRef(null);
 
@@ -48,27 +50,59 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
   }, [scrollView, data]);
 
   useEffect(() => {
-    socket.on("receiveMessage", (data) => {
-      console.log("receiveMessage data:", data);
-      // add message into user chat
-      if (auth.userId === data.receiverUser)
-        queryClient.setQueriesData(["userChats", data.createdBy], (oldData) => {
-          const newData = oldData.map((item) => {
-            if (item.date.toLowerCase() === "today") {
-              item.messages.push({
-                time: "now",
-                content: data.content,
-                id: Math.floor(Math.random() * 90000) + 10000,
-                createdBy: data.createdBy,
-              });
-            }
-            return item;
-          });
+    if (isGroup) {
+      socket.on("receiveGroupMessage", (data) => {
+        console.log("receiveGroupMessage data:", data);
+        console.log("chatUserId", chatUserId);
+        // add message into user chat
+        if (chatUserId === data.groupId) {
+          console.log("condition true");
+          queryClient.setQueriesData(["userChats", chatUserId], (oldData) => {
+            const newData = oldData.map((item) => {
+              if (item.date.toLowerCase() === "today") {
+                console.log("inside");
+                item.messages.push({
+                  time: "now",
+                  content: data.content,
+                  id: Math.floor(Math.random() * 90000) + 10000,
+                  createdBy: data.createdBy,
+                  createdByUser: data.createdByUser,
+                });
+              }
+              return item;
+            });
 
-          return newData;
-        });
-      setScrollView(Math.floor(Math.random() * 90000) + 10000);
-    });
+            return newData;
+          });
+          setScrollView(Math.floor(Math.random() * 90000) + 10000);
+        }
+      });
+    } else {
+      socket.on("receiveMessage", (data) => {
+        console.log("receiveMessage data:", data);
+        // add message into user chat
+        if (auth.userId === data.receiverUser)
+          queryClient.setQueriesData(
+            ["userChats", data.createdBy],
+            (oldData) => {
+              const newData = oldData.map((item) => {
+                if (item.date.toLowerCase() === "today") {
+                  item.messages.push({
+                    time: "now",
+                    content: data.content,
+                    id: Math.floor(Math.random() * 90000) + 10000,
+                    createdBy: data.createdBy,
+                  });
+                }
+                return item;
+              });
+
+              return newData;
+            }
+          );
+        setScrollView(Math.floor(Math.random() * 90000) + 10000);
+      });
+    }
   }, [socket]);
 
   if (isLoading) {

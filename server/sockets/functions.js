@@ -1,9 +1,13 @@
 const OnlineUser = require('../models/onlineUser.model');
 const Notification = require('../models/notification.model');
 const Group = require('../models/group.model');
+const User = require('../models/user.model');
+
 
 exports.addUser = async (userId, socketId) => {
     const user = await OnlineUser.find({ socketId })
+    console.log("user", user)
+    console.log("user.length", user.length)
     if (user.length === 0) {
         const newUser = new OnlineUser({ userId, socketId })
         await newUser.save();
@@ -149,23 +153,41 @@ exports.makeNotificationCountZero = async (data, socket) => {
 
 
 exports.sendGroupMessage = async (data, socket) => {
-
+    console.log("data", data)
     const group = await Group.findById(data.groupId);
-    const userArray = group.admin.concat(group.members)
-    const receiverSocket = await OnlineUser.find({ userId: { $in: userArray } })
-    console.log("receiverSocket", receiverSocket)
 
-    // const socketIds = receiverSocket.map((item) => {
-    //     return item.socketId
+    let userArray = group.admin.concat(group.members);
+    const userId = data.userId;
+
+    // userArray = userArray.map((item) => {
+    //     if (String(item) === userId) return;
+    //     return item;
     // })
+    // console.log("userArray", userArray)
 
-    // if (socketIds.length > 0) {
+    const receiverSocket = await OnlineUser.find({ userId: { $in: userArray } })
 
-    //     const receiverData = {
-    //         content: data.content,
-    //         createdBy: data.userA,
-    //         receiverUser: data.userB
-    //     }
-    //     socket.to(socketIds).emit("receiveMessage", receiverData)
+
+
+    let socketIds = receiverSocket.map((item) => {
+        if (data.socketId !== item.socketId)
+            return item.socketId
+    })
+    // const index = socketIds.indexOf(data.socketId)
+    // if (index > -1) {
+    //     socketIds = socketIds.splice(index, 1)
     // }
+    console.log("socketIds", socketIds)
+
+    if (socketIds.length > 0) {
+        const user = await User.findById(userId);
+
+        const receiverData = {
+            content: data.content,
+            createdBy: data.userId,
+            groupId: data.groupId,
+            createdByUser: user.firstName + " " + user.lastName
+        }
+        socket.to(socketIds).emit("receiveGroupMessage", receiverData)
+    }
 }

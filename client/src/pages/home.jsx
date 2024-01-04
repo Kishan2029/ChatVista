@@ -40,7 +40,8 @@ const Home = ({ children }) => {
         dispatch(
           setUser({
             userId: auth.userId,
-            name: data.firstName,
+            firstName: data.firstName,
+            lastName: data.lastName,
           })
         );
       } catch (error) {
@@ -50,7 +51,7 @@ const Home = ({ children }) => {
     };
 
     // Check if data has already been fetched before triggering fetch again
-    if (auth && !auth.name) {
+    if (auth && !auth.firstName) {
       fetchAndDispatchData();
     }
   }, [auth, dispatch]);

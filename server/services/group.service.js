@@ -58,7 +58,7 @@ exports.getUserGroups = async function (id) {
     let groups = await Group.find({ $or: [{ members: new mongoose.Types.ObjectId(id) }, { admin: new mongoose.Types.ObjectId(id) }] });
 
     groups = await Promise.all(groups.map(async (item) => {
-        console.log("item.member", item.admin)
+
         const lastMessage = await GroupMessage.findOne({ groupId: item._id }).sort({ createdAt: -1 });
         let senderUser = ""
         // const notification = await Notification.findOne({ receiverUser: userId, senderUser: friend.friendId })

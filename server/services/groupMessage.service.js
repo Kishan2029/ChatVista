@@ -41,7 +41,7 @@ exports.getMessage = async function (userId, groupId) {
     if (!partOfGroup) return { statusCode: 400, response: { success: false, message: "User is not part of the group." } };
 
     let messages = await GroupMessage.find({ groupId }).sort({ createdAt: 1 });
-    console.log("groupMessages", messages)
+
     const temp = new Map();
     await Promise.all(messages.map(async (msg) => {
         let date = dateFormate(msg.createdAt);

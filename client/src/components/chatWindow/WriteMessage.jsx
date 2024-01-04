@@ -11,7 +11,6 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
   const chatData = useSelector((state) => state.chat);
   const isGroup = chatData.userInfo.group;
   const chatUserId = chatData.userInfo.id;
-  console.log("auth", auth);
 
   const queryClient = useQueryClient();
 
@@ -35,7 +34,7 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
               content: body.content,
               id: Math.floor(Math.random() * 90000) + 10000,
               createdBy: auth.userId,
-              createdByUser: auth.name,
+              createdByUser: auth.firstName + " " + auth.lastName,
             });
           }
           return item;
@@ -50,7 +49,7 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
           const newData = oldData.map((item) => {
             if (item._id === body.groupId) {
               item.lastMessage = body.content;
-              item.senderUser = auth.name;
+              item.senderUser = auth.firstName;
             }
             return item;
           });
@@ -82,6 +81,7 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
         groupId: chatUserId,
         userId: auth.userId,
         content: sendMessage,
+        socketId: socket.id,
       };
       socket.emit("sendGroupMessage", socketData);
 
