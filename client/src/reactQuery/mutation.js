@@ -59,3 +59,11 @@ export const writeGroupMessage = async (body) => {
     });
     return data.data;
 }
+
+// create group
+export const createGroupFunction = async (body) => {
+    const { data } = await axios.post(config.urls.group.createGroup(), body, {
+
+    });
+    return data.data;
+}

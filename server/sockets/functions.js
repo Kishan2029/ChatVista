@@ -21,6 +21,9 @@ exports.removeUser = async (socketId) => {
     console.log("socket removed")
 }
 
+
+// Only added socketIds for receiver
+// TODO: socketIds for the other sender of the browser window
 exports.sendMessage = async (data, socket) => {
 
     const receiverSocket = await OnlineUser.find({ userId: data.userB })
@@ -152,6 +155,7 @@ exports.makeNotificationCountZero = async (data, socket) => {
 }
 
 
+// Added socketIds for both sender and receiver
 exports.sendGroupMessage = async (data, socket) => {
     console.log("data", data)
     const group = await Group.findById(data.groupId);

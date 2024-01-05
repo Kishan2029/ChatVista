@@ -55,6 +55,9 @@ export const config = {
       getAllGroups: (id) => {
         return `${import.meta.env.VITE_BACKEND_URL}/group/get/${id}`;
       },
+      createGroup: () => {
+        return `${import.meta.env.VITE_BACKEND_URL}/group/create`;
+      },
 
     },
     groupMessage: {
