@@ -27,8 +27,10 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
     onMutate: async (body) => {
       // add message into user chat
       queryClient.setQueriesData(["userChats", chatUserId], (oldData) => {
-        const newData = oldData.map((item) => {
+        let update = false;
+        let newData = oldData.map((item) => {
           if (item.date.toLowerCase() === "today") {
+            update = true;
             item.messages.push({
               time: "now",
               content: body.content,
@@ -39,6 +41,23 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
           }
           return item;
         });
+        if (update === false) {
+          newData = [
+            ...oldData,
+            {
+              date: "Today",
+              messages: [
+                {
+                  time: "now",
+                  content: body.content,
+                  id: Math.floor(Math.random() * 90000) + 10000,
+                  createdBy: auth.userId,
+                  createdByUser: auth.firstName + " " + auth.lastName,
+                },
+              ],
+            },
+          ];
+        }
         return newData;
       });
       setScrollView(Math.floor(Math.random() * 90000) + 10000);
@@ -48,8 +67,8 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
         queryClient.setQueriesData(["allGroups"], (oldData) => {
           const newData = oldData.map((item) => {
             if (item._id === body.groupId) {
-              item.lastMessage = body.content;
-              item.senderUser = auth.firstName;
+              item.lastMessage = auth.firstName + ": " + body.content;
+              // item.senderUser = auth.firstName;
             }
             return item;
           });

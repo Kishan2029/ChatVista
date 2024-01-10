@@ -61,6 +61,7 @@ exports.getUserGroups = async function (id) {
 
         const lastMessage = await GroupMessage.findOne({ groupId: item._id }).sort({ createdAt: -1 });
         let senderUser = ""
+
         // const notification = await Notification.findOne({ receiverUser: userId, senderUser: friend.friendId })
         if (lastMessage) {
             senderUser = await User.findById(lastMessage.senderUser)
@@ -88,12 +89,21 @@ exports.getUserGroups = async function (id) {
             count++;
 
         }))
+        // Let's assume first admin is the creator of the user.
+        let emptyGroupMessage = ""
+        if (String(item.admin[0]) === String(id))
+            emptyGroupMessage = "You created Group."
+        else {
+            const createdByUser = await User.findById(item.admin[0]).select({ firstName: 1 });
+            emptyGroupMessage = `${createdByUser.firstName} created Group.`
+        }
+
         return {
             ...item._doc,
-            lastMessage: lastMessage ? lastMessage.content : null,
-            createdAt: lastMessage ? lastMessage.createdAt : null,
-            time: lastMessage ? getFormattedTime(lastMessage.createdAt) : null,
-            senderUser: lastMessage ? senderUser.firstName : null,
+            lastMessage: lastMessage ? (senderUser.firstName + ": " + lastMessage.content) : emptyGroupMessage,
+            createdAt: lastMessage ? lastMessage.createdAt : item.createdAt,
+            time: lastMessage ? getFormattedTime(lastMessage.createdAt) : getFormattedTime(item.createdAt),
+            // senderUser: lastMessage ? senderUser.firstName : null,
             memberCount: item.admin.length + item.members.length,
             members: members
             // notificationCount: notification ? notification.count : 0

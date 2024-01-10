@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import { useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
@@ -6,6 +6,8 @@ import { fetchAllGroups } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
 import ChatMessageCard from "../chats/ChatMessageCard";
 import GroupMessageCard from "./GroupMessageCard";
+import { socket } from "../../socket";
+import { getFormattedTime } from "../../util/helper";
 
 const AllGroup = () => {
   const auth = useSelector((state) => state.auth.user);
@@ -25,11 +27,38 @@ const AllGroup = () => {
     },
     enabled: !!auth && !!auth.userId,
   });
+
+  useEffect(() => {
+    console.log("inside useeffect");
+    socket.on("receiveGroupCreated", (data) => {
+      console.log("data", data);
+      queryClient.setQueriesData(["allGroups"], (oldData) => {
+        const newData = [
+          {
+            _id: Math.floor(Math.random() * 90000) + 10000,
+            admin: data.admin,
+            createdAt: new Date(),
+            lastMessage:
+              data.admin[0] === auth.userId
+                ? `You created Group.`
+                : `${data.createdBy} created Group.`,
+            name: data.groupName,
+            time: getFormattedTime(new Date()),
+          },
+          ...oldData,
+        ];
+
+        return newData;
+      });
+    });
+  }, [socket]);
+
   if (isLoading) {
     return <LocalLoader />;
   }
-  console.log("data", data);
+  console.log("allGroup", data);
   const allGroups = data;
+
   if (allGroups)
     return (
       <Box sx={{ height: "90%" }}>
@@ -66,15 +95,6 @@ const AllGroup = () => {
                 //   count={"item.notificationCount"}
               />
             );
-            //   <ChatMessageCard
-            //     key={index}
-            //     name={item.name}
-            //     message={"item.lastMessage"}
-            //     time={item.time}
-            //     id={item.groupId}
-            //     showOnline={false}
-            //     count={"item.notificationCount"}
-            //   />
           })}
         </Box>
       </Box>

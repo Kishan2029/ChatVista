@@ -5,7 +5,14 @@
 // export const removeAccessToken = () => {
 //     localStorage.removeItem("accessToken");
 // }
+const dateDiffInDays = (a, b) => {
+    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+}
 
 export const isUserLoggedIn = () => {
     return localStorage.getItem("login");
@@ -40,7 +47,27 @@ export const stringToColor = (string) => {
 
     return color;
 }
+export const getFormattedTime = (date) => {
 
+    const today = new Date();
+    const diff = dateDiffInDays(date, today);
+
+    if (diff === 0) {
+        let hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        const formattedTime = `${hours < 10 ? '0' : ''}${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+        return formattedTime;
+    }
+    else if (diff === 1) {
+        return "Yesterday";
+    } else {
+        return date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
+    }
+
+}
 
 
 

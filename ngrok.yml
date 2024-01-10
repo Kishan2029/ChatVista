@@ -1,0 +1,9 @@
+authtoken: 1u8OpJJ1GsX6xRT7MDJg3lLcuu5_39FE5VvbkX8U3sDq8kpfT
+version: 2
+tunnels:
+  app1:
+    addr: 5173
+    proto: http
+  app2:
+    addr: 8080
+    proto: http

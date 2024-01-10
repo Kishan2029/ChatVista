@@ -195,3 +195,27 @@ exports.sendGroupMessage = async (data, socket) => {
         socket.to(socketIds).emit("receiveGroupMessage", receiverData)
     }
 }
+
+exports.groupCreated = async (data, socket) => {
+    console.log("data", data)
+    let members = data.members.concat(data.admin);
+    const receiverSocket = await OnlineUser.find({ userId: { $in: members } });
+    console.log("receiverSocket", receiverSocket)
+
+    let socketIds = receiverSocket.map((item) => {
+        if (data.socketId !== item.socketId)
+            return item.socketId
+    })
+
+    if (socketIds.length > 0) {
+        // const user = await User.findById(userId);
+
+        const receiverData = {
+            members,
+            groupName: data.name,
+            createdBy: data.createdBy,
+            admin: data.admin
+        }
+        socket.to(socketIds).emit("receiveGroupCreated", receiverData)
+    }
+}

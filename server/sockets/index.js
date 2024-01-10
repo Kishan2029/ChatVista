@@ -1,4 +1,4 @@
-const { addUser, removeUser, sendMessage, sendOnlineStatus, userTyping, sendNotification, makeNotificationCountZero, sendGroupMessage } = require("./functions");
+const { addUser, removeUser, sendMessage, sendOnlineStatus, userTyping, sendNotification, makeNotificationCountZero, sendGroupMessage, groupCreated } = require("./functions");
 
 
 
@@ -26,9 +26,9 @@ module.exports = (io) => {
             makeNotificationCountZero(data, socket)
         })
 
-        // socket.on('isOnline', (data) => {
-        //     isOnline(data, socket, io)
-        // });
+        socket.on('groupCreated', (data) => {
+            groupCreated(data, socket)
+        })
 
         socket.on('userTyping', (data) => [
             userTyping(data, socket)

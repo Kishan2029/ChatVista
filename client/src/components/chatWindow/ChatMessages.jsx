@@ -56,11 +56,11 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
         console.log("chatUserId", chatUserId);
         // add message into user chat
         if (chatUserId === data.groupId) {
-          console.log("condition true");
+          let update = false;
           queryClient.setQueriesData(["userChats", chatUserId], (oldData) => {
-            const newData = oldData.map((item) => {
+            let newData = oldData.map((item) => {
               if (item.date.toLowerCase() === "today") {
-                console.log("inside");
+                update = true;
                 item.messages.push({
                   time: "now",
                   content: data.content,
@@ -71,7 +71,23 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
               }
               return item;
             });
-
+            if (!update) {
+              newData = [
+                ...oldData,
+                {
+                  date: "Today",
+                  messages: [
+                    {
+                      time: "now",
+                      content: data.content,
+                      id: Math.floor(Math.random() * 90000) + 10000,
+                      createdBy: data.createdBy,
+                      createdByUser: data.createdByUser,
+                    },
+                  ],
+                },
+              ];
+            }
             return newData;
           });
           setScrollView(Math.floor(Math.random() * 90000) + 10000);
@@ -85,7 +101,8 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
           queryClient.setQueriesData(
             ["userChats", data.createdBy],
             (oldData) => {
-              const newData = oldData.map((item) => {
+              let update = false;
+              let newData = oldData.map((item) => {
                 if (item.date.toLowerCase() === "today") {
                   item.messages.push({
                     time: "now",
@@ -96,7 +113,22 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
                 }
                 return item;
               });
-
+              if (!update) {
+                newData = [
+                  ...oldData,
+                  {
+                    date: "Today",
+                    messages: [
+                      {
+                        time: "now",
+                        content: data.content,
+                        id: Math.floor(Math.random() * 90000) + 10000,
+                        createdBy: data.createdBy,
+                      },
+                    ],
+                  },
+                ];
+              }
               return newData;
             }
           );

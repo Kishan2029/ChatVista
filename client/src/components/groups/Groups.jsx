@@ -10,7 +10,7 @@ import AllGroup from "./AllGroup";
 const Groups = () => {
   const [modal, setModal] = useState(false);
   return (
-    <Box sx={{ padding: "1rem", height: "100%" }}>
+    <Box sx={{ padding: "1rem", height: "94%" }}>
       <Typography sx={{ fontSize: "2rem", fontWeight: 550 }}>Groups</Typography>
       <Box sx={{ mt: "1rem", mb: "1.5rem" }}>Search Box</Box>
       <Box

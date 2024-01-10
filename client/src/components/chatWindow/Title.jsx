@@ -53,7 +53,7 @@ const Title = ({ name, lastSeen }) => {
             {name}
           </Typography>
           <Typography sx={{ color: "var(--grayFontColor2)" }}>
-            {isGroup ? "groupComponent" : online ? `Online` : `Offline`}
+            {isGroup ? groupComponent : online ? `Online` : `Offline`}
           </Typography>
         </Box>
       </Box>

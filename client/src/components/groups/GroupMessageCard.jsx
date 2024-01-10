@@ -133,8 +133,8 @@ const GroupMessageCard = ({
           >
             {userTyping
               ? `Typing...`
-              : senderUser
-              ? truncateString(senderUser + ": " + message, 23)
+              : message
+              ? truncateString(message, 23)
               : ""}
           </Typography>
         </Box>
