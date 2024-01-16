@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { fetchAllChats } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
 import { socket } from "../../socket";
+import { playSound } from "../../util/helper";
 
 const AllChats = () => {
   const auth = useSelector((state) => state.auth.user);
@@ -29,13 +30,7 @@ const AllChats = () => {
     enabled: !!auth && !!auth.userId,
   });
   console.log("allChats", data);
-  const playSound = () => {
-    let src =
-      "https://commondatastorage.googleapis.com/codeskulptor-assets/jump.ogg";
-    let src1 = "src/assets/sound/Anya Notification ! Notification.mp3";
-    let audio = new Audio(src1);
-    audio.play();
-  };
+
   useEffect(() => {
     const handleReceiveNotification = (data) => {
       if (auth.userId === data.receiverUser) {

@@ -4,6 +4,7 @@ const Group = require('../models/group.model');
 const GroupMessage = require('../models/groupMessage.model');
 const mongoose = require("mongoose");
 const { getFormattedTime } = require('./chat.service');
+const GroupNotification = require('../models/groupNotification.model');
 
 const isPartOfGroup = exports.isPartOfGroup = (userId, groups) => {
     const isMember = groups.members.indexOf(userId);
@@ -97,7 +98,8 @@ exports.getUserGroups = async function (id) {
             const createdByUser = await User.findById(item.admin[0]).select({ firstName: 1 });
             emptyGroupMessage = `${createdByUser.firstName} created Group.`
         }
-
+        const notification = await GroupNotification.find({ userId: id, groupId: item._id })
+        console.log("notification", notification)
         return {
             ...item._doc,
             lastMessage: lastMessage ? (senderUser.firstName + ": " + lastMessage.content) : emptyGroupMessage,
@@ -105,12 +107,13 @@ exports.getUserGroups = async function (id) {
             time: lastMessage ? getFormattedTime(lastMessage.createdAt) : getFormattedTime(item.createdAt),
             // senderUser: lastMessage ? senderUser.firstName : null,
             memberCount: item.admin.length + item.members.length,
-            members: members
-            // notificationCount: notification ? notification.count : 0
+            members: members,
+            notificationCount: notification.length > 0 ? notification[0].count : 0
         }
 
     }))
     groups = groups.sort((a, b) => a.createdAt > b.createdAt ? -1 : 1);
+    console.log("groups", groups)
     return { statusCode: 200, response: { success: true, data: groups } };
 }
 

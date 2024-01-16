@@ -7,13 +7,14 @@ import LocalLoader from "../LocalLoader";
 import ChatMessageCard from "../chats/ChatMessageCard";
 import GroupMessageCard from "./GroupMessageCard";
 import { socket } from "../../socket";
-import { getFormattedTime } from "../../util/helper";
+import { getFormattedTime, playSound } from "../../util/helper";
 
 const AllGroup = () => {
   const auth = useSelector((state) => state.auth.user);
-
+  const chatData = useSelector((state) => state.chat);
+  const chatUserId = chatData ? chatData?.userInfo?.id : null;
   const queryClient = useQueryClient();
-
+  console.log("auth", auth);
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["allGroups"],
     queryFn: () => {
@@ -29,9 +30,7 @@ const AllGroup = () => {
   });
 
   useEffect(() => {
-    console.log("inside useeffect");
     socket.on("receiveGroupCreated", (data) => {
-      console.log("data", data);
       queryClient.setQueriesData(["allGroups"], (oldData) => {
         const newData = [
           {
@@ -53,6 +52,47 @@ const AllGroup = () => {
     });
   }, [socket]);
 
+  useEffect(() => {
+    const handleReceiveNotification = (data) => {
+      console.log("data", data);
+      if (auth.userId === data.userId) {
+        queryClient.setQueriesData(["allGroups"], (oldData) => {
+          const newData = oldData.map((item) => {
+            if (item._id === data.groupId) {
+              // playSound();
+              if (chatUserId === item._id) {
+                console.log("inside coint");
+                item.notificationCount = 0;
+                const socketData = {
+                  userId: auth.userId,
+                  groupId: chatUserId,
+                  isGroup: true,
+                };
+                socket.emit("makeNotificationCountZero", socketData);
+              } else {
+                item.notificationCount = data.count;
+                console.log("item.notificationCount", item.notificationCount);
+              }
+              console.log("item", item);
+            }
+            return item;
+          });
+          return newData;
+        });
+      }
+    };
+
+    if (auth && socket.connected) {
+      socket.on("receiveGroupNotification", handleReceiveNotification);
+    }
+
+    return () => {
+      // Cleanup: Remove the event listener when the component unmounts
+      if (auth && socket.connected) {
+        socket.off("receiveGroupNotification", handleReceiveNotification);
+      }
+    };
+  }, [auth, socket.connected, queryClient, chatUserId]);
   if (isLoading) {
     return <LocalLoader />;
   }
@@ -92,7 +132,7 @@ const AllGroup = () => {
                 senderUser={item.senderUser}
                 members={item.members}
                 memberCount={item.memberCount}
-                //   count={"item.notificationCount"}
+                count={item.notificationCount}
               />
             );
           })}

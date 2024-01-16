@@ -5,7 +5,7 @@ const OnlineUserSchema = new mongoose.Schema({
     userId: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
     },
     socketId: {
         type: String,

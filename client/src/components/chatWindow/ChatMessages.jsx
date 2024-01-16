@@ -12,7 +12,6 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
   const isGroup = chatData.userInfo.group;
-  console.log("chatData", chatData);
 
   const scroll1 = useRef(null);
 
@@ -39,7 +38,6 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
   });
 
   const messages = data;
-  console.log("messages", messages);
 
   useEffect(() => {
     if (scroll1.current)
@@ -52,8 +50,8 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
   useEffect(() => {
     if (isGroup) {
       socket.on("receiveGroupMessage", (data) => {
-        console.log("receiveGroupMessage data:", data);
-        console.log("chatUserId", chatUserId);
+        // console.log("receiveGroupMessage data:", data);
+        // console.log("chatUserId", chatUserId);
         // add message into user chat
         if (chatUserId === data.groupId) {
           let update = false;
@@ -95,7 +93,6 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
       });
     } else {
       socket.on("receiveMessage", (data) => {
-        console.log("receiveMessage data:", data);
         // add message into user chat
         if (auth.userId === data.receiverUser)
           queryClient.setQueriesData(

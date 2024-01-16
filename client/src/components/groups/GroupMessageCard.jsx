@@ -34,29 +34,27 @@ const GroupMessageCard = ({
         },
       })
     );
-    console.log("chat selected");
 
     // make notification count 0
-    // queryClient.setQueriesData(["allChats"], (oldData) => {
-    //   const newData = oldData.map((item) => {
-    //     console.log("first", id, item.friendId);
-    //     if (item.friendId === id) {
-    //       item.notificationCount = 0;
-    //     }
-    //     return item;
-    //   });
-    //   return newData;
-    // });
+    queryClient.setQueriesData(["allGroups"], (oldData) => {
+      const newData = oldData.map((item) => {
+        if (item._id === id) {
+          item.notificationCount = 0;
+        }
+        return item;
+      });
+      return newData;
+    });
 
-    // const socketData = {
-    //   userB: auth.userId,
-    //   userA: id,
-    // };
-    // socket.emit("makeNotificationCountZero", socketData);
+    const socketData = {
+      userId: auth.userId,
+      groupId: id,
+      isGroup: true,
+    };
+    socket.emit("makeNotificationCountZero", socketData);
   };
 
   const selectedUser = useSelector((state) => state.chat.userInfo);
-  console.log("selectedUser", selectedUser);
 
   const [userTyping, setUserTyping] = useState(false);
 

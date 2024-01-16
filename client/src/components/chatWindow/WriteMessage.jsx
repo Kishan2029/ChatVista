@@ -104,7 +104,7 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
       };
       socket.emit("sendGroupMessage", socketData);
 
-      // socket.emit("sendNotification", socketData);
+      socket.emit("sendGroupNotification", socketData);
 
       writeMessageMutation.mutate({
         userId: auth.userId,

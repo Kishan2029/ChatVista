@@ -2,6 +2,7 @@ const OnlineUser = require('../models/onlineUser.model');
 const Notification = require('../models/notification.model');
 const Group = require('../models/group.model');
 const User = require('../models/user.model');
+const GroupNotification = require('../models/groupNotification.model');
 
 
 exports.addUser = async (userId, socketId) => {
@@ -96,7 +97,6 @@ exports.userTyping = async (data, socket) => {
 }
 
 exports.sendNotification = async (data, socket) => {
-    console.log("Inside sendNotification socket", data)
 
     // update the count
     const notification = await Notification.find({
@@ -137,23 +137,100 @@ exports.sendNotification = async (data, socket) => {
     }
 }
 
+exports.sendGroupNotification = async (data, socket) => {
+    console.log("Inside sendGroupNotification socket", data);
+
+    // find users
+    const group = await Group.findById(data.groupId);
+
+    let userArray = group.admin.concat(group.members);
+
+    userArray = userArray.map((item) => {
+        if (String(item) === data.userId) return;
+        return item;
+    })
+    console.log("userArray", userArray)
+
+    await Promise.all(userArray.map(async (item) => {
+        if (item === undefined) return;
+        // update the count
+        const notification = await GroupNotification.find({
+            userId: item,
+            groupId: data.groupId,
+        })
+        const count = notification.length ? notification[0].count + 1 : 1;
+        await GroupNotification.findOneAndUpdate({
+            userId: item,
+            groupId: data.groupId,
+        }, {
+            userId: item,
+            groupId: data.groupId,
+            count: count
+        }, {
+            new: true,
+            upsert: true
+        })
+
+        // send notification to receiver
+        const receiverSocket = await OnlineUser.find({ userId: { $in: userArray } })
+
+
+        const socketIds = receiverSocket.map((item) => {
+            return item.socketId
+        })
+
+        if (socketIds.length > 0) {
+
+            const receiverData = {
+                count,
+                userId: item,
+                groupId: data.groupId,
+            }
+            socket.to(socketIds).emit("receiveGroupNotification", receiverData)
+        }
+    }))
+
+
+
+
+
+
+
+}
+
 exports.makeNotificationCountZero = async (data, socket) => {
     console.log("Inside makeNotificationCountZero socket", data)
 
-    // make count 0
-    await Notification.findOneAndUpdate({
-        senderUser: data.userA,
-        receiverUser: data.userB,
-    }, {
-        senderUser: data.userA,
-        receiverUser: data.userB,
-        count: 0
-    }, {
-        new: true,
-        upsert: true
-    })
-}
 
+    // make count 0
+    if (data?.isGroup) {
+        await GroupNotification.findOneAndUpdate({
+            userId: data.userId,
+            groupId: data.groupId,
+        }, {
+            userId: data.userId,
+            groupId: data.groupId,
+            count: 0
+        }, {
+            new: true,
+            upsert: true
+        })
+    } else {
+
+        await Notification.findOneAndUpdate({
+            senderUser: data.userA,
+            receiverUser: data.userB,
+        }, {
+            senderUser: data.userA,
+            receiverUser: data.userB,
+            count: 0
+        }, {
+            new: true,
+            upsert: true
+        })
+    }
+
+}
 
 // Added socketIds for both sender and receiver
 exports.sendGroupMessage = async (data, socket) => {
