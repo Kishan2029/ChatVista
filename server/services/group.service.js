@@ -248,6 +248,47 @@ exports.editGroupInfo = async function (userId, groupId, name, file) {
     return { statusCode: 200, response: { success: true, message: "Group profile is updated" } };
 
 }
+exports.getGroupInfo = async function (userId, groupId) {
+
+    const user = await User.findById(userId);
+    if (!user) return { statusCode: 400, response: { success: false, message: "User is not registered." } };
+
+    const groups = await Group.findById(groupId);
+    if (!groups) return { statusCode: 400, response: { success: false, message: "Group does not exist." } };
+
+
+    const partOfGroup = isPartOfGroup(userId, groups);
+    if (!partOfGroup) return { statusCode: 400, response: { success: false, message: "User is not part of the group." } };
+
+    let members = [];
+    await Promise.all(groups.members.map(async (item) => {
+
+        const userInfo = await User.findById(item);
+        console.log("userInfo", userInfo)
+        members.push({
+            name: String(item) === String(userId) ? "You" : userInfo.firstName + " " + userInfo.lastName,
+            admin: false,
+            avatar: item?.profileUrl ? item.profileUrl : null
+        })
+
+
+    }))
+    await Promise.all(groups.admin.map(async (item) => {
+
+        const userInfo = await User.findById(item);
+        members.push({
+            name: String(item) === String(userId) ? "You" : userInfo.firstName + " " + userInfo.lastName,
+            admin: true,
+            avatar: item?.profileUrl ? item.profileUrl : null
+        })
+    }))
+    const data = {
+        members,
+        name: groups.name
+    }
+    return { statusCode: 200, response: { success: true, data } };
+
+}
 
 
 

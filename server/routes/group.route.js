@@ -9,6 +9,7 @@ router.get('/get/:id', groupController.getGroup)
 router.post('/addMember', groupController.addMember)
 router.post('/leftGroup', groupController.leftGroup)
 router.post('/addAdmin', groupController.addAdmin)
+router.post('/getGroupInfo', groupController.getGroupInfo)
 router.post('/editInfo', imageUpload, groupController.editInfo)
 
 

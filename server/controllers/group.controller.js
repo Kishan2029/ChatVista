@@ -130,7 +130,22 @@ exports.editInfo = async function (req, res, next) {
     }
 }
 
+exports.getGroupInfo = async function (req, res, next) {
+    try {
+        const group = z.object({
+            userId: z.string({ required_error: "UserId is required" }),
+            groupId: z.string({ required_error: "GroupId is required" })
+        });
 
+        const { userId, groupId } = group.parse(req.body);
+
+        const { response, statusCode } = await GroupService.getGroupInfo(userId, groupId);
+        res.status(statusCode).send(response);
+    } catch (error) {
+
+        next(error)
+    }
+}
 
 
 

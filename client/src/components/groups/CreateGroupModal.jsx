@@ -92,6 +92,8 @@ const CreateGroupModal = ({ open, handleClose }) => {
     };
     socket.emit("groupCreated", socketData);
     handleClose();
+    // setName("");
+    // setMembers([]);
   };
 
   if (isLoading) {

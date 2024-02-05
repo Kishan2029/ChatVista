@@ -5,7 +5,10 @@ export const chatSlice = createSlice({
     initialState: {
         selected: false,
         messages: null,
-        userInfo: null
+        userInfo: null,
+        userSelected: false,
+        groupSelected: false,
+        contactId: null
     },
     reducers: {
         setChatValue: (state, action) => {
@@ -15,7 +18,19 @@ export const chatSlice = createSlice({
         },
         setSelectedTrue: (state, action) => {
             state.selected = action.payload.selected
-        }
+        },
+        setUserSelectedTrue: (state, action) => {
+
+            state.userSelected = action.payload.userSelected
+        },
+        setGroupSelectedTrue: (state, action) => {
+
+            state.groupSelected = action.payload.groupSelected
+        },
+        setContactInfoId: (state, action) => {
+
+            state.contactId = action.payload.contactId
+        },
         // decrement: (state) => {
         //     state.value -= 1
         // },
@@ -26,6 +41,6 @@ export const chatSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setChatValue, setSelectedTrue } = chatSlice.actions
+export const { setChatValue, setSelectedTrue, setGroupSelectedTrue, setUserSelectedTrue, setContactInfoId } = chatSlice.actions
 
 export default chatSlice.reducer

@@ -11,6 +11,7 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
+  console.log("chatUserId", chatUserId);
   const isGroup = chatData.userInfo.group;
 
   const scroll1 = useRef(null);

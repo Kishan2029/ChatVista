@@ -7,10 +7,17 @@ import { socket } from "../socket";
 import { useQueryClient } from "react-query";
 import { fetchProfile } from "../reactQuery/query";
 import { setUser } from "../store/slices/authSlice";
+import { UserInfo } from "../components/chats/index";
+import { GroupInfo } from "../components/groups";
+import AllGroup from "../components/groups/AllGroup";
 
 const Home = ({ children }) => {
   const auth = useSelector((state) => state.auth.user);
   const selected = useSelector((state) => state.chat.selected);
+  const groupSelected = useSelector((state) => state.chat.groupSelected);
+  const userSelected = useSelector((state) => state.chat.userSelected);
+  console.log("groupSelected", groupSelected);
+  console.log("userSelected", userSelected);
   const dispatch = useDispatch();
 
   if (auth) {
@@ -89,9 +96,45 @@ const Home = ({ children }) => {
       >
         {children}
       </Box>
-      <Box sx={{ width: "70%", height: "100vh" }}>
+      {userSelected || groupSelected ? (
+        <Box sx={{ width: "70%", display: "flex" }}>
+          <Box
+            sx={{
+              width: "60%",
+              height: "100vh",
+            }}
+          >
+            {selected ? <ChatWindow /> : <EmptyConversation />}
+          </Box>
+          <Box sx={{ width: "40%", height: "100vh" }}>
+            {userSelected ? (
+              <UserInfo />
+            ) : groupSelected ? (
+              <GroupInfo />
+            ) : (
+              <></>
+            )}
+          </Box>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            width: "70%",
+            height: "100vh",
+          }}
+        >
+          {selected ? <ChatWindow /> : <EmptyConversation />}
+        </Box>
+      )}
+
+      {/* <Box
+        sx={{
+          width: "70%",
+          height: "100vh",
+        }}
+      >
         {selected ? <ChatWindow /> : <EmptyConversation />}
-      </Box>
+      </Box> */}
     </Box>
   );
 };

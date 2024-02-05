@@ -19,7 +19,7 @@ const ChatWindow = () => {
       }}
     >
       <Box sx={{ height: "10%" }}>
-        <Title name={userInfo.name} />
+        <Title name={userInfo.name} id={userInfo.id} />
       </Box>
       <Box sx={{ height: "90%", position: "relative" }}>
         {/* <Box sx={{ height: "80%" }}>Hello</Box> */}

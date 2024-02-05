@@ -30,7 +30,15 @@ const AllGroup = () => {
   });
 
   useEffect(() => {
+    console.log("auth", auth);
+    console.log("socketHit");
+    if (!auth) {
+      return;
+    }
+
     socket.on("receiveGroupCreated", (data) => {
+      console.log("inside receiveGroupCreated");
+
       queryClient.setQueriesData(["allGroups"], (oldData) => {
         const newData = [
           {
@@ -46,7 +54,7 @@ const AllGroup = () => {
           },
           ...oldData,
         ];
-
+        console.log("newData", newData);
         return newData;
       });
     });

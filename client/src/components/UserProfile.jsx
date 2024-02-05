@@ -24,6 +24,7 @@ const UserProfile = () => {
   const auth = useSelector((state) => state.auth.user);
 
   const { data, error, isError, isLoading } = useQuery({
+    queryKey: ["userProfile"],
     queryFn: () => {
       // Check if auth is available before making the query
       if (auth && auth.userId) {

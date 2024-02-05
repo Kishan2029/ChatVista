@@ -40,4 +40,10 @@ export const fetchGroupMessages = async (body) => {
     const { data } = await axios.post(config.urls.groupMessage.getGroupMessages(), body);
     return data.data;
 }
+export const getGroupInfo = async (body) => {
+    const { data } = await axios.post(config.urls.group.getGroupInfo(), body);
+    return data.data;
+}
+
+
 

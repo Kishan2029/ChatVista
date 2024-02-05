@@ -2,15 +2,23 @@ import { Avatar, Box, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import OnlineAvatar from "../common/OnlineAvatar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setContactInfoId,
+  setGroupSelectedTrue,
+  setUserSelectedTrue,
+} from "../../store/slices/chatSlice";
 
-const Title = ({ name, lastSeen }) => {
+const Title = ({ name, lastSeen, id }) => {
+  console.log("id", id);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
   const isGroup = chatData.userInfo.group;
   const members = chatData.userInfo.members;
   const memberCount = chatData.userInfo.memberCount;
   const [online, setOnline] = useState(false);
+
+  const dispatch = useDispatch();
 
   let groupComponent = "";
   if (isGroup) {
@@ -29,6 +37,18 @@ const Title = ({ name, lastSeen }) => {
     );
   }
 
+  const selectedInfo = () => {
+    console.log("click on info");
+    if (groupComponent) {
+      dispatch(setContactInfoId({ contactId: id }));
+      dispatch(setUserSelectedTrue({ userSelected: false }));
+      dispatch(setGroupSelectedTrue({ groupSelected: true }));
+    } else {
+      dispatch(setContactInfoId({ contactId: id }));
+      dispatch(setGroupSelectedTrue({ groupSelected: false }));
+      dispatch(setUserSelectedTrue({ userSelected: true }));
+    }
+  };
   return (
     <Box
       sx={{
@@ -40,6 +60,7 @@ const Title = ({ name, lastSeen }) => {
         borderLeft: "1.5px solid #B4B4B4",
         alignItems: "center",
       }}
+      onClick={() => selectedInfo()}
     >
       <Box sx={{ display: "flex", gap: "1.4rem" }}>
         <OnlineAvatar
