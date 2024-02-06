@@ -16,6 +16,7 @@ const GroupMessageCard = ({
   senderUser,
   members,
   memberCount,
+  profileUrl,
 }) => {
   const auth = useSelector((state) => state.auth.user);
   const queryClient = useQueryClient();
@@ -31,6 +32,7 @@ const GroupMessageCard = ({
           group: true,
           members,
           memberCount,
+          profileUrl,
         },
       })
     );
@@ -111,6 +113,7 @@ const GroupMessageCard = ({
             fontSize: "1.5rem",
             // backgroundColor: stringToColor(name),
           }}
+          src={profileUrl ? profileUrl : ""}
         >
           {name[0]}
         </Avatar>

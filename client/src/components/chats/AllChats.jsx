@@ -104,6 +104,7 @@ const AllChats = () => {
                 id={item.friendId}
                 online={item.online}
                 count={item.notificationCount}
+                profileUrl={item.profileUrl}
               />
             );
           })}

@@ -3,16 +3,8 @@ import React, { useEffect, useState } from "react";
 import { socket } from "../../socket/index";
 import { useQueryClient } from "react-query";
 
-const OnlineAvatar = ({ name, id, online, setOnline }) => {
-  // useEffect(() => {
-  //   socket.emit("isOnline", { userId: id });
-  //   setInterval(() => {
-  //     socket.emit("isOnline", { userId: id });
-  //   }, 10 * 1000);
-  // }, []);
-
+const OnlineAvatar = ({ name, id, online, setOnline, profileUrl }) => {
   useEffect(() => {
-    console.log("inside useeffect");
     socket.on("fetchOnlineStatus", (data) => {
       if (data.includes(id)) {
         setOnline(true);
@@ -50,6 +42,7 @@ const OnlineAvatar = ({ name, id, online, setOnline }) => {
               fontSize: "1.5rem",
               // backgroundColor: stringToColor(name),
             }}
+            src={profileUrl ? profileUrl : ""}
           >
             {name[0]}
           </Avatar>
@@ -62,6 +55,7 @@ const OnlineAvatar = ({ name, id, online, setOnline }) => {
             fontSize: "1.5rem",
             // backgroundColor: stringToColor(name),
           }}
+          src={profileUrl ? profileUrl : ""}
         >
           {name[0]}
         </Avatar>

@@ -141,9 +141,8 @@ const GroupInfo = () => {
   }
   const groupInfo = data;
   const count = groupInfo.members.length;
-  // console.log("groupInfo", groupInfo);
-  // const repeat = (arr, n) => Array(n).fill(arr).flat();
-  // groupInfo.members = repeat(groupInfo.members, 10);
+  console.log("groupInfo", groupInfo);
+
   return (
     <Box sx={{ height: "90%" }}>
       {/* title */}
@@ -194,7 +193,7 @@ const GroupInfo = () => {
           }}
         >
           <Avatar
-            src={""}
+            src={groupInfo?.profileUrl ? groupInfo?.profileUrl : ""}
             sx={{
               height: "6rem",
               width: "6rem",
@@ -268,6 +267,7 @@ const GroupInfo = () => {
                         width: "2.8rem",
                         fontSize: "1.5rem",
                       }}
+                      src={item?.profileUrl ? item.profileUrl : ""}
                     >
                       {item.name[0]}
                     </Avatar>

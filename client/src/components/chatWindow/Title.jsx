@@ -16,8 +16,9 @@ const Title = ({ name, lastSeen, id }) => {
   const isGroup = chatData.userInfo.group;
   const members = chatData.userInfo.members;
   const memberCount = chatData.userInfo.memberCount;
+  const profileUrl = chatData.userInfo.profileUrl;
   const [online, setOnline] = useState(false);
-
+  console.log("title profileUrl", profileUrl);
   const dispatch = useDispatch();
 
   let groupComponent = "";
@@ -68,6 +69,7 @@ const Title = ({ name, lastSeen, id }) => {
           id={chatUserId}
           online={online}
           setOnline={setOnline}
+          profileUrl={profileUrl}
         />
         <Box>
           <Typography sx={{ color: "#030303", fontWeight: 600 }}>

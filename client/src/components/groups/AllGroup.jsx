@@ -42,7 +42,7 @@ const AllGroup = () => {
       queryClient.setQueriesData(["allGroups"], (oldData) => {
         const newData = [
           {
-            _id: Math.floor(Math.random() * 90000) + 10000,
+            _id: data._id,
             admin: data.admin,
             createdAt: new Date(),
             lastMessage:
@@ -51,6 +51,7 @@ const AllGroup = () => {
                 : `${data.createdBy} created Group.`,
             name: data.groupName,
             time: getFormattedTime(new Date()),
+            members: data.members,
           },
           ...oldData,
         ];
@@ -58,7 +59,7 @@ const AllGroup = () => {
         return newData;
       });
     });
-  }, [socket]);
+  }, [socket.connected, queryClient, chatUserId]);
 
   useEffect(() => {
     const handleReceiveNotification = (data) => {
@@ -141,6 +142,7 @@ const AllGroup = () => {
                 members={item.members}
                 memberCount={item.memberCount}
                 count={item.notificationCount}
+                profileUrl={item.profileUrl}
               />
             );
           })}

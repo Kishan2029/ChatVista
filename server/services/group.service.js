@@ -293,7 +293,7 @@ exports.getGroupInfo = async function (userId, groupId) {
         return {
             name: String(item) === String(userId) ? "You" : userInfo.firstName + " " + userInfo.lastName,
             admin: false,
-            avatar: item?.profileUrl ? item.profileUrl : null,
+            profileUrl: userInfo?.profileUrl ? userInfo.profileUrl : null,
             id: item._id
         };
     });
@@ -303,7 +303,7 @@ exports.getGroupInfo = async function (userId, groupId) {
         return {
             name: String(item) === String(userId) ? "You" : userInfo.firstName + " " + userInfo.lastName,
             admin: true,
-            avatar: item?.profileUrl ? item.profileUrl : null,
+            profileUrl: userInfo?.profileUrl ? userInfo.profileUrl : null,
             id: item._id
         };
     });
@@ -314,7 +314,7 @@ exports.getGroupInfo = async function (userId, groupId) {
         Promise.all(adminPromises),
         allUsers
     ]);
-
+    console.log("membersInfo", membersInfo)
     members = [...membersInfo, ...adminsInfo];
     const newMembers = allUserInfo.filter((item1) => {
         // console.log(members.map((item) => item.id))

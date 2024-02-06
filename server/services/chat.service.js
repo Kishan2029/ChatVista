@@ -46,14 +46,15 @@ exports.getAllChatsForUser = async function (userId) {
     let chats = await Promise.all(friendList.map(async (friend) => {
         const lastMessage = await Message.findOne({ $or: [{ senderUser: userId, receiverUser: friend.friendId }, { senderUser: friend.friendId, receiverUser: userId }] }).sort({ createdAt: -1 });
         const notification = await Notification.findOne({ receiverUser: userId, senderUser: friend.friendId })
-
+        const user1 = await User.findById(friend.friendId);
         return {
             ...friend,
             lastMessage: lastMessage ? lastMessage.content : null,
             createdAt: lastMessage ? lastMessage.createdAt : null,
             time: lastMessage ? getFormattedTime(lastMessage.createdAt) : null,
             online: false,
-            notificationCount: notification ? notification.count : 0
+            notificationCount: notification ? notification.count : 0,
+            profileUrl: user1.profileUrl
         }
 
     }))

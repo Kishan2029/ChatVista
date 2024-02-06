@@ -87,7 +87,7 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
 
     setMembers([]);
   };
-
+  console.log("newMembers", newMembers);
   return (
     <Dialog
       open={open}
@@ -130,6 +130,7 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
                   height: "2rem",
                   fontSize: "1rem",
                 }}
+                src={option?.profileUrl ? option?.profileUrl : ""}
               >
                 {option.firstName[0]}
               </Avatar>
@@ -148,7 +149,14 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
             return value.map((option, index) => (
               <Box sx={{ display: "flex" }} key={option._id}>
                 <Chip
-                  avatar={<Avatar sx={{}}>{option.firstName[0]}</Avatar>}
+                  avatar={
+                    <Avatar
+                      sx={{}}
+                      src={option?.profileUrl ? option?.profileUrl : ""}
+                    >
+                      {option.firstName[0]}
+                    </Avatar>
+                  }
                   variant="filled"
                   label={`${option.firstName} ${option.lastName}`}
                   onDelete={() =>

@@ -71,6 +71,15 @@ const CreateGroupModal = ({ open, handleClose }) => {
         // console.log("newData", newData);
         return newData;
       });
+
+      const socketData = {
+        members: data.members,
+        name: body.name,
+        createdBy: auth.firstName,
+        admin: [auth.userId],
+        _id: data.id,
+      };
+      socket.emit("groupCreated", socketData);
     },
   });
 
@@ -86,13 +95,13 @@ const CreateGroupModal = ({ open, handleClose }) => {
     };
     createGroupMutation.mutate(data);
 
-    const socketData = {
-      members: members.map((item) => item.friendId),
-      name,
-      createdBy: auth.firstName,
-      admin: [auth.userId],
-    };
-    socket.emit("groupCreated", socketData);
+    // const socketData = {
+    //   members: members.map((item) => item.friendId),
+    //   name,
+    //   createdBy: auth.firstName,
+    //   admin: [auth.userId],
+    // };
+    // socket.emit("groupCreated", socketData);
     handleClose();
     // setName("");
     // setMembers([]);

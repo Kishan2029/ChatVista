@@ -14,6 +14,7 @@ const ChatMessageCard = ({
   id,
   count,
   showOnline = true,
+  profileUrl,
 }) => {
   const auth = useSelector((state) => state.auth.user);
   const queryClient = useQueryClient();
@@ -27,6 +28,7 @@ const ChatMessageCard = ({
           name,
           id,
           group: false,
+          profileUrl,
         },
       })
     );
@@ -108,6 +110,7 @@ const ChatMessageCard = ({
             id={id}
             online={online}
             setOnline={setOnline}
+            profileUrl={profileUrl}
           />
         )}
 
