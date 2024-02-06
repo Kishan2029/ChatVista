@@ -62,22 +62,6 @@ const GroupInfo = () => {
         return newData;
       });
       setGlobalLoader(false);
-      // queryClient.setQueriesData(["groupInfo", chatUserId], (oldData) => {
-      //   const members = body.members.map((item) => {
-      //     return {
-      //       id: item._id,
-      //       name: item.firstName + " " + item.lastName,
-      //       admin: false,
-      //       avatar: item.profileUrl,
-      //     };
-      //   });
-      //   const newData = {
-      //     ...oldData,
-      //     members: oldData.members.concat(members),
-      //   };
-      //   console.log("newData", newData);
-      //   return newData;
-      // });
     },
   });
 
@@ -205,7 +189,10 @@ const GroupInfo = () => {
             {/* Member list */}
             {groupInfo.members.map((item) => {
               return (
-                <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box
+                  key={item.id}
+                  sx={{ display: "flex", justifyContent: "space-between" }}
+                >
                   {/* avatar and name*/}
                   <Box
                     sx={{ display: "flex", gap: "1rem", alignItems: "center" }}

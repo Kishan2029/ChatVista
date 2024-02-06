@@ -31,6 +31,7 @@ const Login = () => {
       setGlobalLoader(true);
     },
     onSuccess: async (data, body) => {
+      console.log("data", data);
       setGlobalLoader(false);
       console.log("Login Success");
 

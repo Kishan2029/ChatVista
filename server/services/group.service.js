@@ -29,6 +29,17 @@ exports.createGroup = async function (admin, name, members) {
     if (membersArray.length === 0)
         return { statusCode: 400, response: { success: false, message: "Members cannot be empty." } };
 
+    let count = 1, memberName = ["You"];
+    await Promise.all(members.map(async (item) => {
+        if (String(item) === String(admin)) {
+            return;
+        }
+        const user = await User.findById(item).select({ firstName: 1 });
+        if (count === 3) return;
+        memberName.push(user.firstName);
+        count++;
+
+    }))
     // store in database
     const newGroup = new Group({
         admin,
@@ -36,8 +47,14 @@ exports.createGroup = async function (admin, name, members) {
         name
     })
 
+    const data = {
+        id: newGroup.id,
+        members: memberName
+    }
+
+
     await newGroup.save();
-    return { statusCode: 200, response: { success: true, message: "New Group is created." } };
+    return { statusCode: 200, response: { success: true, message: "New Group is created.", data } };
 
 }
 
@@ -257,6 +274,7 @@ exports.editGroupInfo = async function (userId, groupId, name, file) {
     return { statusCode: 200, response: { success: true, message: "Group profile is updated" } };
 
 }
+
 exports.getGroupInfo = async function (userId, groupId) {
 
     const user = await User.findById(userId);

@@ -48,15 +48,17 @@ const CreateGroupModal = ({ open, handleClose }) => {
     onMutate: async (body) => {
       notify("success", "Group is created.");
     },
-    onSuccess: async (queryKey, body) => {
+    onSuccess: async (data, body) => {
+      console.log("data", data);
+
       // set data
       console.log("Group is created successfully.");
       queryClient.setQueriesData(["allGroups"], (oldData) => {
         const newData = [
           {
-            _id: Math.floor(Math.random() * 90000) + 10000,
-            admin: [auth.id],
-            members: body.members,
+            _id: data.id,
+            admin: [auth.userId],
+            members: data.members,
             name: body.name,
             createdAt: new Date(),
             lastMessage: "You created Group.",
