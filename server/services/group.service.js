@@ -132,7 +132,7 @@ exports.addMember = async function (add, userId, groupId, adminId) {
 
     if (add) {
         if (!partOfGroup) {
-            groups.members.push(userId)
+            groups.members = groups.members.concat(userId)
             await groups.save();
             return { statusCode: 200, response: { success: true, message: "Member is added to the group." } };
         } else {
@@ -142,7 +142,7 @@ exports.addMember = async function (add, userId, groupId, adminId) {
         if (!partOfGroup) {
             return { statusCode: 400, response: { success: false, message: "Member is not part of the group." } };
         } else {
-            const index = groups.members.indexOf(userId);
+            const index = groups.members.indexOf(userId[0]);
             groups.members.splice(index, 1);
             await groups.save()
             return { statusCode: 200, response: { success: true, message: "Member is removed from the group." } };
@@ -165,7 +165,16 @@ exports.leftGroup = async function (userId, groupId) {
         return { statusCode: 400, response: { success: false, message: "Member is not part of the group." } };
     } else {
         const index = groups.members.indexOf(userId);
-        groups.members.splice(index, 1);
+        if (index !== -1) { groups.members.splice(index, 1); }
+        else {
+            const index = groups.admin.indexOf(userId);
+            groups.admin.splice(index, 1);
+            // if there is no admin make one
+            if (groups.admin.length === 0 && groups.members.length > 0) {
+                let member = groups.members.shift();
+                groups.admin.push(member);
+            }
+        }
         await groups.save()
         return { statusCode: 200, response: { success: true, message: "Member has left from the group." } };
     }
@@ -261,30 +270,43 @@ exports.getGroupInfo = async function (userId, groupId) {
     if (!partOfGroup) return { statusCode: 400, response: { success: false, message: "User is not part of the group." } };
 
     let members = [];
-    await Promise.all(groups.members.map(async (item) => {
-
+    const memberPromises = groups.members.map(async (item) => {
         const userInfo = await User.findById(item);
-        console.log("userInfo", userInfo)
-        members.push({
+        return {
             name: String(item) === String(userId) ? "You" : userInfo.firstName + " " + userInfo.lastName,
             admin: false,
-            avatar: item?.profileUrl ? item.profileUrl : null
-        })
+            avatar: item?.profileUrl ? item.profileUrl : null,
+            id: item._id
+        };
+    });
 
-
-    }))
-    await Promise.all(groups.admin.map(async (item) => {
-
+    const adminPromises = groups.admin.map(async (item) => {
         const userInfo = await User.findById(item);
-        members.push({
+        return {
             name: String(item) === String(userId) ? "You" : userInfo.firstName + " " + userInfo.lastName,
             admin: true,
-            avatar: item?.profileUrl ? item.profileUrl : null
-        })
-    }))
+            avatar: item?.profileUrl ? item.profileUrl : null,
+            id: item._id
+        };
+    });
+
+    const allUsers = User.find({}).select({ firstName: 1, lastName: 1, profileUrl: 1 })
+    const [membersInfo, adminsInfo, allUserInfo] = await Promise.all([
+        Promise.all(memberPromises),
+        Promise.all(adminPromises),
+        allUsers
+    ]);
+
+    members = [...membersInfo, ...adminsInfo];
+    const newMembers = allUserInfo.filter((item1) => {
+        // console.log(members.map((item) => item.id))
+        return !members.map((item) => String(item.id)).includes(String(item1._id))
+    })
+
     const data = {
         members,
-        name: groups.name
+        name: groups.name,
+        newMembers: newMembers
     }
     return { statusCode: 200, response: { success: true, data } };
 

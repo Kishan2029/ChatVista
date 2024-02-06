@@ -67,3 +67,19 @@ export const createGroupFunction = async (body) => {
     });
     return data.data;
 }
+
+// add member into group
+export const addMemberInGroup = async (body) => {
+    const { data } = await axios.post(config.urls.group.addMember(), body, {
+
+    });
+    return data.data;
+}
+
+// add member into group
+export const leftGroup = async (body) => {
+    const { data } = await axios.post(config.urls.group.leftGroup(), body, {
+
+    });
+    return data.data;
+}

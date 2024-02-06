@@ -54,16 +54,23 @@ function App() {
       path: "/",
       element: isUserLoggedIn() ? (
         <>
-          <Box sx={{ display: "flex" }}>
-            <Navbar />
-            <Outlet />
-          </Box>
-          <Backdrop
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={globalLoader}
+          <AuthContext.Provider
+            value={{
+              globalLoader,
+              setGlobalLoader,
+            }}
           >
-            <CircularProgress color="inherit" />
-          </Backdrop>
+            <Box sx={{ display: "flex" }}>
+              <Navbar />
+              <Outlet />
+            </Box>
+            <Backdrop
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={globalLoader}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          </AuthContext.Provider>
         </>
       ) : (
         <Navigate to="/login" />

@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Avatar, Box, Button, Card, Divider, Typography } from "@mui/material";
-import { SignOut, TrashSimple, XCircle } from "@phosphor-icons/react";
-import { useQuery } from "react-query";
+import { SignOut, TrashSimple, UserPlus, XCircle } from "@phosphor-icons/react";
+import { useQuery, useQueryClient, useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setGroupSelectedTrue,
+  setSelectedTrue,
   setUserSelectedTrue,
 } from "../../store/slices/chatSlice";
 import { getGroupInfo } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
+import MemberAddModal from "./MemberAddModal";
+import { addMemberInGroup, leftGroup } from "../../reactQuery/mutation";
+import { notify } from "../../util/notify";
+import { AuthContext } from "../../context/authContext";
 const GroupInfo = () => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const contactId = chatData.contactId;
+  const queryClient = useQueryClient();
+  const { globalLoader, setGlobalLoader } = useContext(AuthContext);
   const dispatch = useDispatch();
-  console.log("contactId", contactId);
+
+  const [modal, setModal] = useState(false);
+
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["groupInfo", contactId],
     queryFn: () => {
@@ -28,21 +37,67 @@ const GroupInfo = () => {
     },
     enabled: !!auth && !!auth.userId && !!contactId,
   });
-  console.log("data", data);
-  const selectedInfo = () => {
+
+  const selectedCross = () => {
     console.log("click on info");
     dispatch(setUserSelectedTrue({ userSelected: false }));
     dispatch(setGroupSelectedTrue({ groupSelected: false }));
   };
+
+  const leaveGroupMutation = useMutation({
+    mutationFn: (body) => leftGroup(body),
+    onMutate: async (body) => {
+      notify("success", "You have left the group.");
+      setGlobalLoader(true);
+    },
+    onSuccess: async (queryKey, body) => {
+      // set data
+      console.log("member left the group.");
+
+      dispatch(setGroupSelectedTrue({ groupSelected: false }));
+      dispatch(setSelectedTrue({ selected: false }));
+      queryClient.setQueriesData(["allGroups"], (oldData) => {
+        const newData = oldData.filter((item) => item._id !== body.groupId);
+        console.log("newData", newData);
+        return newData;
+      });
+      setGlobalLoader(false);
+      // queryClient.setQueriesData(["groupInfo", chatUserId], (oldData) => {
+      //   const members = body.members.map((item) => {
+      //     return {
+      //       id: item._id,
+      //       name: item.firstName + " " + item.lastName,
+      //       admin: false,
+      //       avatar: item.profileUrl,
+      //     };
+      //   });
+      //   const newData = {
+      //     ...oldData,
+      //     members: oldData.members.concat(members),
+      //   };
+      //   console.log("newData", newData);
+      //   return newData;
+      // });
+    },
+  });
+
+  const exitGroup = () => {
+    leaveGroupMutation.mutate({
+      groupId: contactId,
+      userId: auth.userId,
+    });
+  };
+
   if (isLoading) {
     return <LocalLoader />;
   }
-  let groupInfo = data;
+  const groupInfo = data;
   const count = groupInfo.members.length;
-  const repeat = (arr, n) => Array(n).fill(arr).flat();
-  groupInfo.members = repeat(groupInfo.members, 10);
+  // const repeat = (arr, n) => Array(n).fill(arr).flat();
+  // groupInfo.members = repeat(groupInfo.members, 10);
   return (
     <Box sx={{ height: "90%" }}>
+      {/* title */}
       <Box
         sx={{
           borderLeft: "1.5px solid #B4B4B4",
@@ -58,7 +113,7 @@ const GroupInfo = () => {
           size={24}
           color="var(--grayFontColor)"
           style={{ marginLeft: "2rem" }}
-          onClick={() => selectedInfo()}
+          onClick={() => selectedCross()}
         />
         <Typography
           sx={{
@@ -71,7 +126,7 @@ const GroupInfo = () => {
           Group Info
         </Typography>
       </Box>
-
+      {/* avatar and members */}
       <Box
         sx={{
           padding: "1rem",
@@ -113,16 +168,32 @@ const GroupInfo = () => {
         </Box>
         <Divider />
         <Box sx={{ mt: "1.8rem", mb: "1.8rem" }}>
-          <Typography
+          <Box
             sx={{
-              fontSize: "1rem",
-              fontSize: "1rem",
-              color: "var(--userInfoFontColor)",
-              mb: "1rem",
+              display: "flex",
+              justifyContent: "space-between",
+              pr: "1rem",
             }}
           >
-            {`${count} Members`}
-          </Typography>
+            <Typography
+              sx={{
+                fontSize: "1rem",
+                fontSize: "1rem",
+                color: "var(--userInfoFontColor)",
+                mb: "1rem",
+              }}
+            >
+              {`${count} Members`}
+            </Typography>
+            <Box>
+              <UserPlus
+                onClick={() => setModal(!modal)}
+                size={26}
+                color="var(--userInfoFontColor)"
+                style={{ color: "var(--userInfoFontColor)", cursor: "pointer" }}
+              />
+            </Box>
+          </Box>
 
           <Box
             sx={{
@@ -159,11 +230,11 @@ const GroupInfo = () => {
                     </Box>
                   </Box>
 
-                  {/* Time and notification */}
+                  {/* admin or not */}
                   <Box
                     sx={{
                       mr: "0.3rem",
-                      alignItems: "center",
+                      alignItems: "flex-end",
                     }}
                   >
                     {item.admin ? (
@@ -175,6 +246,9 @@ const GroupInfo = () => {
                           textTransform: "none",
                           backgroundColor: "#AFE1AF",
                           color: "#097969	",
+                          pointerEvents: "none",
+                          // height: "1.5rem",
+                          // width: "1rem",
                         }}
                       >
                         Admin
@@ -194,11 +268,17 @@ const GroupInfo = () => {
             variant="outlined"
             sx={{ textTransform: "none" }}
             startIcon={<SignOut size={24} />}
+            onClick={() => exitGroup()}
           >
             Exit Group
           </Button>
         </Box>
       </Box>
+      <MemberAddModal
+        open={modal}
+        handleClose={() => setModal(false)}
+        newMembers={groupInfo.newMembers}
+      />
     </Box>
   );
 };

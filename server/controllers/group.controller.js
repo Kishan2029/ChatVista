@@ -61,7 +61,7 @@ exports.addMember = async function (req, res, next) {
     try {
         const group = z.object({
             add: z.boolean({ required_error: "Add boolean is required" }),
-            userId: z.string({ required_error: "UserId is required" }),
+            userId: z.array(z.string({ required_error: "UserId is required" })).nonempty(),
             groupId: z.string({ required_error: "GroupId is required" }),
             adminId: z.string({ required_error: "AdminId is required" }),
         });
