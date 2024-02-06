@@ -296,3 +296,77 @@ exports.groupCreated = async (data, socket) => {
         socket.to(socketIds).emit("receiveGroupCreated", receiverData)
     }
 }
+
+exports.groupMemberAdded = async (data, socket) => {
+    console.log("data", data);
+    const group = await Group.findById(data.groupId);
+
+    let userArray = group.admin.concat(group.members);
+
+    const receiverSocket = await OnlineUser.find({ userId: { $in: userArray } })
+
+    let socketIds = receiverSocket.map((item) => {
+        if (data.socketId !== item.socketId)
+            return item.socketId
+    })
+
+
+    if (socketIds.length > 0) {
+        console.log("socket Users", socketIds)
+        // const user = await User.findById(userId);
+
+        const receiverData = {
+            members: data.members,
+            groupId: data.groupId,
+            addedBy: data.addedBy,
+
+        }
+        socket.to(socketIds).emit("receiveGroupMemberAdded", receiverData)
+    }
+}
+
+exports.userLeaveGroup = async (data, socket) => {
+    console.log("data", data);
+    const group = await Group.findById(data.groupId);
+
+    let userArray = group.admin.concat(group.members);
+
+    const receiverSocket = await OnlineUser.find({ userId: { $in: userArray } })
+
+    let socketIds = receiverSocket.map((item) => {
+        if (data.socketId !== item.socketId)
+            return item.socketId
+    })
+
+
+    if (socketIds.length > 0) {
+        console.log("socket Users", socketIds)
+        // const user = await User.findById(userId);
+
+        const receiverData = {
+            userId: data.userId,
+            groupId: data.groupId,
+
+        }
+        socket.to(socketIds).emit("receiveGroupMemberRemoved", receiverData)
+    }
+}
+
+
+
+// const findUsers = async (socketIds) => {
+//     let data = []
+//     try {
+
+
+//         await Promise.all(socketIds.map(async (item) => {
+//             const socket = await OnlineUser.find({ socketId: item });
+//             const user = await User.findById(socket[0].userId);
+
+//             data.push(user.firstName);
+//         }))
+//         return data;
+//     } catch (err) {
+//         console.log("err", err)
+//     }
+// } 

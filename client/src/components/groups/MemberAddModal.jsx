@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 // import { createGroupFunction } from "../../reactQuery/mutation";
 // import { notify } from "../../util/notify";
 // import { getFormattedTime } from "../../util/helper";
-// import { socket } from "../../socket";
+import { socket } from "../../socket";
 
 const MemberAddModal = ({ open, handleClose, newMembers }) => {
   const auth = useSelector((state) => state.auth.user);
@@ -50,6 +50,9 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
         const newData = {
           ...oldData,
           members: oldData.members.concat(members),
+          newMembers: oldData.newMembers.filter(
+            (item) => !members.map((item1) => item1.id).includes(item._id)
+          ),
         };
         console.log("newData", newData);
         return newData;
@@ -73,13 +76,13 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
     console.log("data", data);
     addMemberMutation.mutate(data);
 
-    // const socketData = {
-    //   members: members.map((item) => item.friendId),
-    //   name,
-    //   createdBy: auth.firstName,
-    //   admin: [auth.userId],
-    // };
-    // socket.emit("groupCreated", socketData);
+    const socketData = {
+      groupId: chatUserId,
+      addedBy: auth.userId,
+      members,
+      socketId: socket.id,
+    };
+    socket.emit("groupMemberAdded", socketData);
     handleClose();
 
     setMembers([]);

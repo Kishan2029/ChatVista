@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Avatar, Box, Button, Card, Divider, Typography } from "@mui/material";
 import { SignOut, TrashSimple, UserPlus, XCircle } from "@phosphor-icons/react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
@@ -14,6 +14,7 @@ import MemberAddModal from "./MemberAddModal";
 import { addMemberInGroup, leftGroup } from "../../reactQuery/mutation";
 import { notify } from "../../util/notify";
 import { AuthContext } from "../../context/authContext";
+import { socket } from "../../socket";
 const GroupInfo = () => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
@@ -39,7 +40,7 @@ const GroupInfo = () => {
   });
 
   const selectedCross = () => {
-    console.log("click on info");
+    // console.log("click on info");
     dispatch(setUserSelectedTrue({ userSelected: false }));
     dispatch(setGroupSelectedTrue({ groupSelected: false }));
   };
@@ -58,7 +59,7 @@ const GroupInfo = () => {
       dispatch(setSelectedTrue({ selected: false }));
       queryClient.setQueriesData(["allGroups"], (oldData) => {
         const newData = oldData.filter((item) => item._id !== body.groupId);
-        console.log("newData", newData);
+        // console.log("newData", newData);
         return newData;
       });
       setGlobalLoader(false);
@@ -70,13 +71,77 @@ const GroupInfo = () => {
       groupId: contactId,
       userId: auth.userId,
     });
+
+    const socketData = {
+      groupId: contactId,
+      userId: auth.userId,
+    };
+    socket.emit("userLeaveGroup", socketData);
   };
+
+  useEffect(() => {
+    // console.log("inside useFfect");
+    socket.on("receiveGroupMemberAdded", (data) => {
+      console.log("receiveGroupMemberAdded:", data);
+
+      // add members in groupInfo
+      if (data.groupId === contactId)
+        queryClient.setQueriesData(["groupInfo", contactId], (oldData) => {
+          const members = data.members.map((item) => {
+            return {
+              id: item._id,
+              name: item.firstName + " " + item.lastName,
+              admin: false,
+              avatar: item.profileUrl,
+            };
+          });
+          const newData = {
+            ...oldData,
+            members: oldData.members.concat(members),
+            newMembers: oldData.newMembers.filter(
+              (item) =>
+                !data.members.map((item1) => item1._id).includes(item._id)
+            ),
+          };
+          // console.log("newData", newData);
+          return newData;
+        });
+    });
+    socket.on("receiveGroupMemberRemoved", (data) => {
+      console.log("receiveGroupMemberRemoved:", data);
+
+      // add members in groupInfo
+      if (data.groupId === contactId)
+        queryClient.setQueriesData(["groupInfo", contactId], (oldData) => {
+          // const members = data.members.map((item) => {
+          //   return {
+          //     id: item._id,
+          //     name: item.firstName + " " + item.lastName,
+          //     admin: false,
+          //     avatar: item.profileUrl,
+          //   };
+          // });
+          const newData = {
+            ...oldData,
+            members: oldData.members.filter((item) => item.id !== data.userId),
+            // newMembers: oldData.newMembers.filter(
+            //   (item) =>
+            //     !data.members.map((item1) => item1._id).includes(item._id)
+            // ),
+          };
+          // console.log("newData", newData);
+          return newData;
+        });
+      queryClient.invalidateQueries(["groupInfo", contactId]);
+    });
+  }, [socket]);
 
   if (isLoading) {
     return <LocalLoader />;
   }
   const groupInfo = data;
   const count = groupInfo.members.length;
+  // console.log("groupInfo", groupInfo);
   // const repeat = (arr, n) => Array(n).fill(arr).flat();
   // groupInfo.members = repeat(groupInfo.members, 10);
   return (
