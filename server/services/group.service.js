@@ -5,6 +5,15 @@ const GroupMessage = require('../models/groupMessage.model');
 const mongoose = require("mongoose");
 const { getFormattedTime } = require('./chat.service');
 const GroupNotification = require('../models/groupNotification.model');
+const path = require('path');
+const { removeFile } = require('./profile.service');
+
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+    cloud_name: 'do9w4fypf',
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 const isPartOfGroup = exports.isPartOfGroup = (userId, groups) => {
     const isMember = groups.members.indexOf(userId);
@@ -261,17 +270,26 @@ exports.editGroupInfo = async function (userId, groupId, name, file) {
         const profile = await cloudinary.uploader.upload(path.join('./uploads/' + file[0].filename),
             { public_id: process.env.NODE_ENV === "production" ? "chatVista_prod/profile" + file[0].filename : "chatVista_dev/profile" + file[0].filename },
             (error, result) => {
-
+                if (error) {
+                    console.log("Image upload error");
+                    return;
+                }
                 removeFile(file[0].filename)
-                if (error)
-                    console.log("Image upload error")
+
             })
         groups.profileUrl = profile.url;
     }
     groups.name = name;
 
     await groups.save();
-    return { statusCode: 200, response: { success: true, message: "Group profile is updated" } };
+    return {
+        statusCode: 200, response: {
+            success: true, message: "Group profile is updated", data: {
+                name: groups.name,
+                profileUrl: groups.profileUrl
+            }
+        }
+    };
 
 }
 
@@ -324,7 +342,8 @@ exports.getGroupInfo = async function (userId, groupId) {
     const data = {
         members,
         name: groups.name,
-        newMembers: newMembers
+        newMembers: newMembers,
+        profileUrl: groups?.profileUrl
     }
     return { statusCode: 200, response: { success: true, data } };
 

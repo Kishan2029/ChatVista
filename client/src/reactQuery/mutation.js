@@ -76,10 +76,19 @@ export const addMemberInGroup = async (body) => {
     return data.data;
 }
 
-// add member into group
+// member leave group
 export const leftGroup = async (body) => {
     const { data } = await axios.post(config.urls.group.leftGroup(), body, {
 
     });
     return data.data;
 }
+
+// edit group info
+export const editGroupInfo = async (body) => {
+    const { data } = await axios.post(config.urls.group.editGroupInfo(), body, {
+
+    });
+    return data.data;
+}
+

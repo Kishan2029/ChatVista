@@ -1,6 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Avatar, Box, Button, Card, Divider, Typography } from "@mui/material";
-import { SignOut, TrashSimple, UserPlus, XCircle } from "@phosphor-icons/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Divider,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { SignOut, UserPlus, XCircle } from "@phosphor-icons/react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,6 +23,7 @@ import { addMemberInGroup, leftGroup } from "../../reactQuery/mutation";
 import { notify } from "../../util/notify";
 import { AuthContext } from "../../context/authContext";
 import { socket } from "../../socket";
+import EditGroupInfo from "./EditGroupInfo";
 const GroupInfo = () => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
@@ -141,7 +150,6 @@ const GroupInfo = () => {
   }
   const groupInfo = data;
   const count = groupInfo.members.length;
-  console.log("groupInfo", groupInfo);
 
   return (
     <Box sx={{ height: "90%" }}>
@@ -184,7 +192,7 @@ const GroupInfo = () => {
           height: "97%",
         }}
       >
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             gap: "2rem",
@@ -202,19 +210,37 @@ const GroupInfo = () => {
             }}
           />
           <Box sx={{ mt: "0.6rem" }}>
-            <Typography
-              sx={{ fontSize: "1.2rem", color: "var(--userInfoFontColor)" }}
-            >
-              {groupInfo.name}
-            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Typography
+                sx={{ fontSize: "1.2rem", color: "var(--userInfoFontColor)" }}
+              >
+                {groupInfo.name}
+              </Typography>
+              <Tooltip title="Click to Edit">
+                <EditIcon
+                  sx={{
+                    color: "var(--userInfoFontColor)",
+                    fontSize: "1.5rem",
+                    ml: "2rem",
+                    alignSelf: "flex-start",
+                  }}
+                />
+              </Tooltip>
+            </Box>
             <Typography
               sx={{ fontSize: "1rem", color: "var(--userInfoFontColor)" }}
             >
               {`${count} Members`}
             </Typography>
           </Box>
-        </Box>
+        </Box> */}
+        <EditGroupInfo
+          groupInfo={groupInfo}
+          userId={auth.userId}
+          groupId={contactId}
+        />
         <Divider />
+        {/* Members */}
         <Box sx={{ mt: "1.8rem", mb: "1.8rem" }}>
           <Box
             sx={{

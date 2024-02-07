@@ -66,7 +66,10 @@ export const config = {
       },
       leftGroup: () => {
         return `${import.meta.env.VITE_BACKEND_URL}/group/leftGroup`;
-      }
+      },
+      editGroupInfo: () => {
+        return `${import.meta.env.VITE_BACKEND_URL}/group/editInfo`;
+      },
     },
     groupMessage: {
       getGroupMessages: () => {

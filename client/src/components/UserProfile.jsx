@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { ArrowLeft } from "@phosphor-icons/react";
 import React, { useEffect, useState } from "react";
-import profileImage from "../assets/images/profile.jpeg";
 import { useNavigate } from "react-router-dom";
 import { fetchProfile } from "../reactQuery/query";
 import { useSelector } from "react-redux";
