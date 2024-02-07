@@ -4,9 +4,12 @@ import React, { useState } from "react";
 import birdImage from "../assets/images/bird.avif";
 import budgie from "../assets/images/Budgie.png";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { NavAvatar } from "./common";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth.user);
 
   const [selected, setSelected] = useState("");
 
@@ -133,7 +136,8 @@ const Navbar = () => {
         }}
         onClick={() => onClickNav("profile")}
       >
-        <Avatar />
+        <NavAvatar />
+        {/* <Avatar src={auth?.profileUrl ? auth.profileUrl : ""} /> */}
       </Box>
     </Box>
   );

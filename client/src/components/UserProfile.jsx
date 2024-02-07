@@ -13,7 +13,7 @@ import profileImage from "../assets/images/profile.jpeg";
 import { useNavigate } from "react-router-dom";
 import { fetchProfile } from "../reactQuery/query";
 import { useSelector } from "react-redux";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import LocalLoader from "./LocalLoader";
 import { updateProfile } from "../reactQuery/mutation";
 import { notify } from "../util/notify";
@@ -22,6 +22,7 @@ import { Camera } from "@phosphor-icons/react/dist/ssr";
 const UserProfile = () => {
   const navigate = useNavigate();
   const auth = useSelector((state) => state.auth.user);
+  const queryClient = useQueryClient();
 
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["userProfile"],
@@ -54,6 +55,7 @@ const UserProfile = () => {
     onSuccess: async (queryKey, body) => {
       // set data
       console.log("profile updated successfully");
+      queryClient.invalidateQueries(["userProfile"]);
     },
   });
 
