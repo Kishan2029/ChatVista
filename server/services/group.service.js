@@ -125,7 +125,7 @@ exports.getUserGroups = async function (id) {
             emptyGroupMessage = `${createdByUser.firstName} created Group.`
         }
         const notification = await GroupNotification.find({ userId: id, groupId: item._id })
-        console.log("notification", notification)
+        // console.log("notification", notification)
         return {
             ...item._doc,
             lastMessage: lastMessage ? (senderUser.firstName + ": " + lastMessage.content) : emptyGroupMessage,
@@ -139,7 +139,7 @@ exports.getUserGroups = async function (id) {
 
     }))
     groups = groups.sort((a, b) => a.createdAt > b.createdAt ? -1 : 1);
-    console.log("groups", groups)
+    // console.log("groups", groups)
     return { statusCode: 200, response: { success: true, data: groups } };
 }
 
@@ -332,7 +332,7 @@ exports.getGroupInfo = async function (userId, groupId) {
         Promise.all(adminPromises),
         allUsers
     ]);
-    console.log("membersInfo", membersInfo)
+    // console.log("membersInfo", membersInfo)
     members = [...membersInfo, ...adminsInfo];
     const newMembers = allUserInfo.filter((item1) => {
         // console.log(members.map((item) => item.id))

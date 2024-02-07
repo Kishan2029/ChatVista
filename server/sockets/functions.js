@@ -352,6 +352,35 @@ exports.userLeaveGroup = async (data, socket) => {
     }
 }
 
+exports.updateGroupInfo = async (data, socket) => {
+    console.log("data", data);
+    const group = await Group.findById(data.groupId);
+
+    let userArray = group.admin.concat(group.members);
+
+    const receiverSocket = await OnlineUser.find({ userId: { $in: userArray } })
+
+    let socketIds = receiverSocket.map((item) => {
+        if (data.socketId !== item.socketId)
+            return item.socketId
+    })
+
+
+    if (socketIds.length > 0) {
+        // console.log("socket Users", socketIds)
+        // const user = await User.findById(userId);
+
+        const receiverData = {
+            userId: data.userId,
+            groupId: data.groupId,
+            name: data.name,
+            profileUrl: data.profileUrl,
+
+        }
+        socket.to(socketIds).emit("receiveUpdateGroupInfo", receiverData)
+    }
+}
+
 
 
 // const findUsers = async (socketIds) => {

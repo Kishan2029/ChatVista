@@ -1,4 +1,4 @@
-const { addUser, removeUser, sendMessage, groupMemberAdded, userLeaveGroup, sendOnlineStatus, userTyping, sendNotification, sendGroupNotification, makeNotificationCountZero, sendGroupMessage, groupCreated } = require("./functions");
+const { addUser, removeUser, sendMessage, updateGroupInfo, groupMemberAdded, userLeaveGroup, sendOnlineStatus, userTyping, sendNotification, sendGroupNotification, makeNotificationCountZero, sendGroupMessage, groupCreated } = require("./functions");
 
 
 
@@ -50,10 +50,13 @@ module.exports = (io) => {
             userLeaveGroup(data, socket)
         });
 
+        socket.on('updateGroupInfo', (data) => {
+            updateGroupInfo(data, socket)
+        });
+
         setInterval(() => {
             sendOnlineStatus(socket)
         }, 2 * 1000)
-
 
 
         socket.on('error', (error) => {

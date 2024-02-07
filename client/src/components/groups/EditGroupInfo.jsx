@@ -18,6 +18,7 @@ import { editGroupInfo } from "../../reactQuery/mutation";
 import { notify } from "../../util/notify";
 import { useDispatch, useSelector } from "react-redux";
 import { setChatValue } from "../../store/slices/chatSlice";
+import { socket } from "../../socket";
 
 const EditGroupInfo = ({ groupInfo, userId, groupId }) => {
   const [editProfile, setEditProfile] = useState(false);
@@ -44,7 +45,20 @@ const EditGroupInfo = ({ groupInfo, userId, groupId }) => {
       console.log("Group info updated successfully");
 
       // update data where avatar is present
-      queryClient.invalidateQueries(["allGroups"]);
+      //   queryClient.invalidateQueries(["allGroups"]);
+      console.log("body", body);
+      queryClient.setQueriesData(["allGroups"], (oldData) => {
+        const newData = oldData.map((item) => {
+          if (item._id === groupId) {
+            item.name = data.name;
+            item.profileUrl = data.profileUrl;
+          }
+          return item;
+        });
+        console.log("newData", newData);
+        return newData;
+      });
+
       queryClient.invalidateQueries(["groupInfo", groupId]);
       if (chatData.userInfo.id === groupId)
         dispatch(
@@ -56,6 +70,16 @@ const EditGroupInfo = ({ groupInfo, userId, groupId }) => {
             },
           })
         );
+
+      // after success update other data
+      const socketData = {
+        groupId,
+        userId,
+        socketId: socket.id,
+        name: data.name,
+        profileUrl: data.profileUrl,
+      };
+      socket.emit("updateGroupInfo", socketData);
       //   queryClient.setQueriesData(["groupInfo", groupId], (oldData) => {
       //     const newData = {
       //       ...oldData,

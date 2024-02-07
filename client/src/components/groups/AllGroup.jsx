@@ -1,19 +1,21 @@
 import React, { useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import { useQuery, useQueryClient } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchAllGroups } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
 import ChatMessageCard from "../chats/ChatMessageCard";
 import GroupMessageCard from "./GroupMessageCard";
 import { socket } from "../../socket";
 import { getFormattedTime, playSound } from "../../util/helper";
+import { setChatValue } from "../../store/slices/chatSlice";
 
 const AllGroup = () => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData ? chatData?.userInfo?.id : null;
   const queryClient = useQueryClient();
+  const dispatch = useDispatch();
   console.log("auth", auth);
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["allGroups"],
@@ -58,6 +60,34 @@ const AllGroup = () => {
         console.log("newData", newData);
         return newData;
       });
+    });
+    socket.on("receiveUpdateGroupInfo", (data) => {
+      console.log("inside receiveUpdateGroupInfo");
+
+      queryClient.setQueriesData(["allGroups"], (oldData) => {
+        const newData = oldData.map((item) => {
+          if (item._id === data.groupId) {
+            item.name = data.name;
+            item.profileUrl = data.profileUrl;
+          }
+          return item;
+        });
+        console.log("newData", newData);
+        return newData;
+      });
+
+      queryClient.invalidateQueries(["groupInfo", data.groupId]);
+
+      if (chatUserId === data.groupId)
+        dispatch(
+          setChatValue({
+            userInfo: {
+              ...chatData.userInfo,
+              profileUrl: data.profileUrl,
+              name: data.name,
+            },
+          })
+        );
     });
   }, [socket.connected, queryClient, chatUserId]);
 
