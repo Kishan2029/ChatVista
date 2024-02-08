@@ -6,13 +6,17 @@ import { Plus } from "@phosphor-icons/react";
 import { Divide } from "@phosphor-icons/react/dist/ssr";
 import CreateGroupModal from "./CreateGroupModal";
 import AllGroup from "./AllGroup";
+import SearchBox from "../chats/SearchBox";
 
 const Groups = () => {
   const [modal, setModal] = useState(false);
+  const [search, setSearch] = useState("");
   return (
     <Box sx={{ padding: "1rem", height: "94%" }}>
       <Typography sx={{ fontSize: "2rem", fontWeight: 550 }}>Groups</Typography>
-      <Box sx={{ mt: "1rem", mb: "1.5rem" }}>Search Box</Box>
+      <Box sx={{ mt: "1rem", mb: "1.5rem" }}>
+        <SearchBox setSearch={setSearch} />
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -32,7 +36,7 @@ const Groups = () => {
       </Box>
       <Divider sx={{ my: "1rem" }} />
 
-      <AllGroup />
+      <AllGroup search={search} />
 
       <CreateGroupModal open={modal} handleClose={() => setModal(false)} />
     </Box>

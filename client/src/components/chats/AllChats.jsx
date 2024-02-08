@@ -1,22 +1,23 @@
 import { Box, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ChatMessageCard from "./ChatMessageCard";
 import { useSelector } from "react-redux";
 import { useQuery, useQueryClient } from "react-query";
 import { fetchAllChats } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
 import { socket } from "../../socket";
-import { playSound } from "../../util/helper";
+import { filterQueryChatData, playSound } from "../../util/helper";
 
-const AllChats = () => {
+const AllChats = ({ search }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData ? chatData?.userInfo?.id : null;
-  console.log("chatUserId", chatUserId);
+  const [filteredData, setFilteredData] = useState(chatData);
+  // console.log("chatUserId", chatUserId);
 
   const queryClient = useQueryClient();
 
-  const { data, error, isError, isLoading } = useQuery({
+  let { data, error, isError, isLoading } = useQuery({
     queryKey: ["allChats"],
     queryFn: () => {
       // Check if auth is available before making the query
@@ -67,10 +68,19 @@ const AllChats = () => {
       }
     };
   }, [auth, socket.connected, queryClient, chatUserId]);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      const newData = data.filter((item) =>
+        filterQueryChatData(search, item.firstName, item.lastName)
+      );
+      setFilteredData(newData);
+    }
+  }, [search]);
   if (isLoading) {
     return <LocalLoader />;
   }
-  const allChats = data;
+  const allChats = search === "" ? data : filteredData;
 
   if (allChats)
     return (

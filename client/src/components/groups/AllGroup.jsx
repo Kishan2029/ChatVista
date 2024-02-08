@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { useQuery, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,13 +7,18 @@ import LocalLoader from "../LocalLoader";
 import ChatMessageCard from "../chats/ChatMessageCard";
 import GroupMessageCard from "./GroupMessageCard";
 import { socket } from "../../socket";
-import { getFormattedTime, playSound } from "../../util/helper";
+import {
+  filterQueryGroupData,
+  getFormattedTime,
+  playSound,
+} from "../../util/helper";
 import { setChatValue } from "../../store/slices/chatSlice";
 
-const AllGroup = () => {
+const AllGroup = ({ search }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData ? chatData?.userInfo?.id : null;
+  const [filteredData, setFilteredData] = useState(chatData);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   console.log("auth", auth);
@@ -132,11 +137,20 @@ const AllGroup = () => {
       }
     };
   }, [auth, socket.connected, queryClient, chatUserId]);
+
+  useEffect(() => {
+    if (data !== undefined) {
+      const newData = data.filter((item) =>
+        filterQueryGroupData(search, item.name)
+      );
+      setFilteredData(newData);
+    }
+  }, [search]);
   if (isLoading) {
     return <LocalLoader />;
   }
   console.log("allGroup", data);
-  const allGroups = data;
+  const allGroups = search === "" ? data : filteredData;
 
   if (allGroups)
     return (

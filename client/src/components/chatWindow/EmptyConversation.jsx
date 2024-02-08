@@ -21,15 +21,17 @@ const EmptyConversation = () => {
       >
         <img src={empty} height="230" width="230" />
         <Typography sx={{ mt: "1rem" }}>
-          Select a conversation or start a{" "}
-          <span
+          Select a conversation to start
+          {/* or start a{" "} */}
+          {/* <span
             style={{
               textDecoration: "underline",
               color: "var(--blueTextColor)",
+              cursor: "pointer",
             }}
           >
             new one
-          </span>
+          </span> */}
         </Typography>
       </Box>
     </Box>

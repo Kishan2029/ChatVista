@@ -68,6 +68,17 @@ export const getFormattedTime = (date) => {
     }
 
 }
+export const filterQueryChatData = (value, firstName, lastName) => {
+
+    return (firstName + " " + lastName)
+        .toLowerCase()
+        .includes(value.toLowerCase());
+};
+export const filterQueryGroupData = (value, name) => {
+    return (name)
+        .toLowerCase()
+        .includes(value.toLowerCase());
+};
 
 export const playSound = () => {
     let src =

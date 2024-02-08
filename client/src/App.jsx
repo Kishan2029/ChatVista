@@ -23,8 +23,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "./store/slices/authSlice";
 import { isUserLoggedIn } from "./util/helper";
-import { socket } from "./socket";
-import { fetchProfile } from "./reactQuery/query";
 
 axiosRequestInterceptor();
 axiosResponseInterceptor();

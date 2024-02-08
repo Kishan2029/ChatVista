@@ -1,12 +1,15 @@
 import { Autocomplete, Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AllChats from "./AllChats";
 import { UserPlus } from "@phosphor-icons/react";
 import { AddFriendModal } from "./friends/index";
 import { useSelector } from "react-redux";
+import SearchBox from "./SearchBox";
 
 const Chats = () => {
   const [modal, setModal] = useState(false);
+  const [search, setSearch] = useState("");
+  // const [debouncedValue, setDebouncedValue] = useState("");
 
   return (
     <Box sx={{ padding: "1rem", height: "100%" }}>
@@ -26,8 +29,14 @@ const Chats = () => {
           onClick={() => setModal(!modal)}
         />
       </Box>
-      <Box sx={{ mt: "1rem", mb: "1rem" }}>Search Box</Box>
-      <AllChats />
+      <Box sx={{ mt: "1.1rem", mb: "1.1rem" }}>
+        <SearchBox
+          search={search}
+          setSearch={setSearch}
+          // setDebouncedValue={setDebouncedValue}
+        />
+      </Box>
+      <AllChats search={search} />
 
       {/* Add Friend modal */}
       {modal && (
