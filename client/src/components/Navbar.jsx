@@ -9,9 +9,11 @@ import { NavAvatar } from "./common";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const auth = useSelector((state) => state.auth.user);
 
-  const [selected, setSelected] = useState("");
+  const location = useLocation();
+  console.log(location.pathname);
+
+  const [selected, setSelected] = useState(location.pathname.split("/")[1]);
 
   const onClickNav = (path) => {
     navigate("/" + path);
