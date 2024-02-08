@@ -15,20 +15,24 @@ import { notify } from "../../util/notify";
 import { addMemberInGroup } from "../../reactQuery/mutation";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 // import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { fetchFriends } from "../../reactQuery/query";
 // import LocalLoader from "../LocalLoader";
 // import { createGroupFunction } from "../../reactQuery/mutation";
 // import { notify } from "../../util/notify";
 // import { getFormattedTime } from "../../util/helper";
 import { socket } from "../../socket";
+import { setChatValue } from "../../store/slices/chatSlice";
 
 const MemberAddModal = ({ open, handleClose, newMembers }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
+  const userInfo = chatData?.userInfo;
   const chatUserId = chatData ? chatData?.userInfo?.id : null;
   const queryClient = useQueryClient();
   const [members, setMembers] = useState([]);
+  const dispatch = useDispatch();
+  console.log("userInfo", userInfo);
 
   const addMemberMutation = useMutation({
     mutationFn: (body) => addMemberInGroup(body),
@@ -57,6 +61,18 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
         console.log("newData", newData);
         return newData;
       });
+
+      dispatch(
+        setChatValue({
+          userInfo: {
+            ...userInfo,
+            members: userInfo.members.concat(
+              members.map((item) => item.firstName)
+            ),
+            memberCount: userInfo.memberCount + members.length,
+          },
+        })
+      );
     },
   });
 

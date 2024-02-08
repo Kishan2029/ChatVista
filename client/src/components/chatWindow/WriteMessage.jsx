@@ -157,41 +157,14 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
               color: "var(--chatEnterMessageButtonFontColor)",
               bgcolor: "var(--chatEnterMessageButtonBackgroundColor)",
               height: "1.2rem",
+              outline: "none",
 
               // px: 0,
               // mx: 0,
             },
           }}
-          inputProps={{ style: { borderColor: "red" } }}
           variant="outlined"
           fullWidth
-          // InputProps={{
-          //   startAdornment: (
-          //     <InputAdornment position="start" sx={{ bgcolor: "yellow" }}>
-          //       <Box sx={{ bgcolor: "blue" }}>
-          //         <Link
-          //           size={32}
-          //           color="var(--chatEnterMessageButtonFontColor)"
-          //         />
-          //       </Box>
-          //     </InputAdornment>
-          //   ),
-          //   endAdornment: (
-          //     <InputAdornment
-          //       position="end"
-          //       sx={{
-          //         bgcolor: "yellow",
-          //         color: "green",
-          //       }}
-          //     >
-          //       <Smiley
-          //         size={32}
-          //         color="var(--chatEnterMessageButtonFontColor)"
-          //       />
-          //     </InputAdornment>
-          //   ),
-          // }}
-
           onKeyDown={(ev) => {
             if (ev.key === "Enter") {
               ev.preventDefault();

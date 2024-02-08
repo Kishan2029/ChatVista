@@ -89,7 +89,7 @@ const Requests = () => {
                 <Box
                   sx={{ display: "flex", gap: "1rem", alignItems: "center" }}
                 >
-                  <Avatar />
+                  <Avatar src={item?.profileUrl ? item.profileUrl : ""} />
                   <Typography>
                     {item.firstName + " " + item.lastName}
                   </Typography>

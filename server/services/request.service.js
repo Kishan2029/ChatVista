@@ -96,7 +96,8 @@ exports.getUserReceivedRequests = async function (userId) {
             ...item._doc,
             firstName: userInfo.firstName,
             lastName: userInfo.lastName,
-            email: userInfo.email
+            email: userInfo.email,
+            profileUrl: userInfo.profileUrl
         }
     }))
 

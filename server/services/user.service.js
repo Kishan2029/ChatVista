@@ -10,7 +10,8 @@ const getFriendList = exports.getFriendList = async (userId) => {
         return {
             friendId: userID,
             firstName: userInfo.firstName,
-            lastName: userInfo.lastName
+            lastName: userInfo.lastName,
+            profileUrl: userInfo.profileUrl
         }
     }))
     return requests;

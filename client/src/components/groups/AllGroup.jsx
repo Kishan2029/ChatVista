@@ -18,7 +18,7 @@ const AllGroup = ({ search }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData ? chatData?.userInfo?.id : null;
-  const [filteredData, setFilteredData] = useState(chatData);
+  const [filteredData, setFilteredData] = useState([]);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   console.log("auth", auth);

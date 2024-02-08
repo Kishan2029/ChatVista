@@ -12,7 +12,7 @@ const AllChats = ({ search }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData ? chatData?.userInfo?.id : null;
-  const [filteredData, setFilteredData] = useState(chatData);
+  const [filteredData, setFilteredData] = useState([]);
   // console.log("chatUserId", chatUserId);
 
   const queryClient = useQueryClient();
@@ -81,7 +81,7 @@ const AllChats = ({ search }) => {
     return <LocalLoader />;
   }
   const allChats = search === "" ? data : filteredData;
-
+  console.log("allChats", allChats);
   if (allChats)
     return (
       <Box sx={{ height: "90%" }}>

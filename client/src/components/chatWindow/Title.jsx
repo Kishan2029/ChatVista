@@ -18,21 +18,24 @@ const Title = ({ name, lastSeen, id }) => {
   const memberCount = chatData.userInfo.memberCount;
   const profileUrl = chatData.userInfo.profileUrl;
   const [online, setOnline] = useState(false);
-  console.log("title profileUrl", profileUrl);
+  console.log("members", members);
   const dispatch = useDispatch();
 
   let groupComponent = "";
   if (isGroup) {
     groupComponent = (
       <div>
-        {members.map((item, index) => (
-          <span key={index}>
-            {item}
-            {index !== members.length - 1 && ", "}
-          </span>
-        ))}
+        {members.map((item, index) => {
+          if (index < 3)
+            return (
+              <span key={index}>
+                {item}
+                {index !== members.length - 1 && ", "}
+              </span>
+            );
+        })}
         {members.length > 3 && (
-          <span>{" & " + (memberCount - 3) + "other"} </span>
+          <span>{" & " + (memberCount - 3) + " other"} </span>
         )}
       </div>
     );
@@ -80,7 +83,7 @@ const Title = ({ name, lastSeen, id }) => {
           </Typography>
         </Box>
       </Box>
-      <MagnifyingGlass size={28} />
+      {/* <MagnifyingGlass size={28} /> */}
     </Box>
   );
 };

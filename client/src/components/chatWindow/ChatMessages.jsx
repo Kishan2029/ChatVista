@@ -184,7 +184,7 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
                               : "0 0.6rem 0 0 ",
                         }}
                       >
-                        <b> {individualMessage.createdByUser}</b>{" "}
+                        <b> {isGroup ? individualMessage.createdByUser : ""}</b>{" "}
                         {individualMessage.time}
                       </Typography>
                       <Card
