@@ -192,48 +192,6 @@ const GroupInfo = () => {
           height: "97%",
         }}
       >
-        {/* <Box
-          sx={{
-            display: "flex",
-            gap: "2rem",
-            alignItems: "center",
-            alignSelf: "center",
-          }}
-        >
-          <Avatar
-            src={groupInfo?.profileUrl ? groupInfo?.profileUrl : ""}
-            sx={{
-              height: "6rem",
-              width: "6rem",
-              mt: "3rem",
-              mb: "2rem",
-            }}
-          />
-          <Box sx={{ mt: "0.6rem" }}>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{ fontSize: "1.2rem", color: "var(--userInfoFontColor)" }}
-              >
-                {groupInfo.name}
-              </Typography>
-              <Tooltip title="Click to Edit">
-                <EditIcon
-                  sx={{
-                    color: "var(--userInfoFontColor)",
-                    fontSize: "1.5rem",
-                    ml: "2rem",
-                    alignSelf: "flex-start",
-                  }}
-                />
-              </Tooltip>
-            </Box>
-            <Typography
-              sx={{ fontSize: "1rem", color: "var(--userInfoFontColor)" }}
-            >
-              {`${count} Members`}
-            </Typography>
-          </Box>
-        </Box> */}
         <EditGroupInfo
           groupInfo={groupInfo}
           userId={auth.userId}
@@ -260,12 +218,17 @@ const GroupInfo = () => {
               {`${count} Members`}
             </Typography>
             <Box>
-              <UserPlus
-                onClick={() => setModal(!modal)}
-                size={26}
-                color="var(--userInfoFontColor)"
-                style={{ color: "var(--userInfoFontColor)", cursor: "pointer" }}
-              />
+              {groupInfo.admin && (
+                <UserPlus
+                  onClick={() => setModal(!modal)}
+                  size={26}
+                  color="var(--userInfoFontColor)"
+                  style={{
+                    color: "var(--userInfoFontColor)",
+                    cursor: "pointer",
+                  }}
+                />
+              )}
             </Box>
           </Box>
 

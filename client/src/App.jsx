@@ -93,14 +93,14 @@ function App() {
             </Home>
           ),
         },
-        {
-          path: "/setting",
-          element: (
-            <Home>
-              <Setting />
-            </Home>
-          ),
-        },
+        // {
+        //   path: "/setting",
+        //   element: (
+        //     <Home>
+        //       <Setting />
+        //     </Home>
+        //   ),
+        // },
         {
           path: "/profile",
           element: (

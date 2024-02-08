@@ -305,7 +305,7 @@ exports.getGroupInfo = async function (userId, groupId) {
     const partOfGroup = isPartOfGroup(userId, groups);
     if (!partOfGroup) return { statusCode: 400, response: { success: false, message: "User is not part of the group." } };
 
-    let members = [];
+    let members = [], isAdmin = false;
     const memberPromises = groups.members.map(async (item) => {
         const userInfo = await User.findById(item);
         return {
@@ -317,6 +317,7 @@ exports.getGroupInfo = async function (userId, groupId) {
     });
 
     const adminPromises = groups.admin.map(async (item) => {
+        if (String(item) === String(userId)) isAdmin = true;
         const userInfo = await User.findById(item);
         return {
             name: String(item) === String(userId) ? "You" : userInfo.firstName + " " + userInfo.lastName,
@@ -343,7 +344,8 @@ exports.getGroupInfo = async function (userId, groupId) {
         members,
         name: groups.name,
         newMembers: newMembers,
-        profileUrl: groups?.profileUrl
+        profileUrl: groups?.profileUrl,
+        admin: isAdmin
     }
     return { statusCode: 200, response: { success: true, data } };
 

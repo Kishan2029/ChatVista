@@ -5,9 +5,10 @@ import {
   IconButton,
   Paper,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import { ArrowLeft } from "@phosphor-icons/react";
+import { ArrowLeft, SignOut } from "@phosphor-icons/react";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchProfile } from "../reactQuery/query";
@@ -57,6 +58,18 @@ const UserProfile = () => {
       queryClient.invalidateQueries(["userProfile"]);
     },
   });
+
+  const logOut = () => {
+    localStorage.removeItem("login");
+    localStorage.removeItem("userId");
+    console.log("localStorage", localStorage.getItem("login"));
+    navigate(0);
+    // navigate("/login");
+
+    // setTimeout(() => {
+
+    // }, [10]);
+  };
 
   const saveProfile = () => {
     let formData = new FormData();
@@ -228,6 +241,29 @@ const UserProfile = () => {
           Save
         </Button>
       </Box>
+
+      <Tooltip title="Click here to logout">
+        <Button
+          variant="outlined"
+          size="small"
+          // color="error"
+          startIcon={<SignOut size={20} />}
+          sx={{
+            position: "absolute",
+            bottom: "8%",
+            left: "8%",
+
+            textTransform: "none",
+            ":hover": {
+              color: "white",
+              bgcolor: "#1876d2",
+            },
+          }}
+          onClick={() => logOut()}
+        >
+          Logout
+        </Button>
+      </Tooltip>
     </Box>
   );
 };

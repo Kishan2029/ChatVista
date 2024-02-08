@@ -105,7 +105,7 @@ const Navbar = () => {
           )}
 
           <Divider sx={{ width: "100%", color: "#B4B4B4" }} />
-          {selected === "setting" ? (
+          {/* {selected === "setting" ? (
             <Box
               sx={{
                 bgcolor: "var(--blueNotification)",
@@ -122,7 +122,7 @@ const Navbar = () => {
             </Box>
           ) : (
             <Gear size={26} onClick={() => onClickNav("setting")} />
-          )}
+          )} */}
         </Box>
       </Box>
 
