@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, Box } from "@mui/material";
 import { useSelector } from "react-redux";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { fetchProfile } from "../../reactQuery/query";
 
 const NavAvatar = () => {
@@ -21,7 +21,7 @@ const NavAvatar = () => {
   });
 
   const profile = data;
-  console.log("profile", profile);
+
   return (
     <Box>
       <Avatar src={profile?.profileUrl ? profile.profileUrl : ""} />

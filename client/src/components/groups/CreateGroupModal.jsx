@@ -5,7 +5,6 @@ import {
   Button,
   Chip,
   Dialog,
-  Modal,
   TextField,
   Typography,
 } from "@mui/material";
@@ -49,10 +48,8 @@ const CreateGroupModal = ({ open, handleClose }) => {
       notify("success", "Group is created.");
     },
     onSuccess: async (data, body) => {
-      console.log("data", data);
-
       // set data
-      console.log("Group is created successfully.");
+      // console.log("Group is created successfully.");
       queryClient.setQueriesData(["allGroups"], (oldData) => {
         const newData = [
           {

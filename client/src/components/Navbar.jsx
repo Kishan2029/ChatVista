@@ -1,17 +1,15 @@
-import { Avatar, Box, Divider } from "@mui/material";
+import { Box, Divider } from "@mui/material";
 import { Users, ChatCircleDots, Gear } from "@phosphor-icons/react";
 import React, { useState } from "react";
 import birdImage from "../assets/images/bird.avif";
 import budgie from "../assets/images/Budgie.png";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { NavAvatar } from "./common";
 
 const Navbar = () => {
   const navigate = useNavigate();
 
   const location = useLocation();
-  console.log(location.pathname);
 
   const [selected, setSelected] = useState(location.pathname.split("/")[1]);
 
@@ -49,7 +47,6 @@ const Navbar = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            // justifyContent: "center",
             alignItems: "center",
             mt: "1rem",
             gap: "2.3rem",
@@ -139,7 +136,6 @@ const Navbar = () => {
         onClick={() => onClickNav("profile")}
       >
         <NavAvatar />
-        {/* <Avatar src={auth?.profileUrl ? auth.profileUrl : ""} /> */}
       </Box>
     </Box>
   );

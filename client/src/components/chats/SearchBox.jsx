@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Box, InputAdornment, TextField } from "@mui/material";
-import { MagnifyingGlass, TelegramLogo } from "@phosphor-icons/react";
+import React from "react";
+import { MagnifyingGlass } from "@phosphor-icons/react";
 const SearchBox = ({ setSearch }) => {
   return (
     <div

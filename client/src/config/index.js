@@ -44,7 +44,7 @@ export const config = {
     },
     profile: {
       getProfile: (id) => {
-        console.log("id", id)
+
         return `${import.meta.env.VITE_BACKEND_URL}/profile/${id}`;
       },
       updateProfile: () => {

@@ -1,14 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  Divider,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { SignOut, UserPlus, XCircle } from "@phosphor-icons/react";
+import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
+import { SignOut, UserPlus } from "@phosphor-icons/react";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -19,7 +11,7 @@ import {
 import { getGroupInfo } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
 import MemberAddModal from "./MemberAddModal";
-import { addMemberInGroup, leftGroup } from "../../reactQuery/mutation";
+import { leftGroup } from "../../reactQuery/mutation";
 import { notify } from "../../util/notify";
 import { AuthContext } from "../../context/authContext";
 import { socket } from "../../socket";
@@ -29,7 +21,7 @@ const GroupInfoContent = () => {
   const chatData = useSelector((state) => state.chat);
   const contactId = chatData.contactId;
   const queryClient = useQueryClient();
-  const { globalLoader, setGlobalLoader } = useContext(AuthContext);
+  const { setGlobalLoader } = useContext(AuthContext);
   const dispatch = useDispatch();
 
   const [modal, setModal] = useState(false);
@@ -48,12 +40,6 @@ const GroupInfoContent = () => {
     enabled: !!auth && !!auth.userId && !!contactId,
   });
 
-  const selectedCross = () => {
-    // console.log("click on info");
-    dispatch(setUserSelectedTrue({ userSelected: false }));
-    dispatch(setGroupSelectedTrue({ groupSelected: false }));
-  };
-
   const leaveGroupMutation = useMutation({
     mutationFn: (body) => leftGroup(body),
     onMutate: async (body) => {
@@ -62,7 +48,7 @@ const GroupInfoContent = () => {
     },
     onSuccess: async (queryKey, body) => {
       // set data
-      console.log("member left the group.");
+      // console.log("member left the group.");
 
       dispatch(setGroupSelectedTrue({ groupSelected: false }));
       dispatch(setSelectedTrue({ selected: false }));
@@ -89,10 +75,7 @@ const GroupInfoContent = () => {
   };
 
   useEffect(() => {
-    // console.log("inside useFfect");
     socket.on("receiveGroupMemberAdded", (data) => {
-      console.log("receiveGroupMemberAdded:", data);
-
       // add members in groupInfo
       if (data.groupId === contactId)
         queryClient.setQueriesData(["groupInfo", contactId], (oldData) => {
@@ -117,8 +100,6 @@ const GroupInfoContent = () => {
         });
     });
     socket.on("receiveGroupMemberRemoved", (data) => {
-      console.log("receiveGroupMemberRemoved:", data);
-
       // add members in groupInfo
       if (data.groupId === contactId)
         queryClient.setQueriesData(["groupInfo", contactId], (oldData) => {
@@ -153,36 +134,6 @@ const GroupInfoContent = () => {
 
   return (
     <Box sx={{ height: "90%" }}>
-      {/* title */}
-      {/* <Box
-        sx={{
-          borderLeft: "1.5px solid #B4B4B4",
-          backgroundColor: "var(--backgroundColor2)",
-          display: "flex",
-          gap: "2rem",
-          alignItems: "center",
-          height: "4.6rem",
-          // boxShadow: 1,
-        }}
-      >
-        <XCircle
-          size={24}
-          color="var(--grayFontColor)"
-          style={{ marginLeft: "2rem" }}
-          onClick={() => selectedCross()}
-        />
-        <Typography
-          sx={{
-            color: "var(--grayFontColor)",
-            fontSize: "1.1rem",
-            fontWeight: 500,
-            my: "1rem",
-          }}
-        >
-          Group Info
-        </Typography>
-      </Box> */}
-      {/* avatar and members */}
       <Box
         sx={{
           padding: "1rem",

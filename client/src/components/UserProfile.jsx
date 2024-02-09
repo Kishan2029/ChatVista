@@ -39,7 +39,6 @@ const UserProfile = () => {
   });
 
   const profile = data;
-  console.log("profile", profile);
 
   const [firstName, setFirstName] = useState(profile ? profile.firstName : "");
   const [lastName, setLastName] = useState(profile ? profile.lastName : "");
@@ -54,7 +53,7 @@ const UserProfile = () => {
     },
     onSuccess: async (queryKey, body) => {
       // set data
-      console.log("profile updated successfully");
+      // console.log("profile updated successfully");
       queryClient.invalidateQueries(["userProfile"]);
     },
   });
@@ -62,13 +61,8 @@ const UserProfile = () => {
   const logOut = () => {
     localStorage.removeItem("login");
     localStorage.removeItem("userId");
-    console.log("localStorage", localStorage.getItem("login"));
+
     navigate(0);
-    // navigate("/login");
-
-    // setTimeout(() => {
-
-    // }, [10]);
   };
 
   const saveProfile = () => {
@@ -94,9 +88,7 @@ const UserProfile = () => {
       setCoverImage(profile.profileUrl || "");
     }
   }, [profile]);
-  useEffect(() => {
-    console.log("coverImage", coverImage);
-  }, [coverImage]);
+  useEffect(() => {}, [coverImage]);
 
   if (isLoading) {
     return <LocalLoader />;

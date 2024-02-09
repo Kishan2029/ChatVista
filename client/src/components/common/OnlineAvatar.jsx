@@ -1,7 +1,6 @@
 import { Avatar, Badge } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { socket } from "../../socket/index";
-import { useQueryClient } from "react-query";
 
 const OnlineAvatar = ({ name, id, online, setOnline, profileUrl }) => {
   useEffect(() => {

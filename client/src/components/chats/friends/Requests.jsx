@@ -18,8 +18,6 @@ const Requests = () => {
   const requestResponseMutation = useMutation({
     mutationFn: (body) => sendRequest(body),
     onMutate: async (body) => {
-      console.log("body", body);
-
       queryClient.setQueriesData(["requests"], (oldData) => {
         const newData = oldData.filter(
           (item) => item.senderUser !== body.userB
@@ -46,7 +44,7 @@ const Requests = () => {
     },
     onSuccess: async (queryKey, body) => {
       // set data
-      console.log("request sent successfully");
+      // console.log("request sent successfully");
     },
   });
 

@@ -1,9 +1,6 @@
-import { Autocomplete, Box, Divider, Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import React, { useState } from "react";
-
-import { AllChats } from "../chats";
 import { Plus } from "@phosphor-icons/react";
-import { Divide } from "@phosphor-icons/react/dist/ssr";
 import CreateGroupModal from "./CreateGroupModal";
 import AllGroup from "./AllGroup";
 import SearchBox from "../chats/SearchBox";

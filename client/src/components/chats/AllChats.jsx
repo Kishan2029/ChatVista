@@ -30,7 +30,6 @@ const AllChats = ({ search }) => {
     },
     enabled: !!auth && !!auth.userId,
   });
-  console.log("allChats", data);
 
   useEffect(() => {
     const handleReceiveNotification = (data) => {
@@ -81,7 +80,7 @@ const AllChats = ({ search }) => {
     return <LocalLoader />;
   }
   const allChats = search === "" ? data : filteredData;
-  console.log("allChats", allChats);
+  // console.log("allChats", allChats);
   if (allChats)
     return (
       <Box sx={{ height: "90%" }}>

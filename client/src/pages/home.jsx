@@ -16,8 +16,7 @@ const Home = ({ children }) => {
   const selected = useSelector((state) => state.chat.selected);
   const groupSelected = useSelector((state) => state.chat.groupSelected);
   const userSelected = useSelector((state) => state.chat.userSelected);
-  console.log("groupSelected", groupSelected);
-  console.log("userSelected", userSelected);
+
   const dispatch = useDispatch();
 
   if (auth) {
@@ -30,9 +29,8 @@ const Home = ({ children }) => {
         const data = await fetchProfile(auth.userId);
         return data;
       } catch (error) {
-        // Handle error, e.g., log or show an error message
         console.error("Error fetching profile data:", error);
-        throw error; // Re-throw the error to propagate it further
+        throw error;
       }
     };
 
@@ -42,7 +40,6 @@ const Home = ({ children }) => {
       }
 
       try {
-        console.log("inside", auth);
         const data = await fetchData();
         dispatch(
           setUser({
@@ -63,27 +60,6 @@ const Home = ({ children }) => {
     }
   }, [auth, dispatch]);
 
-  const queryClient = useQueryClient();
-  // useEffect(() => {
-  //   console.log("hello");
-  //   if (auth) {
-  //     socket.on("receiveNotification", (data) => {
-  //       console.log("receiveNotification", data);
-  //       if (auth.userId === data.receiverUser) {
-  //         queryClient.setQueriesData(["allChats"], (oldData) => {
-  //           // console.log("oldData", oldData);
-  //           const newData = oldData.map((item) => {
-  //             if (item.friendId === data.createdBy) {
-  //               item.notificationCount = data.count;
-  //             }
-  //             return item;
-  //           });
-  //           return newData;
-  //         });
-  //       }
-  //     });
-  //   }
-  // }, [socket]);
   return (
     <Box sx={{ display: "flex", width: "100%", height: "100vh" }}>
       <Box

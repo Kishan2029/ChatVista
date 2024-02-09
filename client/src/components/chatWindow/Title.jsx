@@ -1,6 +1,5 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { MagnifyingGlass } from "@phosphor-icons/react";
 import OnlineAvatar from "../common/OnlineAvatar";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,8 +8,7 @@ import {
   setUserSelectedTrue,
 } from "../../store/slices/chatSlice";
 
-const Title = ({ name, lastSeen, id }) => {
-  // console.log("id", id);
+const Title = ({ name, id }) => {
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
   const isGroup = chatData.userInfo.group;
@@ -18,7 +16,7 @@ const Title = ({ name, lastSeen, id }) => {
   const memberCount = chatData.userInfo.memberCount;
   const profileUrl = chatData.userInfo.profileUrl;
   const [online, setOnline] = useState(false);
-  // console.log("members", members);
+
   const dispatch = useDispatch();
 
   let groupComponent = "";

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { Autocomplete, Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Title from "./Title";
 import WriteMessage from "./WriteMessage";
 import ChatMessages from "./ChatMessages";
 import { useSelector } from "react-redux";
-import { writeMessage } from "../../reactQuery/mutation";
-import { useMutation } from "react-query";
 const ChatWindow = () => {
   const chatData = useSelector((state) => state.chat);
   const userInfo = chatData.userInfo;

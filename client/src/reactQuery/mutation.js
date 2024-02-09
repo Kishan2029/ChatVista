@@ -7,7 +7,6 @@ export const registerUser = async (body) => {
     const { data } = await axios.post(config.urls.auth.register(), body, {
 
     });
-    console.log("data", data);
     return data.data;
 }
 

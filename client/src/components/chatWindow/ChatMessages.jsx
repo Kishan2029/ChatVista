@@ -1,17 +1,16 @@
 import { Box, Card, Divider, Typography } from "@mui/material";
 import React, { useEffect, useRef } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { fetchGroupMessages, fetchUserMessages } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
-// import ScrollIntoView from "react-scroll-into-view";
 import { socket } from "../../socket";
 
 const ChatMessages = ({ scrollView, setScrollView }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
-  // console.log("chatUserId", chatUserId);
+
   const isGroup = chatData.userInfo.group;
 
   const scroll1 = useRef(null);
@@ -50,7 +49,6 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
 
   useEffect(() => {
     if (isGroup) {
-      console.log("receiveGroupMessage");
       socket.on("receiveGroupMessage", (data) => {
         // console.log("receiveGroupMessage data:", data);
 
@@ -91,7 +89,7 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
             return newData;
           });
           setScrollView(Math.floor(Math.random() * 90000) + 10000);
-          console.log("receiveGroupMessage data", data);
+
           // update last message in group chat card
           queryClient.setQueriesData(["allGroups"], (oldData) => {
             const newData = oldData.map((item) => {

@@ -1,12 +1,12 @@
-import { Box, InputAdornment, TextField } from "@mui/material";
-import { Link, Smiley, TelegramLogo } from "@phosphor-icons/react";
-import React, { useEffect, useRef, useState } from "react";
+import { Box, TextField } from "@mui/material";
+import { TelegramLogo } from "@phosphor-icons/react";
+import React, { useState } from "react";
 import { writeGroupMessage, writeMessage } from "../../reactQuery/mutation";
 import { useSelector } from "react-redux";
 import { useMutation, useQueryClient } from "react-query";
 import { socket } from "../../socket/index";
 
-const WriteMessage = ({ scrollView, setScrollView }) => {
+const WriteMessage = ({ setScrollView }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const isGroup = chatData.userInfo.group;
@@ -75,7 +75,6 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
           return newData;
         });
       } else {
-        console.log("body", body);
         queryClient.setQueriesData(["allChats"], (oldData) => {
           const newData = oldData.map((item) => {
             if (item.friendId === body.userB) {
@@ -90,20 +89,19 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
     },
     onSuccess: async (queryKey, body) => {
       // set data
-      console.log("message created successfully");
+      // console.log("message created successfully");
     },
   });
 
   const onSendMessage = () => {
     if (isGroup) {
-      console.log("inside group");
       const socketData = {
         groupId: chatUserId,
         userId: auth.userId,
         content: sendMessage,
         socketId: socket.id,
       };
-      console.log("sendGroupMessage socket");
+
       socket.emit("sendGroupMessage", socketData);
 
       socket.emit("sendGroupNotification", socketData);
@@ -115,7 +113,6 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
         content: sendMessage,
       });
     } else {
-      console.log("inside user");
       const socketData = {
         userA: auth.userId,
         userB: chatUserId,
@@ -142,7 +139,6 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
         display: "flex",
         alignItems: "center",
         bgcolor: "var(--chatEnterMessageButtonMarginColor)",
-        // bgcolor: "green",
         p: "1rem",
         borderLeft: "1.5px solid #B4B4B4",
       }}
@@ -160,9 +156,6 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
               bgcolor: "var(--chatEnterMessageButtonBackgroundColor)",
               height: "1.2rem",
               outline: "none",
-
-              // px: 0,
-              // mx: 0,
             },
           }}
           variant="outlined"
@@ -170,8 +163,6 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
           onKeyDown={(ev) => {
             if (ev.key === "Enter") {
               ev.preventDefault();
-
-              // console.log("comment", commentMessage);
               if (sendMessage !== "") {
                 onSendMessage();
               }

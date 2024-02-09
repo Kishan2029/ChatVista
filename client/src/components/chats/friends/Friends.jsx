@@ -32,7 +32,6 @@ const Friends = () => {
         },
       })
     );
-    console.log("chat selected");
 
     // make notification count 0
     queryClient.setQueriesData(["allChats"], (oldData) => {
@@ -55,7 +54,7 @@ const Friends = () => {
     return <LocalLoader />;
   }
   const friends = data;
-  console.log("friends", friends);
+
   return (
     <Box>
       <Stack spacing={2}>

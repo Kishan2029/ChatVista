@@ -31,9 +31,7 @@ const Login = () => {
       setGlobalLoader(true);
     },
     onSuccess: async (data, body) => {
-      console.log("data", data);
       setGlobalLoader(false);
-      console.log("Login Success");
 
       const user = {
         userId: data.userId,
@@ -53,12 +51,12 @@ const Login = () => {
     },
   });
 
-  useEffect(() => {
-    console.log("emailError", emailError);
-  }, [emailError]);
-  useEffect(() => {
-    console.log("passwordError", passwordError);
-  }, [passwordError]);
+  // useEffect(() => {
+  //   console.log("emailError", emailError);
+  // }, [emailError]);
+  // useEffect(() => {
+  //   console.log("passwordError", passwordError);
+  // }, [passwordError]);
 
   const setError = (value) => {
     let isError = false;
@@ -82,13 +80,10 @@ const Login = () => {
     } else {
       setPasswordError("");
     }
-    console.log("isError", isError);
 
     return isError;
   };
   const onLogin = async () => {
-    console.log("login Button Clicked");
-
     const isError = setError();
 
     if (!isError) {

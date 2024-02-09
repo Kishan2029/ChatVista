@@ -1,4 +1,4 @@
-import { Avatar, Badge, Box, Card, Typography } from "@mui/material";
+import { Box, Card, Typography } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import OnlineAvatar from "../common/OnlineAvatar";
 import { truncateString } from "../../util/helper";
@@ -32,12 +32,10 @@ const ChatMessageCard = ({
         },
       })
     );
-    console.log("chat selected");
 
     // make notification count 0
     queryClient.setQueriesData(["allChats"], (oldData) => {
       const newData = oldData.map((item) => {
-        console.log("first", id, item.friendId);
         if (item.friendId === id) {
           item.notificationCount = 0;
         }

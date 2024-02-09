@@ -1,13 +1,8 @@
-import { Avatar, Box, Card, Divider, Typography } from "@mui/material";
-import { XCircle } from "@phosphor-icons/react";
+import { Avatar, Box, Divider, Typography } from "@mui/material";
 import React from "react";
 import { fetchProfile } from "../../reactQuery/query";
 import { useQuery } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setGroupSelectedTrue,
-  setUserSelectedTrue,
-} from "../../store/slices/chatSlice";
 import LocalLoader from "../LocalLoader";
 
 const UserInfoContent = () => {
@@ -28,24 +23,13 @@ const UserInfoContent = () => {
     },
     enabled: !!auth && !!auth.userId && !!contactId,
   });
-  console.log("data", data);
 
-  const selectedInfo = () => {
-    console.log("click on info");
-    dispatch(setUserSelectedTrue({ userSelected: false }));
-    dispatch(setGroupSelectedTrue({ groupSelected: false }));
-  };
   if (isLoading) {
     return <LocalLoader />;
   }
   const userInfo = data;
   return (
     <Box sx={{ height: "90%" }}>
-      {/* coverImage
-              ? coverImage.name !== undefined
-                ? URL.createObjectURL(coverImage)
-                : coverImage
-              : "/broken-image.jpg" */}
       <Box sx={{ padding: "1rem", display: "flex", flexDirection: "column" }}>
         <Box
           sx={{
@@ -70,11 +54,6 @@ const UserInfoContent = () => {
             >
               {userInfo.firstName + " " + userInfo.lastName}
             </Typography>
-            {/* <Typography
-              sx={{ fontSize: "1rem", color: "var(--userInfoFontColor)" }}
-            >
-              +91 33333 333333
-            </Typography> */}
           </Box>
         </Box>
 

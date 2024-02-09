@@ -3,8 +3,6 @@ import {
   Avatar,
   Box,
   Button,
-  Card,
-  Divider,
   IconButton,
   Paper,
   TextField,
@@ -13,7 +11,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { Camera } from "@phosphor-icons/react/dist/ssr";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { editGroupInfo } from "../../reactQuery/mutation";
 import { notify } from "../../util/notify";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,7 +29,6 @@ const EditGroupInfo = ({ groupInfo, userId, groupId }) => {
   const chatData = useSelector((state) => state.chat);
   const dispatch = useDispatch();
 
-  console.log("edit groupInfo", groupInfo);
   const queryClient = useQueryClient();
 
   const updateGroupInfoMutation = useMutation({
@@ -40,13 +37,11 @@ const EditGroupInfo = ({ groupInfo, userId, groupId }) => {
       notify("success", "Group info updated.");
     },
     onSuccess: async (data, body) => {
-      console.log("data", data);
       // set data
-      console.log("Group info updated successfully");
+      // console.log("Group info updated successfully");
 
       // update data where avatar is present
-      //   queryClient.invalidateQueries(["allGroups"]);
-      console.log("body", body);
+
       queryClient.setQueriesData(["allGroups"], (oldData) => {
         const newData = oldData.map((item) => {
           if (item._id === groupId) {
@@ -55,7 +50,7 @@ const EditGroupInfo = ({ groupInfo, userId, groupId }) => {
           }
           return item;
         });
-        console.log("newData", newData);
+
         return newData;
       });
 
@@ -177,7 +172,6 @@ const EditGroupInfo = ({ groupInfo, userId, groupId }) => {
             </Box>
             {/* Text field */}
             <Box sx={{ mt: "0.6rem", width: "200%" }}>
-              {/* <Box sx={{ display: "flex", alignItems: "center" }}> */}
               <TextField
                 id="groupName"
                 label="Group Name"
@@ -190,7 +184,6 @@ const EditGroupInfo = ({ groupInfo, userId, groupId }) => {
                 }}
                 fullWidth
               />
-              {/* </Box> */}
             </Box>
           </Box>
           <Button
@@ -221,14 +214,13 @@ const EditGroupInfo = ({ groupInfo, userId, groupId }) => {
           }}
         >
           <Avatar
-            // src={groupInfo?.profileUrl ? groupInfo?.profileUrl : ""}
             src={
               edit
                 ? editImage.name !== undefined
                   ? URL.createObjectURL(editImage)
                   : editImage
                 : groupInfo?.profileUrl
-                ? groupInfo?.profileUrl
+                ? groupInfo.profileUrl
                 : ""
             }
             // src={

@@ -1,10 +1,4 @@
-import {
-  Avatar,
-  Box,
-  CircularProgress,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -36,7 +30,7 @@ const Explore = () => {
     },
     onSuccess: async (queryKey, body) => {
       // set data
-      console.log("request sent successfully");
+      // console.log("request sent successfully");
     },
   });
 

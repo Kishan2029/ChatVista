@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   setGroupSelectedTrue,
   setUserSelectedTrue,
@@ -10,7 +10,6 @@ import { XCircle } from "@phosphor-icons/react";
 const InfoTitle = ({ value }) => {
   const dispatch = useDispatch();
   const selectedCross = () => {
-    // console.log("click on info");
     dispatch(setUserSelectedTrue({ userSelected: false }));
     dispatch(setGroupSelectedTrue({ groupSelected: false }));
   };

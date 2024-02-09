@@ -17,7 +17,6 @@ export const notify = (type, msg) => {
             });
             break;
         case "error":
-            console.log("here")
             toast.error(msg, {
                 position: "bottom-left",
                 autoClose: 3000,

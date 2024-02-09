@@ -4,14 +4,9 @@ import { useQuery, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllGroups } from "../../reactQuery/query";
 import LocalLoader from "../LocalLoader";
-import ChatMessageCard from "../chats/ChatMessageCard";
 import GroupMessageCard from "./GroupMessageCard";
 import { socket } from "../../socket";
-import {
-  filterQueryGroupData,
-  getFormattedTime,
-  playSound,
-} from "../../util/helper";
+import { filterQueryGroupData, getFormattedTime } from "../../util/helper";
 import { setChatValue } from "../../store/slices/chatSlice";
 
 const AllGroup = ({ search }) => {
@@ -42,8 +37,6 @@ const AllGroup = ({ search }) => {
     }
 
     socket.on("receiveGroupCreated", (data) => {
-      console.log("inside receiveGroupCreated");
-
       queryClient.setQueriesData(["allGroups"], (oldData) => {
         const newData = [
           {
@@ -60,13 +53,11 @@ const AllGroup = ({ search }) => {
           },
           ...oldData,
         ];
-        console.log("newData", newData);
+
         return newData;
       });
     });
     socket.on("receiveUpdateGroupInfo", (data) => {
-      console.log("inside receiveUpdateGroupInfo");
-
       queryClient.setQueriesData(["allGroups"], (oldData) => {
         const newData = oldData.map((item) => {
           if (item._id === data.groupId) {
@@ -75,7 +66,7 @@ const AllGroup = ({ search }) => {
           }
           return item;
         });
-        // console.log("newData", newData);
+
         return newData;
       });
 
@@ -111,9 +102,7 @@ const AllGroup = ({ search }) => {
                 socket.emit("makeNotificationCountZero", socketData);
               } else {
                 item.notificationCount = data.count;
-                // console.log("item.notificationCount", item.notificationCount);
               }
-              // console.log("item", item);
             }
             return item;
           });

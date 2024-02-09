@@ -6,21 +6,14 @@ import {
   Button,
   Chip,
   Dialog,
-  Modal,
   TextField,
   Typography,
 } from "@mui/material";
 import { XCircle } from "@phosphor-icons/react";
 import { notify } from "../../util/notify";
 import { addMemberInGroup } from "../../reactQuery/mutation";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-// import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
-// import { fetchFriends } from "../../reactQuery/query";
-// import LocalLoader from "../LocalLoader";
-// import { createGroupFunction } from "../../reactQuery/mutation";
-// import { notify } from "../../util/notify";
-// import { getFormattedTime } from "../../util/helper";
 import { socket } from "../../socket";
 import { setChatValue } from "../../store/slices/chatSlice";
 
@@ -32,7 +25,6 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
   const queryClient = useQueryClient();
   const [members, setMembers] = useState([]);
   const dispatch = useDispatch();
-  console.log("userInfo", userInfo);
 
   const addMemberMutation = useMutation({
     mutationFn: (body) => addMemberInGroup(body),
@@ -41,7 +33,7 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
     },
     onSuccess: async (queryKey, body) => {
       // set data
-      console.log("new member added.");
+      // console.log("new member added.");
       queryClient.setQueriesData(["groupInfo", chatUserId], (oldData) => {
         const members = body.members.map((item) => {
           return {
@@ -58,7 +50,7 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
             (item) => !members.map((item1) => item1.id).includes(item._id)
           ),
         };
-        console.log("newData", newData);
+
         return newData;
       });
 
@@ -81,7 +73,7 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
       notify("error", "Members cannot be empty.");
       return;
     }
-    console.log("members", members);
+
     const data = {
       adminId: auth.userId,
       groupId: chatUserId,
@@ -89,7 +81,7 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
       add: true,
       members,
     };
-    console.log("data", data);
+
     addMemberMutation.mutate(data);
 
     const socketData = {
@@ -103,7 +95,7 @@ const MemberAddModal = ({ open, handleClose, newMembers }) => {
 
     setMembers([]);
   };
-  console.log("newMembers", newMembers);
+
   return (
     <Dialog
       open={open}

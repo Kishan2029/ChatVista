@@ -1,6 +1,5 @@
-import { Avatar, Badge, Box, Card, Typography } from "@mui/material";
-import React, { useState, useEffect } from "react";
-import OnlineAvatar from "../common/OnlineAvatar";
+import { Avatar, Box, Card, Typography } from "@mui/material";
+import React, { useState } from "react";
 import { truncateString } from "../../util/helper";
 import { setChatValue, setSelectedTrue } from "../../store/slices/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +12,7 @@ const GroupMessageCard = ({
   message,
   id,
   count = 0,
-  senderUser,
+
   members,
   memberCount,
   profileUrl,
@@ -58,36 +57,7 @@ const GroupMessageCard = ({
 
   const selectedUser = useSelector((state) => state.chat.userInfo);
 
-  const [userTyping, setUserTyping] = useState(false);
-
-  //   useEffect(() => {
-  //     // console.log("userTyping", userTyping);
-  //   }, [userTyping]);
-
-  //   useEffect(() => {
-  //     socket.on("fetchUserTyping", (data) => {
-  //       // console.log("fetchUserTyping", userTyping);
-  //       let time;
-  //       let i = 0;
-  //       if (data.senderUser === id) {
-  //         if (userTyping === true) {
-  //           // console.log("true");
-  //           // console.log("clear", i);
-  //           clearTimeout(time);
-  //         } else {
-  //           i = 0;
-  //           // console.log("false");
-  //           setUserTyping(true);
-  //         }
-  //         i++;
-
-  //         time = setTimeout(() => {
-  //           // console.log("User stopped typing.");
-  //           setUserTyping(false);
-  //         }, 3 * 1000);
-  //       }
-  //     });
-  //   }, [socket]);
+  const [userTyping] = useState(false);
 
   return (
     <Card

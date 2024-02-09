@@ -1,9 +1,8 @@
-import { Autocomplete, Box, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
+import React, { useState } from "react";
 import AllChats from "./AllChats";
 import { UserPlus } from "@phosphor-icons/react";
 import { AddFriendModal } from "./friends/index";
-import { useSelector } from "react-redux";
 import SearchBox from "./SearchBox";
 
 const Chats = () => {
