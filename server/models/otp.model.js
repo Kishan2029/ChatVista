@@ -32,13 +32,19 @@ const otpSchema = new mongoose.Schema({
     },
 });
 
-async function sendVerificationEmail(email, otp) {
+async function sendVerificationEmail(email, otp, name) {
     try {
         const mailResponse = await mailSender(
             email,
-            "Verification Email",
-            `<h1>Please confirm your OTP</h1>
-       <p>Here is your OTP code: ${otp}</p>`
+            "Welcome to ChatVista! Just One Step Away...",
+            `Hello ${name},</br>
+            <p>Excited to have you join the ChatVista community! You're almost ready to connect and chat with everyone. Just confirm your email address with the quick OTP below:</p></br>
+            <p><b>OTP</b>: ${otp}</p></br>
+            <p>This code is valid for 5 minutes. Enter it on the ChatVista website to unlock your new messaging adventure!</p></br>
+            <p>If you didn't request this verification, please ignore this email.</p></br>
+            <p>See you in the chat,</p></br>
+            <p>The ChatVista Team</p>
+            `
         );
 
     } catch (error) {
@@ -50,7 +56,7 @@ otpSchema.pre("save", async function (next) {
     console.log("New otp document saved to the database");
     // Only send an email when a new document is created
     if (this.isNew) {
-        await sendVerificationEmail(this.email, this.otp);
+        await sendVerificationEmail(this.email, this.otp, this.firstName + " " + this.lastName);
     }
     next();
 });
