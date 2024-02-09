@@ -11,13 +11,10 @@ exports.createGroup = async function (req, res, next) {
         });
         const { admin, name, members } = group.parse(req.body);
 
-        // console.log("admin", admin)
-        // console.log("name", name)
-        // console.log("members", members)
         const { response, statusCode } = await GroupService.createGroup(admin, name, members);
         res.status(statusCode).send(response);
     } catch (error) {
-        // console.log("first", error)
+
         next(error)
     }
 }
@@ -27,15 +24,13 @@ exports.deleteGroup = async function (req, res, next) {
     try {
         const group = z.object({
             id: z.string({ required_error: "UserId is required" })
-
         });
-
         const { id } = group.parse(req.params);
 
         const { response, statusCode } = await GroupService.deleteGroup(id);
         res.status(statusCode).send(response);
     } catch (error) {
-        // console.log("first", error)
+
         next(error)
     }
 }
@@ -52,7 +47,7 @@ exports.getGroup = async function (req, res, next) {
         const { response, statusCode } = await GroupService.getUserGroups(id);
         res.status(statusCode).send(response);
     } catch (error) {
-        // console.log("first", error)
+
         next(error)
     }
 }

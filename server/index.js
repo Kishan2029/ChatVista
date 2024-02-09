@@ -24,9 +24,6 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 // app.use(express.static(path.join(__dirname, 'uploads')));
-
-
-
 connectDB();
 
 
@@ -59,21 +56,7 @@ const io = new Server(server, {
 
 socket(io)
 
-// io.on("connection", (socket, data) => {
 
-//     console.log("User Connected:", socket.id)
-//     socket.on("disconnect", () => {
-//         console.log("User Disconnected:", socket.id)
-//     });
-
-//     socket.on("addUser", (data) => {
-//         const userId = data.userId
-        
-//     })
-//     socket.on('sendMessage', (arg) => {
-//         console.log(socket.id + " " + arg);
-//     });
-// });
 
 
 

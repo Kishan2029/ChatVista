@@ -4,14 +4,10 @@ const Group = require('../models/group.model');
 const User = require('../models/user.model');
 const GroupNotification = require('../models/groupNotification.model');
 
-const getUniqueSocketIds = () => {
-
-}
-
 exports.addUser = async (userId, socketId) => {
     const user = await OnlineUser.find({ socketId })
     console.log("user", user)
-    console.log("user.length", user.length)
+
     if (user.length === 0) {
         const newUser = new OnlineUser({ userId, socketId })
         await newUser.save();
@@ -48,22 +44,7 @@ exports.sendMessage = async (data, socket) => {
     }
 }
 
-// exports.isOnline = async (data, socket, io) => {
-//     console.log("isOnline", socket.id, data.userId)
-//     const user = await OnlineUser.find({ userId: data.userId });
-//     console.log("user", user)
-//     let value = false;
-//     if (user.length > 0) {
-//         value = true;
-//     }
-//     const onlineData = {
-//         value,
-//         id: data.userId
-//     }
-//     io.to(socket.id).emit("fetchOnlineStatus", onlineData)
-//     // socket.broadcast.emit("fetchOnlineStatus", value)
 
-// }
 
 exports.sendOnlineStatus = async (socket, io) => {
 
@@ -72,9 +53,6 @@ exports.sendOnlineStatus = async (socket, io) => {
     const userIds = socketIds.map((item) => {
         return item.userId
     })
-
-
-    // io.to(socket.id).emit("fetchOnlineStatus", onlineData)
     socket.broadcast.emit("fetchOnlineStatus", userIds)
 
 }
@@ -94,7 +72,7 @@ exports.userTyping = async (data, socket) => {
             senderUser: data.userA,
             receiverUser: data.userB
         }
-        // console.log("hello")
+
         socket.to(socketIds).emit("fetchUserTyping", receiverData)
     }
 }
@@ -141,7 +119,6 @@ exports.sendNotification = async (data, socket) => {
 }
 
 exports.sendGroupNotification = async (data, socket) => {
-    // console.log("Inside sendGroupNotification socket", data);
 
     // find users
     const group = await Group.findById(data.groupId);
@@ -152,7 +129,7 @@ exports.sendGroupNotification = async (data, socket) => {
         if (String(item) === data.userId) return;
         return item;
     })
-    // console.log("userArray", userArray)
+
 
     await Promise.all(userArray.map(async (item) => {
         if (item === undefined) return;
@@ -192,18 +169,9 @@ exports.sendGroupNotification = async (data, socket) => {
             socket.to(socketIds).emit("receiveGroupNotification", receiverData)
         }
     }))
-
-
-
-
-
-
-
 }
 
 exports.makeNotificationCountZero = async (data, socket) => {
-    // console.log("Inside makeNotificationCountZero socket", data)
-
 
     // make count 0
     if (data?.isGroup) {
@@ -237,18 +205,12 @@ exports.makeNotificationCountZero = async (data, socket) => {
 
 // Added socketIds for both sender and receiver
 exports.sendGroupMessage = async (data, socket) => {
-    console.log("sendGroupMessage socket", data.content)
-    // console.log("data", data)
+
+
     const group = await Group.findById(data.groupId);
 
     let userArray = group.admin.concat(group.members);
     const userId = data.userId;
-
-    // userArray = userArray.map((item) => {
-    //     if (String(item) === userId) return;
-    //     return item;
-    // })
-    // console.log("userArray", userArray)
 
     const receiverSocket = await OnlineUser.find({ userId: { $in: userArray } })
 
@@ -274,10 +236,9 @@ exports.sendGroupMessage = async (data, socket) => {
 }
 
 exports.groupCreated = async (data, socket) => {
-    // console.log("data", data)
+
     let members = data.members.concat(data.admin);
     const receiverSocket = await OnlineUser.find({ userId: { $in: members } });
-    // console.log("receiverSocket", receiverSocket)
 
     let socketIds = receiverSocket.map((item) => {
         if (data.socketId !== item.socketId)
@@ -285,7 +246,6 @@ exports.groupCreated = async (data, socket) => {
     })
     socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
-        // const user = await User.findById(userId);
 
         const receiverData = {
             members,
@@ -298,7 +258,6 @@ exports.groupCreated = async (data, socket) => {
 }
 
 exports.groupMemberAdded = async (data, socket) => {
-    // console.log("data", data);
     const group = await Group.findById(data.groupId);
 
     let userArray = group.admin.concat(group.members);
@@ -312,8 +271,6 @@ exports.groupMemberAdded = async (data, socket) => {
 
     socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
-        // console.log("socket Users", socketIds)
-        // const user = await User.findById(userId);
 
         const receiverData = {
             members: data.members,
@@ -326,7 +283,6 @@ exports.groupMemberAdded = async (data, socket) => {
 }
 
 exports.userLeaveGroup = async (data, socket) => {
-    // console.log("data", data);
     const group = await Group.findById(data.groupId);
 
     let userArray = group.admin.concat(group.members);
@@ -340,8 +296,6 @@ exports.userLeaveGroup = async (data, socket) => {
     socketIds = [...new Set(socketIds)]
 
     if (socketIds.length > 0) {
-        // console.log("socket Users", socketIds)
-        // const user = await User.findById(userId);
 
         const receiverData = {
             userId: data.userId,
@@ -353,7 +307,7 @@ exports.userLeaveGroup = async (data, socket) => {
 }
 
 exports.updateGroupInfo = async (data, socket) => {
-    // console.log("data", data);
+
     const group = await Group.findById(data.groupId);
 
     let userArray = group.admin.concat(group.members);
@@ -367,8 +321,6 @@ exports.updateGroupInfo = async (data, socket) => {
     socketIds = [...new Set(socketIds)]
 
     if (socketIds.length > 0) {
-        // console.log("socket Users", socketIds)
-        // const user = await User.findById(userId);
 
         const receiverData = {
             userId: data.userId,
@@ -383,19 +335,3 @@ exports.updateGroupInfo = async (data, socket) => {
 
 
 
-// const findUsers = async (socketIds) => {
-//     let data = []
-//     try {
-
-
-//         await Promise.all(socketIds.map(async (item) => {
-//             const socket = await OnlineUser.find({ socketId: item });
-//             const user = await User.findById(socket[0].userId);
-
-//             data.push(user.firstName);
-//         }))
-//         return data;
-//     } catch (err) {
-//         console.log("err", err)
-//     }
-// } 

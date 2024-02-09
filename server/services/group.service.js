@@ -23,9 +23,7 @@ const isPartOfGroup = exports.isPartOfGroup = (userId, groups) => {
 }
 
 exports.createGroup = async function (admin, name, members) {
-    // console.log("admin", admin)
-    // console.log("name", name)
-    // console.log("members", members)
+
     const isAdmin = await User.findById(admin);
     if (!isAdmin) return { statusCode: 400, response: { success: false, message: "Admin is not registered." } };
 
@@ -125,7 +123,7 @@ exports.getUserGroups = async function (id) {
             emptyGroupMessage = `${createdByUser.firstName} created Group.`
         }
         const notification = await GroupNotification.find({ userId: id, groupId: item._id })
-        // console.log("notification", notification)
+
         return {
             ...item._doc,
             lastMessage: lastMessage ? (senderUser.firstName + ": " + lastMessage.content) : emptyGroupMessage,
@@ -139,7 +137,7 @@ exports.getUserGroups = async function (id) {
 
     }))
     groups = groups.sort((a, b) => a.createdAt > b.createdAt ? -1 : 1);
-    // console.log("groups", groups)
+
     return { statusCode: 200, response: { success: true, data: groups } };
 }
 
@@ -333,10 +331,10 @@ exports.getGroupInfo = async function (userId, groupId) {
         Promise.all(adminPromises),
         allUsers
     ]);
-    // console.log("membersInfo", membersInfo)
+
     members = [...membersInfo, ...adminsInfo];
     const newMembers = allUserInfo.filter((item1) => {
-        // console.log(members.map((item) => item.id))
+
         return !members.map((item) => String(item.id)).includes(String(item1._id))
     })
 
