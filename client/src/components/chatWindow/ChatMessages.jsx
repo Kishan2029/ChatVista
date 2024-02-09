@@ -11,7 +11,7 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
   const auth = useSelector((state) => state.auth.user);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
-  console.log("chatUserId", chatUserId);
+  // console.log("chatUserId", chatUserId);
   const isGroup = chatData.userInfo.group;
 
   const scroll1 = useRef(null);
@@ -50,13 +50,14 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
 
   useEffect(() => {
     if (isGroup) {
+      console.log("receiveGroupMessage");
       socket.on("receiveGroupMessage", (data) => {
         // console.log("receiveGroupMessage data:", data);
-        // console.log("chatUserId", chatUserId);
-        // add message into user chat
+
         if (chatUserId === data.groupId) {
-          let update = false;
+          // add message into user chat
           queryClient.setQueriesData(["userChats", chatUserId], (oldData) => {
+            let update = false;
             let newData = oldData.map((item) => {
               if (item.date.toLowerCase() === "today") {
                 update = true;
@@ -90,12 +91,25 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
             return newData;
           });
           setScrollView(Math.floor(Math.random() * 90000) + 10000);
+          console.log("receiveGroupMessage data", data);
+          // update last message in group chat card
+          queryClient.setQueriesData(["allGroups"], (oldData) => {
+            const newData = oldData.map((item) => {
+              if (item._id === data.groupId) {
+                item.lastMessage =
+                  data.createdByUser.split(" ")[0] + ": " + data.content;
+                // item.senderUser = auth.firstName;
+              }
+              return item;
+            });
+            return newData;
+          });
         }
       });
     } else {
       socket.on("receiveMessage", (data) => {
-        // add message into user chat
-        if (auth.userId === data.receiverUser)
+        if (auth.userId === data.receiverUser) {
+          // add message into user chat
           queryClient.setQueriesData(
             ["userChats", data.createdBy],
             (oldData) => {
@@ -108,6 +122,7 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
                     id: Math.floor(Math.random() * 90000) + 10000,
                     createdBy: data.createdBy,
                   });
+                  update = true;
                 }
                 return item;
               });
@@ -130,7 +145,21 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
               return newData;
             }
           );
-        setScrollView(Math.floor(Math.random() * 90000) + 10000);
+
+          // update last message in the user chat card
+          queryClient.setQueriesData(["allChats"], (oldData) => {
+            const newData = oldData.map((item) => {
+              if (item.friendId === data.createdBy) {
+                item.lastMessage = data.content;
+              }
+              return item;
+            });
+            // console.log("new Data", newData);
+            return newData;
+          });
+
+          setScrollView(Math.floor(Math.random() * 90000) + 10000);
+        }
       });
     }
   }, [socket]);

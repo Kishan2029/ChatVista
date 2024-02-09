@@ -75,9 +75,10 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
           return newData;
         });
       } else {
+        console.log("body", body);
         queryClient.setQueriesData(["allChats"], (oldData) => {
           const newData = oldData.map((item) => {
-            if (item._id === body.groupId) {
+            if (item.friendId === body.userB) {
               item.lastMessage = body.content;
             }
             return item;
@@ -102,6 +103,7 @@ const WriteMessage = ({ scrollView, setScrollView }) => {
         content: sendMessage,
         socketId: socket.id,
       };
+      console.log("sendGroupMessage socket");
       socket.emit("sendGroupMessage", socketData);
 
       socket.emit("sendGroupNotification", socketData);

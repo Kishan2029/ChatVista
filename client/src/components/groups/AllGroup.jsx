@@ -21,7 +21,7 @@ const AllGroup = ({ search }) => {
   const [filteredData, setFilteredData] = useState([]);
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
-  console.log("auth", auth);
+
   const { data, error, isError, isLoading } = useQuery({
     queryKey: ["allGroups"],
     queryFn: () => {
@@ -37,8 +37,6 @@ const AllGroup = ({ search }) => {
   });
 
   useEffect(() => {
-    console.log("auth", auth);
-    console.log("socketHit");
     if (!auth) {
       return;
     }
@@ -77,7 +75,7 @@ const AllGroup = ({ search }) => {
           }
           return item;
         });
-        console.log("newData", newData);
+        // console.log("newData", newData);
         return newData;
       });
 
@@ -98,14 +96,12 @@ const AllGroup = ({ search }) => {
 
   useEffect(() => {
     const handleReceiveNotification = (data) => {
-      console.log("data", data);
       if (auth.userId === data.userId) {
         queryClient.setQueriesData(["allGroups"], (oldData) => {
           const newData = oldData.map((item) => {
             if (item._id === data.groupId) {
               // playSound();
               if (chatUserId === item._id) {
-                console.log("inside coint");
                 item.notificationCount = 0;
                 const socketData = {
                   userId: auth.userId,
@@ -115,9 +111,9 @@ const AllGroup = ({ search }) => {
                 socket.emit("makeNotificationCountZero", socketData);
               } else {
                 item.notificationCount = data.count;
-                console.log("item.notificationCount", item.notificationCount);
+                // console.log("item.notificationCount", item.notificationCount);
               }
-              console.log("item", item);
+              // console.log("item", item);
             }
             return item;
           });
@@ -149,7 +145,7 @@ const AllGroup = ({ search }) => {
   if (isLoading) {
     return <LocalLoader />;
   }
-  console.log("allGroup", data);
+  // console.log("allGroup", data);
   const allGroups = search === "" ? data : filteredData;
 
   if (allGroups)

@@ -71,7 +71,7 @@ exports.getMessage = async function (userId, groupId) {
     for (let [key, value] of temp) {
         messages.push({
             date: key,
-            messages: value
+            messages: value.sort((a, b) => a.createdAt > b.createdAt ? 1 : -1)
         })
     }
 

@@ -81,11 +81,9 @@ export const filterQueryGroupData = (value, name) => {
 };
 
 export const playSound = () => {
-    let src =
-        "https://commondatastorage.googleapis.com/codeskulptor-assets/jump.ogg";
-    let src1 = "src/assets/sound/Anya Notification ! Notification.mp3";
-    let audio = new Audio(src1);
-    audio.play();
+    let src = "src/assets/sound/Anya Notification ! Notification.mp3";
+    let audio = new Audio(src);
+    // audio.play();
 };
 
 

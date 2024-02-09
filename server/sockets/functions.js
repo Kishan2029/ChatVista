@@ -4,6 +4,9 @@ const Group = require('../models/group.model');
 const User = require('../models/user.model');
 const GroupNotification = require('../models/groupNotification.model');
 
+const getUniqueSocketIds = () => {
+
+}
 
 exports.addUser = async (userId, socketId) => {
     const user = await OnlineUser.find({ socketId })
@@ -30,10 +33,10 @@ exports.sendMessage = async (data, socket) => {
     const receiverSocket = await OnlineUser.find({ userId: data.userB })
 
 
-    const socketIds = receiverSocket.map((item) => {
+    let socketIds = receiverSocket.map((item) => {
         return item.socketId
     })
-
+    socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
 
         const receiverData = {
@@ -81,10 +84,10 @@ exports.userTyping = async (data, socket) => {
     const receiverSocket = await OnlineUser.find({ userId: data.userB })
 
 
-    const socketIds = receiverSocket.map((item) => {
+    let socketIds = receiverSocket.map((item) => {
         return item.socketId
     })
-
+    socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
 
         const receiverData = {
@@ -122,10 +125,10 @@ exports.sendNotification = async (data, socket) => {
     const receiverSocket = await OnlineUser.find({ userId: data.userB })
 
 
-    const socketIds = receiverSocket.map((item) => {
+    let socketIds = receiverSocket.map((item) => {
         return item.socketId
     })
-
+    socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
 
         const receiverData = {
@@ -138,7 +141,7 @@ exports.sendNotification = async (data, socket) => {
 }
 
 exports.sendGroupNotification = async (data, socket) => {
-    console.log("Inside sendGroupNotification socket", data);
+    // console.log("Inside sendGroupNotification socket", data);
 
     // find users
     const group = await Group.findById(data.groupId);
@@ -149,7 +152,7 @@ exports.sendGroupNotification = async (data, socket) => {
         if (String(item) === data.userId) return;
         return item;
     })
-    console.log("userArray", userArray)
+    // console.log("userArray", userArray)
 
     await Promise.all(userArray.map(async (item) => {
         if (item === undefined) return;
@@ -175,10 +178,10 @@ exports.sendGroupNotification = async (data, socket) => {
         const receiverSocket = await OnlineUser.find({ userId: { $in: userArray } })
 
 
-        const socketIds = receiverSocket.map((item) => {
+        let socketIds = receiverSocket.map((item) => {
             return item.socketId
         })
-
+        socketIds = [...new Set(socketIds)]
         if (socketIds.length > 0) {
 
             const receiverData = {
@@ -199,7 +202,7 @@ exports.sendGroupNotification = async (data, socket) => {
 }
 
 exports.makeNotificationCountZero = async (data, socket) => {
-    console.log("Inside makeNotificationCountZero socket", data)
+    // console.log("Inside makeNotificationCountZero socket", data)
 
 
     // make count 0
@@ -234,7 +237,8 @@ exports.makeNotificationCountZero = async (data, socket) => {
 
 // Added socketIds for both sender and receiver
 exports.sendGroupMessage = async (data, socket) => {
-    console.log("data", data)
+    console.log("sendGroupMessage socket", data.content)
+    // console.log("data", data)
     const group = await Group.findById(data.groupId);
 
     let userArray = group.admin.concat(group.members);
@@ -254,11 +258,7 @@ exports.sendGroupMessage = async (data, socket) => {
         if (data.socketId !== item.socketId)
             return item.socketId
     })
-    // const index = socketIds.indexOf(data.socketId)
-    // if (index > -1) {
-    //     socketIds = socketIds.splice(index, 1)
-    // }
-    console.log("socketIds", socketIds)
+    socketIds = [...new Set(socketIds)]
 
     if (socketIds.length > 0) {
         const user = await User.findById(userId);
@@ -274,16 +274,16 @@ exports.sendGroupMessage = async (data, socket) => {
 }
 
 exports.groupCreated = async (data, socket) => {
-    console.log("data", data)
+    // console.log("data", data)
     let members = data.members.concat(data.admin);
     const receiverSocket = await OnlineUser.find({ userId: { $in: members } });
-    console.log("receiverSocket", receiverSocket)
+    // console.log("receiverSocket", receiverSocket)
 
     let socketIds = receiverSocket.map((item) => {
         if (data.socketId !== item.socketId)
             return item.socketId
     })
-
+    socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
         // const user = await User.findById(userId);
 
@@ -298,7 +298,7 @@ exports.groupCreated = async (data, socket) => {
 }
 
 exports.groupMemberAdded = async (data, socket) => {
-    console.log("data", data);
+    // console.log("data", data);
     const group = await Group.findById(data.groupId);
 
     let userArray = group.admin.concat(group.members);
@@ -310,9 +310,9 @@ exports.groupMemberAdded = async (data, socket) => {
             return item.socketId
     })
 
-
+    socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
-        console.log("socket Users", socketIds)
+        // console.log("socket Users", socketIds)
         // const user = await User.findById(userId);
 
         const receiverData = {
@@ -326,7 +326,7 @@ exports.groupMemberAdded = async (data, socket) => {
 }
 
 exports.userLeaveGroup = async (data, socket) => {
-    console.log("data", data);
+    // console.log("data", data);
     const group = await Group.findById(data.groupId);
 
     let userArray = group.admin.concat(group.members);
@@ -337,10 +337,10 @@ exports.userLeaveGroup = async (data, socket) => {
         if (data.socketId !== item.socketId)
             return item.socketId
     })
-
+    socketIds = [...new Set(socketIds)]
 
     if (socketIds.length > 0) {
-        console.log("socket Users", socketIds)
+        // console.log("socket Users", socketIds)
         // const user = await User.findById(userId);
 
         const receiverData = {
@@ -353,7 +353,7 @@ exports.userLeaveGroup = async (data, socket) => {
 }
 
 exports.updateGroupInfo = async (data, socket) => {
-    console.log("data", data);
+    // console.log("data", data);
     const group = await Group.findById(data.groupId);
 
     let userArray = group.admin.concat(group.members);
@@ -364,7 +364,7 @@ exports.updateGroupInfo = async (data, socket) => {
         if (data.socketId !== item.socketId)
             return item.socketId
     })
-
+    socketIds = [...new Set(socketIds)]
 
     if (socketIds.length > 0) {
         // console.log("socket Users", socketIds)

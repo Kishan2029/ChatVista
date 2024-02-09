@@ -10,7 +10,7 @@ import {
 } from "../../store/slices/chatSlice";
 
 const Title = ({ name, lastSeen, id }) => {
-  console.log("id", id);
+  // console.log("id", id);
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData.userInfo.id;
   const isGroup = chatData.userInfo.group;
@@ -18,7 +18,7 @@ const Title = ({ name, lastSeen, id }) => {
   const memberCount = chatData.userInfo.memberCount;
   const profileUrl = chatData.userInfo.profileUrl;
   const [online, setOnline] = useState(false);
-  console.log("members", members);
+  // console.log("members", members);
   const dispatch = useDispatch();
 
   let groupComponent = "";
@@ -42,7 +42,7 @@ const Title = ({ name, lastSeen, id }) => {
   }
 
   const selectedInfo = () => {
-    console.log("click on info");
+    // console.log("click on info");
     if (groupComponent) {
       dispatch(setContactInfoId({ contactId: id }));
       dispatch(setUserSelectedTrue({ userSelected: false }));
