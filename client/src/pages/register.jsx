@@ -46,7 +46,8 @@ const Register = () => {
     onError: async (error) => {
       setGlobalLoader(false);
       console.log("error", error);
-
+      if (error?.message === 'Validation error: Not a email formate at "email"')
+        notify("error", "Please enter valid email");
       // navigate("/login");
       // navigate(0);
     },
@@ -216,14 +217,14 @@ const Register = () => {
           required
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        {/* <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Typography sx={{ color: blue[800], textDecoration: "underline" }}>
             Forgot Password ?
           </Typography>
-        </Box>
+        </Box> */}
         <SubmitButton name={"Create Account"} onClick={() => onRegister()} />
 
-        <Divider sx={{ mb: "0.6rem" }}>Or</Divider>
+        {/* <Divider sx={{ mb: "0.6rem" }}>Or</Divider> */}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Typography sx={{ fontSize: "0.7rem", mb: "1rem", color: grey[700] }}>
             By signing up, I agree to{" "}
@@ -238,11 +239,11 @@ const Register = () => {
             </span>
           </Typography>
         </Box>
-        <Box sx={{ display: "flex", justifyContent: "center", gap: "4rem" }}>
+        {/* <Box sx={{ display: "flex", justifyContent: "center", gap: "4rem" }}>
           <GoogleLogo size={32} color="#e60000" />
           <GithubLogo size={32} color="#666666" />
           <TwitterLogo size={32} color="#1a8cff" />
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );

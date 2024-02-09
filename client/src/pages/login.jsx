@@ -150,7 +150,7 @@ const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
-          sx={{ mt: "0.7rem", mb: "0.7rem" }}
+          sx={{ mt: "0.7rem", mb: "0.9rem" }}
           error={passwordError.length === 0 ? false : true}
           helperText={passwordError}
           id="password"
@@ -163,18 +163,18 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        {/* <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Typography sx={{ color: blue[800], textDecoration: "underline" }}>
             Forgot Password ?
           </Typography>
-        </Box>
+        </Box> */}
         <SubmitButton name={"Login"} onClick={() => onLogin()} />
-        <Divider sx={{ mb: "1rem" }}>Or</Divider>
+        {/* <Divider sx={{ mb: "1rem" }}>Or</Divider>
         <Box sx={{ display: "flex", justifyContent: "center", gap: "4rem" }}>
           <GoogleLogo size={32} color="#e60000" />
           <GithubLogo size={32} color="#666666" />
           <TwitterLogo size={32} color="#1a8cff" />
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );
