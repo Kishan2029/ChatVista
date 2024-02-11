@@ -47,6 +47,11 @@ function App() {
     }
   }, []);
 
+  console.log(
+    "import.meta.env.VITE_BACKEND_URL",
+    import.meta.env.VITE_BACKEND_URL
+  );
+
   const router = createBrowserRouter([
     {
       path: "/",
