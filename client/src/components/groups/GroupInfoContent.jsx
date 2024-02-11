@@ -161,7 +161,6 @@ const GroupInfoContent = () => {
             <Typography
               sx={{
                 fontSize: "1rem",
-                fontSize: "1rem",
                 color: "var(--userInfoFontColor)",
                 mb: "1rem",
               }}
