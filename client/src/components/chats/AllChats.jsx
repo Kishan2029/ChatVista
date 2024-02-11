@@ -32,6 +32,7 @@ const AllChats = ({ search }) => {
   });
 
   useEffect(() => {
+    console.log("first", socket.id);
     const handleReceiveNotification = (data) => {
       if (auth.userId === data.receiverUser) {
         queryClient.setQueriesData(["allChats"], (oldData) => {
@@ -56,14 +57,27 @@ const AllChats = ({ search }) => {
       }
     };
 
+    const handleReceiveRequest = (data) => {
+      console.log("handleReceiveRequest");
+      console.log("data", data);
+      if (data.senderUser === auth.userId) {
+        queryClient.invalidateQueries(["allChats"]);
+        queryClient.invalidateQueries(["requests"]);
+        queryClient.invalidateQueries(["exploreUsers"]);
+        queryClient.invalidateQueries(["friends"]);
+      }
+    };
+
     if (auth && socket.connected) {
       socket.on("receiveNotification", handleReceiveNotification);
+      socket.on("receiveRequestAccepted", handleReceiveRequest);
     }
 
     return () => {
       // Cleanup: Remove the event listener when the component unmounts
       if (auth && socket.connected) {
         socket.off("receiveNotification", handleReceiveNotification);
+        socket.on("receiveRequestAccepted", handleReceiveRequest);
       }
     };
   }, [auth, socket.connected, queryClient, chatUserId]);
@@ -76,6 +90,7 @@ const AllChats = ({ search }) => {
       setFilteredData(newData);
     }
   }, [search]);
+
   if (isLoading) {
     return <LocalLoader />;
   }

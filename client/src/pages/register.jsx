@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import { Box, TextField, Tooltip, Typography } from "@mui/material";
 import birdImage from "../assets/images/bird.avif";
 import { blue, grey } from "@mui/material/colors";
-import { GithubLogo, GoogleLogo, TwitterLogo } from "@phosphor-icons/react";
+// import { GithubLogo, GoogleLogo, TwitterLogo } from "@phosphor-icons/react";
 import { SubmitButton } from "../components";
 import { AuthContext } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { registerUser } from "../reactQuery/mutation";
 import { notify } from "../util/notify";
 
@@ -139,7 +139,9 @@ const Register = () => {
     >
       <Box sx={{ width: "30%" }}>
         <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-          <img src={birdImage} style={{ height: "5rem" }} />
+          <Tooltip title="I am Angry Bird!" placement="right">
+            <img src={birdImage} style={{ height: "5rem" }} />
+          </Tooltip>
         </Box>
         <Typography sx={{ fontSize: "1.6rem", mb: "0.4rem", mt: "0.4rem" }}>
           Get Started With ChatVista

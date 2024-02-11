@@ -44,6 +44,31 @@ exports.sendMessage = async (data, socket) => {
     }
 }
 
+exports.requestAccepted = async (data, socket) => {
+    console.log("request accepted");
+
+    const receiverSocket = await OnlineUser.find({ userId: data.senderUser })
+
+
+    let socketIds = receiverSocket.map((item) => {
+        return item.socketId
+    })
+
+    socketIds = [...new Set(socketIds)];
+
+    if (socketIds.length > 0) {
+        console.log("socketIds", socketIds)
+        const receiverData = {
+            senderUser: data.senderUser,
+            receiverUser: data.receiverUser,
+            status: "accepted"
+        }
+
+        console.log("receiverData", receiverData)
+        socket.to(socketIds).emit("receiveRequestAccepted", receiverData)
+    }
+}
+
 
 
 exports.sendOnlineStatus = async (socket, io) => {

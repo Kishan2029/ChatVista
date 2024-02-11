@@ -12,8 +12,6 @@ const generateHashedPassword = async (password) => {
     return data;
 }
 
-
-
 exports.registerUser = async function (firstName, lastName, email, password) {
 
 
@@ -31,8 +29,6 @@ exports.registerUser = async function (firstName, lastName, email, password) {
     if (!findOTP) return { statusCode: 400, response: { success: false, message: "Otp is not generated", notificationMessage: "Otp is not generated" } };
 
     // store data in temp users
-
-
 
     return { statusCode: 200, response: { success: true, message: "Otp is generated" } };
 

@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import React, { useContext, useState } from "react";
+import { Box, TextField, Tooltip, Typography } from "@mui/material";
 import birdImage from "../assets/images/bird.avif";
 import { blue } from "@mui/material/colors";
-import { GithubLogo, GoogleLogo, TwitterLogo } from "@phosphor-icons/react";
+// import { GithubLogo, GoogleLogo, TwitterLogo } from "@phosphor-icons/react";
 import { SubmitButton } from "../components/index";
 
 import { useMutation } from "react-query";
 import { loginUser } from "../reactQuery/mutation";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../store/slices/authSlice";
 import { setUserLogin } from "../util/helper";
 
@@ -115,7 +115,9 @@ const Login = () => {
     >
       <Box sx={{ width: "30%" }}>
         <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-          <img src={birdImage} style={{ height: "5rem" }} />
+          <Tooltip title="I am Angry Bird!" placement="right">
+            <img src={birdImage} style={{ height: "5rem" }} />
+          </Tooltip>
         </Box>
         <Typography sx={{ fontSize: "1.6rem", mb: "0.4rem", mt: "0.4rem" }}>
           Login to ChatVista

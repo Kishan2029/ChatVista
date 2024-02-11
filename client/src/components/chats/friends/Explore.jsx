@@ -44,7 +44,7 @@ const Explore = () => {
       <Stack spacing={2}>
         {explore.map((item) => {
           return (
-            <Box id={item._id}>
+            <Box id={item._id} key={item._id}>
               <Box
                 sx={{
                   display: "flex",

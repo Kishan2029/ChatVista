@@ -1,4 +1,4 @@
-import { Box, Divider } from "@mui/material";
+import { Box, Divider, Tooltip } from "@mui/material";
 import { Users, ChatCircleDots, Gear } from "@phosphor-icons/react";
 import React, { useState } from "react";
 import birdImage from "../assets/images/bird.avif";
@@ -52,18 +52,20 @@ const Navbar = () => {
             gap: "2.3rem",
           }}
         >
-          <Box
-            sx={{
-              bgcolor: "var(--navbarImageBackgroundColor)",
-              p: "0.5rem",
-              borderRadius: "1rem",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <img src={budgie} style={{ height: "2rem" }} />
-          </Box>
+          <Tooltip title="You are great!.">
+            <Box
+              sx={{
+                bgcolor: "var(--navbarImageBackgroundColor)",
+                p: "0.5rem",
+                borderRadius: "1rem",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <img src={budgie} style={{ height: "2rem" }} />
+            </Box>
+          </Tooltip>
 
           {selected === "" ? (
             <Box
@@ -81,7 +83,11 @@ const Navbar = () => {
               />
             </Box>
           ) : (
-            <ChatCircleDots size={26} onClick={() => onClickNav("")} />
+            <ChatCircleDots
+              size={26}
+              onClick={() => onClickNav("")}
+              style={{ cursor: "pointer" }}
+            />
           )}
 
           {selected === "groups" ? (
@@ -100,7 +106,11 @@ const Navbar = () => {
               />
             </Box>
           ) : (
-            <Users size={26} onClick={() => onClickNav("groups")} />
+            <Users
+              size={26}
+              onClick={() => onClickNav("groups")}
+              style={{ cursor: "pointer" }}
+            />
           )}
 
           <Divider sx={{ width: "100%", color: "#B4B4B4" }} />
@@ -132,6 +142,7 @@ const Navbar = () => {
           flexDirection: "column",
           alignItems: "center",
           mb: "1.5rem",
+          cursor: "pointer",
         }}
         onClick={() => onClickNav("profile")}
       >

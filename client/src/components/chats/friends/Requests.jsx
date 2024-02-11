@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import LocalLoader from "../../LocalLoader";
 import { fetchRequests } from "../../../reactQuery/query";
 import { sendRequest } from "../../../reactQuery/mutation";
+import { socket } from "../../../socket";
 
 const Requests = () => {
   const auth = useSelector((state) => state.auth.user);
@@ -43,8 +44,17 @@ const Requests = () => {
       });
     },
     onSuccess: async (queryKey, body) => {
-      // set data
-      // console.log("request sent successfully");
+      if (body.status === "accepted") {
+        queryClient.invalidateQueries(["allChats"]);
+
+        const socketData = {
+          senderUser: body.userB,
+          receiverUser: auth.userId,
+          status: "accepted",
+        };
+        console.log("socketData", socketData);
+        socket.emit("requestAccepted", socketData);
+      }
     },
   });
 
@@ -53,30 +63,12 @@ const Requests = () => {
   }
   const requests = data;
 
-  // const requests = [
-  //   {
-  //     id: "1",
-  //     name: "Kevin",
-  //   },
-  //   {
-  //     id: "2",
-  //     name: "Virat",
-  //   },
-  //   {
-  //     id: "3",
-  //     name: "Rohit",
-  //   },
-  //   {
-  //     id: "4",
-  //     name: "Anushka",
-  //   },
-  // ];
   return (
     <Box>
       <Stack spacing={2}>
         {requests.map((item) => {
           return (
-            <Box id={item._id}>
+            <Box id={item._id} key={item._id}>
               <Box
                 sx={{
                   display: "flex",
