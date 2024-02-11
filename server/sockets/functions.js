@@ -5,7 +5,7 @@ const User = require('../models/user.model');
 const GroupNotification = require('../models/groupNotification.model');
 
 exports.addUser = async (userId, socketId) => {
-    const user = await OnlineUser.find({ socketId })
+    const user = await OnlineUser.find({ socketId, userId })
     console.log("user", user)
 
     if (user.length === 0) {
@@ -45,7 +45,6 @@ exports.sendMessage = async (data, socket) => {
 }
 
 exports.requestAccepted = async (data, socket) => {
-    console.log("request accepted");
 
     const receiverSocket = await OnlineUser.find({ userId: data.senderUser })
 
@@ -57,14 +56,12 @@ exports.requestAccepted = async (data, socket) => {
     socketIds = [...new Set(socketIds)];
 
     if (socketIds.length > 0) {
-        console.log("socketIds", socketIds)
+
         const receiverData = {
             senderUser: data.senderUser,
             receiverUser: data.receiverUser,
             status: "accepted"
         }
-
-        console.log("receiverData", receiverData)
         socket.to(socketIds).emit("receiveRequestAccepted", receiverData)
     }
 }

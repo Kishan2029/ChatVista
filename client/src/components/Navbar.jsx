@@ -52,7 +52,7 @@ const Navbar = () => {
             gap: "2.3rem",
           }}
         >
-          <Tooltip title="You are great!.">
+          <Tooltip title="You are Great!.">
             <Box
               sx={{
                 bgcolor: "var(--navbarImageBackgroundColor)",

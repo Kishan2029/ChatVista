@@ -13,7 +13,6 @@ const AllChats = ({ search }) => {
   const chatData = useSelector((state) => state.chat);
   const chatUserId = chatData ? chatData?.userInfo?.id : null;
   const [filteredData, setFilteredData] = useState([]);
-  // console.log("chatUserId", chatUserId);
 
   const queryClient = useQueryClient();
 
@@ -32,7 +31,6 @@ const AllChats = ({ search }) => {
   });
 
   useEffect(() => {
-    console.log("first", socket.id);
     const handleReceiveNotification = (data) => {
       if (auth.userId === data.receiverUser) {
         queryClient.setQueriesData(["allChats"], (oldData) => {
@@ -58,8 +56,6 @@ const AllChats = ({ search }) => {
     };
 
     const handleReceiveRequest = (data) => {
-      console.log("handleReceiveRequest");
-      console.log("data", data);
       if (data.senderUser === auth.userId) {
         queryClient.invalidateQueries(["allChats"]);
         queryClient.invalidateQueries(["requests"]);
