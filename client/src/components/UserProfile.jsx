@@ -101,7 +101,9 @@ const UserProfile = () => {
           size={32}
           color="#4B4B4B"
           style={{ marginLeft: "1rem" }}
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            navigate(-1);
+          }}
         />
         <Typography sx={{ fontSize: "2rem", fontWeight: 550 }}>
           Profile

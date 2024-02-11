@@ -29,6 +29,7 @@ const AllGroup = ({ search }) => {
       return [];
     },
     enabled: !!auth && !!auth.userId,
+    refetchInterval: 1000 * 60 * 5,
   });
 
   useEffect(() => {
@@ -148,7 +149,7 @@ const AllGroup = ({ search }) => {
             my: "1rem",
           }}
         >
-          All Chats
+          All Groups
         </Typography>
         <Box
           sx={{

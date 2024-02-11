@@ -11,7 +11,7 @@ import { ToastContainer } from "react-toastify";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false, // default: true
+      refetchOnWindowFocus: true, // default: true
     },
   },
 });

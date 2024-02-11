@@ -35,6 +35,7 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
       return [];
     },
     enabled: !!auth && !!auth.userId && !!chatUserId,
+    refetchInterval: 1000 * 30, //fetch query every 30 seconds
   });
 
   const messages = data;

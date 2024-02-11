@@ -28,6 +28,7 @@ const AllChats = ({ search }) => {
       return [];
     },
     enabled: !!auth && !!auth.userId,
+    refetchInterval: 1000 * 60 * 5, // refetch every 5 min
   });
 
   useEffect(() => {
