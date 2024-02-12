@@ -74,7 +74,8 @@ exports.getMessage = async function (userId, groupId) {
             messages: value.sort((a, b) => a.createdAt > b.createdAt ? 1 : -1)
         })
     }
-
+    messages.sort((a, b) => a.date > b.date ? 1 : -1)
+    console.log("group messages", messages)
     // messages = messages.sort((a, b) => a.createdAt > b.createdAt ? -1 : 1);
     return { statusCode: 200, response: { success: true, data: messages } };
 
