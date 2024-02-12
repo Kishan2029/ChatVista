@@ -19,9 +19,10 @@ const Home = ({ children }) => {
 
   const dispatch = useDispatch();
 
-  if (auth) {
-    socket.emit("addUser", { userId: auth.userId });
-  }
+  // if (auth) {
+  //   console.log("addUser socket emit");
+  //   socket.emit("addUser", { userId: auth.userId });
+  // }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +57,8 @@ const Home = ({ children }) => {
 
     // Check if data has already been fetched before triggering fetch again
     if (auth && !auth.firstName) {
+      console.log("addUser socket emit");
+      socket.emit("addUser", { userId: auth.userId });
       fetchAndDispatchData();
     }
   }, [auth, dispatch]);

@@ -32,7 +32,9 @@ exports.sendMessage = async (data, socket) => {
     let socketIds = receiverSocket.map((item) => {
         return item.socketId
     })
-    socketIds = [...new Set(socketIds)]
+    socketIds = socketIds.filter(value => value !== undefined);
+    socketIds = [...new Set(socketIds)];
+    console.log("socketIds", socketIds)
     if (socketIds.length > 0) {
 
         const receiverData = {
@@ -53,7 +55,8 @@ exports.requestAccepted = async (data, socket) => {
         return item.socketId
     })
 
-    socketIds = [...new Set(socketIds)];
+
+    socketIds = socketIds.filter(value => value !== undefined); socketIds = [...new Set(socketIds)];
 
     if (socketIds.length > 0) {
 
@@ -87,6 +90,7 @@ exports.userTyping = async (data, socket) => {
     let socketIds = receiverSocket.map((item) => {
         return item.socketId
     })
+    socketIds = socketIds.filter(value => value !== undefined);
     socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
 
@@ -128,6 +132,7 @@ exports.sendNotification = async (data, socket) => {
     let socketIds = receiverSocket.map((item) => {
         return item.socketId
     })
+    socketIds = socketIds.filter(value => value !== undefined);
     socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
 
@@ -180,6 +185,7 @@ exports.sendGroupNotification = async (data, socket) => {
         let socketIds = receiverSocket.map((item) => {
             return item.socketId
         })
+        socketIds = socketIds.filter(value => value !== undefined);
         socketIds = [...new Set(socketIds)]
         if (socketIds.length > 0) {
 
@@ -227,7 +233,7 @@ exports.makeNotificationCountZero = async (data, socket) => {
 
 // Added socketIds for both sender and receiver
 exports.sendGroupMessage = async (data, socket) => {
-
+    console.log("data.socketId", data.socketId)
 
     const group = await Group.findById(data.groupId);
 
@@ -242,8 +248,9 @@ exports.sendGroupMessage = async (data, socket) => {
         if (data.socketId !== item.socketId)
             return item.socketId
     })
+    socketIds = socketIds.filter(value => value !== undefined);
     socketIds = [...new Set(socketIds)]
-
+    console.log("socketIds", socketIds)
     if (socketIds.length > 0) {
         const user = await User.findById(userId);
 
@@ -251,7 +258,7 @@ exports.sendGroupMessage = async (data, socket) => {
             content: data.content,
             createdBy: data.userId,
             groupId: data.groupId,
-            createdByUser: user.firstName + " " + user.lastName
+            createdByUser: user.firstName + " " + user.lastName,
         }
         socket.to(socketIds).emit("receiveGroupMessage", receiverData)
     }
@@ -266,6 +273,7 @@ exports.groupCreated = async (data, socket) => {
         if (data.socketId !== item.socketId)
             return item.socketId
     })
+    socketIds = socketIds.filter(value => value !== undefined);
     socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
 
@@ -291,7 +299,8 @@ exports.groupMemberAdded = async (data, socket) => {
             return item.socketId
     })
 
-    socketIds = [...new Set(socketIds)]
+
+    socketIds = socketIds.filter(value => value !== undefined); socketIds = [...new Set(socketIds)]
     if (socketIds.length > 0) {
 
         const receiverData = {
@@ -315,6 +324,7 @@ exports.userLeaveGroup = async (data, socket) => {
         if (data.socketId !== item.socketId)
             return item.socketId
     })
+    socketIds = socketIds.filter(value => value !== undefined);
     socketIds = [...new Set(socketIds)]
 
     if (socketIds.length > 0) {
@@ -340,6 +350,7 @@ exports.updateGroupInfo = async (data, socket) => {
         if (data.socketId !== item.socketId)
             return item.socketId
     })
+    socketIds = socketIds.filter(value => value !== undefined);
     socketIds = [...new Set(socketIds)]
 
     if (socketIds.length > 0) {

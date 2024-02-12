@@ -49,9 +49,11 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
   }, [scrollView, data]);
 
   useEffect(() => {
+    console.log("inside useEffect", socket.id);
+
     if (isGroup) {
       socket.on("receiveGroupMessage", (data) => {
-        // console.log("receiveGroupMessage data:", data);
+        console.log("receiveGroupMessage data:", data);
 
         if (chatUserId === data.groupId) {
           // add message into user chat
@@ -107,6 +109,7 @@ const ChatMessages = ({ scrollView, setScrollView }) => {
       });
     } else {
       socket.on("receiveMessage", (data) => {
+        console.log("receiveMessage data:", data);
         if (auth.userId === data.receiverUser) {
           // add message into user chat
           queryClient.setQueriesData(
