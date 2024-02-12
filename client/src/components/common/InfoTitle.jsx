@@ -28,7 +28,7 @@ const InfoTitle = ({ value }) => {
       <XCircle
         size={24}
         color="var(--grayFontColor)"
-        style={{ marginLeft: "2rem" }}
+        style={{ marginLeft: "2rem", cursor: "pointer" }}
         onClick={() => selectedCross()}
       />
       <Typography

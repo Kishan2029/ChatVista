@@ -71,6 +71,7 @@ const GroupMessageCard = ({
         flexShrink: 0,
         gap: "0.2rem",
         bgcolor: selectedUser?.id === id ? "var(--blueNotification)" : "white",
+        cursor: selectedUser?.id !== id && "pointer",
       }}
       onClick={() => chatSelected()}
     >

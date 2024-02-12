@@ -3,7 +3,8 @@ import { Users, ChatCircleDots, Gear } from "@phosphor-icons/react";
 import React, { useState } from "react";
 import birdImage from "../assets/images/bird.avif";
 import budgie from "../assets/images/Budgie.png";
-import { useLocation, useNavigate } from "react-router-dom";
+import lion from "../assets/images/lion.png";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { NavAvatar } from "./common";
 
 const Navbar = () => {
@@ -132,6 +133,28 @@ const Navbar = () => {
           ) : (
             <Gear size={26} onClick={() => onClickNav("setting")} />
           )} */}
+          <Tooltip title="See our Social Media Site." placement="right">
+            {/* <Box
+              sx={{
+                bgcolor: "var(--navbarImageBackgroundColor)",
+                p: "0.5rem",
+                borderRadius: "1rem",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            > */}
+            <Link to="https://social-media01.netlify.app/" target="_blank">
+              <img
+                src={lion}
+                style={{ height: "2rem", cursor: "pointer" }}
+                // onClick={() =>
+                //   (window.location = "https://social-media01.netlify.app/")
+                // }
+              />
+            </Link>
+            {/* </Box> */}
+          </Tooltip>
         </Box>
       </Box>
 

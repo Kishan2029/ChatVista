@@ -189,7 +189,12 @@ const WriteMessage = ({ setScrollView }) => {
           <TelegramLogo
             size={28}
             color="#fff"
-            onClick={() => onSendMessage()}
+            onClick={() => {
+              if (sendMessage !== "") {
+                onSendMessage();
+              }
+            }}
+            style={{ cursor: "pointer" }}
           />
         </Box>
       </Box>

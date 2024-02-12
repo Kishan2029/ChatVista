@@ -61,6 +61,7 @@ const Title = ({ name, id }) => {
         py: "0.8rem",
         borderLeft: "1.5px solid #B4B4B4",
         alignItems: "center",
+        cursor: "pointer",
       }}
       onClick={() => selectedInfo()}
     >
