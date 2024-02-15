@@ -10,6 +10,7 @@ import { setUser } from "../store/slices/authSlice";
 import { UserInfo } from "../components/chats/index";
 import { GroupInfo } from "../components/groups";
 import AllGroup from "../components/groups/AllGroup";
+import { ReleaseNote } from "../components/common";
 
 const Home = ({ children }) => {
   const auth = useSelector((state) => state.auth.user);
@@ -17,12 +18,16 @@ const Home = ({ children }) => {
   const groupSelected = useSelector((state) => state.chat.groupSelected);
   const userSelected = useSelector((state) => state.chat.userSelected);
 
+  // release note dialog
+  const [modal, setModal] = useState(true);
+
   const dispatch = useDispatch();
 
   // if (auth) {
   //   console.log("addUser socket emit");
   //   socket.emit("addUser", { userId: auth.userId });
   // }
+  console.log("localStorage.getIte", localStorage.getItem("ReleaseNote"));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,49 +69,50 @@ const Home = ({ children }) => {
   }, [auth, dispatch]);
 
   return (
-    <Box sx={{ display: "flex", width: "100%", height: "100vh" }}>
-      <Box
-        sx={{
-          width: "30%",
-          bgcolor: "var(--backgroundColor2)",
-          height: "100%",
-          // borderRight: "1px solid #B4B4B4",
-        }}
-      >
-        {children}
-      </Box>
-      {userSelected || groupSelected ? (
-        <Box sx={{ width: "70%", display: "flex" }}>
+    <>
+      <Box sx={{ display: "flex", width: "100%", height: "100vh" }}>
+        <Box
+          sx={{
+            width: "30%",
+            bgcolor: "var(--backgroundColor2)",
+            height: "100%",
+            // borderRight: "1px solid #B4B4B4",
+          }}
+        >
+          {children}
+        </Box>
+        {userSelected || groupSelected ? (
+          <Box sx={{ width: "70%", display: "flex" }}>
+            <Box
+              sx={{
+                width: "60%",
+                height: "100vh",
+              }}
+            >
+              {selected ? <ChatWindow /> : <EmptyConversation />}
+            </Box>
+            <Box sx={{ width: "40%", height: "100vh" }}>
+              {userSelected ? (
+                <UserInfo />
+              ) : groupSelected ? (
+                <GroupInfo />
+              ) : (
+                <></>
+              )}
+            </Box>
+          </Box>
+        ) : (
           <Box
             sx={{
-              width: "60%",
+              width: "70%",
               height: "100vh",
             }}
           >
             {selected ? <ChatWindow /> : <EmptyConversation />}
           </Box>
-          <Box sx={{ width: "40%", height: "100vh" }}>
-            {userSelected ? (
-              <UserInfo />
-            ) : groupSelected ? (
-              <GroupInfo />
-            ) : (
-              <></>
-            )}
-          </Box>
-        </Box>
-      ) : (
-        <Box
-          sx={{
-            width: "70%",
-            height: "100vh",
-          }}
-        >
-          {selected ? <ChatWindow /> : <EmptyConversation />}
-        </Box>
-      )}
+        )}
 
-      {/* <Box
+        {/* <Box
         sx={{
           width: "70%",
           height: "100vh",
@@ -114,7 +120,17 @@ const Home = ({ children }) => {
       >
         {selected ? <ChatWindow /> : <EmptyConversation />}
       </Box> */}
-    </Box>
+      </Box>
+      {localStorage.getItem("ReleaseNote") === null && (
+        <ReleaseNote
+          open={modal}
+          handleClose={() => {
+            setModal(false);
+            localStorage.setItem("ReleaseNote", true); // Corrected line
+          }}
+        />
+      )}
+    </>
   );
 };
 
