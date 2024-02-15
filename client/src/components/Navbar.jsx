@@ -1,9 +1,8 @@
 import { Box, Divider, Tooltip } from "@mui/material";
 import { Users, ChatCircleDots, Gear } from "@phosphor-icons/react";
 import React, { useState } from "react";
-import birdImage from "../assets/images/bird.avif";
-import budgie from "../assets/images/Budgie.png";
 import lion from "../assets/images/lion.png";
+import bird from "../assets/images/001-bird.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { NavAvatar } from "./common";
 
@@ -57,6 +56,7 @@ const Navbar = () => {
             <Box
               sx={{
                 bgcolor: "var(--navbarImageBackgroundColor)",
+                // bgcolor: "gray",
                 p: "0.5rem",
                 borderRadius: "1rem",
                 display: "flex",
@@ -64,7 +64,7 @@ const Navbar = () => {
                 alignItems: "center",
               }}
             >
-              <img src={budgie} style={{ height: "2rem" }} />
+              <img src={bird} style={{ height: "2rem" }} />
             </Box>
           </Tooltip>
 
