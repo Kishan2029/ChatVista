@@ -1,7 +1,7 @@
 <div align="center" id="top"> 
-  <img src="./.github/app.gif" alt="Chatvista" />
+  <img src="https://github.com/Kishan2029/ChatVista/blob/master/client/public/logo192.png" alt="Chatvista" />
 
-  &#xa0;
+&#xa0;
 
   <!-- <a href="https://chatvista.netlify.app">Demo</a> -->
 </div>
@@ -9,89 +9,85 @@
 <h1 align="center">Chatvista</h1>
 
 <p align="center">
-  <img alt="Github top language" src="https://img.shields.io/github/languages/top/{{YOUR_GITHUB_USERNAME}}/chatvista?color=56BEB8">
+  <img alt="Github top language" src="https://img.shields.io/github/languages/top/Kishan2029/chatvista?color=56BEB8">
 
-  <img alt="Github language count" src="https://img.shields.io/github/languages/count/{{YOUR_GITHUB_USERNAME}}/chatvista?color=56BEB8">
+  <img alt="Github language count" src="https://img.shields.io/github/languages/count/Kishan2029/chatvista?color=56BEB8">
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/{{YOUR_GITHUB_USERNAME}}/chatvista?color=56BEB8">
-
-  <img alt="License" src="https://img.shields.io/github/license/{{YOUR_GITHUB_USERNAME}}/chatvista?color=56BEB8">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/Kishan2029/chatvista?color=56BEB8">
 
   <!-- <img alt="Github issues" src="https://img.shields.io/github/issues/{{YOUR_GITHUB_USERNAME}}/chatvista?color=56BEB8" /> -->
 
   <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/{{YOUR_GITHUB_USERNAME}}/chatvista?color=56BEB8" /> -->
 
-  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/{{YOUR_GITHUB_USERNAME}}/chatvista?color=56BEB8" /> -->
+  <img alt="Github stars" src="https://img.shields.io/github/stars/Kishan2029/chatvista?color=56BEB8" />
 </p>
 
 <!-- Status -->
 
-<!-- <h4 align="center"> 
+<!-- <h4 align="center">
 	🚧  Chatvista 🚀 Under construction...  🚧
-</h4> 
+</h4>
 
 <hr> -->
 
-<p align="center">
-  <a href="#dart-about">About</a> &#xa0; | &#xa0; 
-  <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
-  <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
-  <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
-  <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
-  <a href="#memo-license">License</a> &#xa0; | &#xa0;
-  <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">Author</a>
-</p>
-
 <br>
 
-## :dart: About ##
+## :dart: About
 
-Describe your project
+Chatvista is a full-stack MERN application that functions as a chat platform. To use the app, users must first register. After verifying their registration through an OTP (one-time password), users can start using the app's features.
 
-## :sparkles: Features ##
+## :sparkles: Features
 
-:heavy_check_mark: Feature 1;\
-:heavy_check_mark: Feature 2;\
-:heavy_check_mark: Feature 3;
+- <b>Making Friends</b>
+  Upon logging in, users must first add friends to begin communication. They can send friend requests to other users, and if accepted, they become friends.
 
-## :rocket: Technologies ##
+- <b>Real-Time Chat</b>
+  Users can only chat with their friends. The app utilizes sockets to enable real-time communication between users.
+
+- <b>Group Chats</b>
+  Users can create groups with their friends to chat together. They can view group information, members, add new members, edit group information, and leave groups as needed.
+
+- <b>User Presence</b>
+  Users can see if other users are online or offline, whether they are typing, and their profile information.
+
+- <b>Notifications</b>
+  The app supports notification functionality. Whenever there is a new message, the app sends a notification to the user.
+
+- <b>Profile Management</b>
+  Users can create and update their profiles.
+  A user search functionality is included for convenience.
+
+- <b>Real-Time Updates</b>
+  All communication, information updates, and member or group additions/removals happen in real-time.
+
+- <b>Release Notes</b>
+  -> Users are informed about new app announcements and features through release notes.
+
+- <b>Progressive Web App</b>
+  Chatvista is a progressive web app (PWA), allowing users to install it on their laptops for convenient access.
+
+## :rocket: Technologies
 
 The following tools were used in this project:
 
-- [Expo](https://expo.io/)
-- [Node.js](https://nodejs.org/en/)
-- [React](https://pt-br.reactjs.org/)
-- [React Native](https://reactnative.dev/)
-- [TypeScript](https://www.typescriptlang.org/)
-
-## :white_check_mark: Requirements ##
-
-Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Node](https://nodejs.org/en/) installed.
-
-## :checkered_flag: Starting ##
+## :checkered_flag: Starting
 
 ```bash
-# Clone this project
-$ git clone https://github.com/{{YOUR_GITHUB_USERNAME}}/chatvista
+# Run client
+$ cd client
+$ npm i  # Install dependencies
+$ npm run dev # starts development server
+$ npm run start # starts production server
 
-# Access
-$ cd chatvista
+# Run client
+$ cd server
+$ npm i  # Install dependencies
+$ npm run dev # starts development server
+$ npm run start # starts production server
 
-# Install dependencies
-$ yarn
-
-# Run the project
-$ yarn start
-
-# The server will initialize in the <http://localhost:3000>
+# The server will initialize in the <http://localhost:5173>
+# The server will initialize in the <http://localhost:8080>
 ```
-
-## :memo: License ##
-
-This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
-
-
-Made with :heart: by <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">{{YOUR_NAME}}</a>
 
 &#xa0;
 
